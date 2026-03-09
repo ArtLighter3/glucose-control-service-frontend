@@ -1,9 +1,15 @@
 import "axios"
 import axios from 'axios'
 
-export type User = {username: string, password: string}
+export interface UserSession {
+  id: number,
+  username: string,
+  roles: Set<string>
+}
 
-const AUTH_LOGIN_URL = 'http://localhost:8080/api/v1/auth/process-login';
+//const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+const AUTH_LOGIN_URL = `${API_BASE_URL}/api/v1/auth/process-login`;
 
 export async function login(username: string, password: string) {
   axios.defaults.withCredentials = true;
@@ -11,13 +17,5 @@ export async function login(username: string, password: string) {
   loginFormData.append("username", username);
   loginFormData.append("password", password);
 
-  return axios.post(AUTH_LOGIN_URL, loginFormData);
-}
-
-export async function getGlucose(id: number) {
-  //axios.defaults.withCredentials = true;
-  await axios.get("http://localhost:8080/api/v1/patients/2/entries")
-  .then(response => {
-    console.log(response);
-  }).catch(err => {console.log(err);});
+  return axios.post<UserSession>(AUTH_LOGIN_URL, loginFormData);
 }

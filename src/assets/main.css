@@ -1,7 +1,40 @@
 @import './base.css';
+@import 'bootstrap-vue-next/dist/bootstrap-vue-next.css';
+@import 'bootstrap/dist/css/bootstrap.css';
 
 #app {
   font-weight: normal;
+}
+
+.squared-input-field {
+  border-radius: 0;
+  border-color: var(--color-text);
+}
+
+.text-success {
+  color: var(--color-background-alt);
+}
+
+.b-form-group {
+  margin: 0.2rem;
+}
+
+.border-wrapper {
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--color-background-alt);
+ }
+
+.error-text {
+  color: var(--color-text-error);
+}
+
+.btn-outline-success {
+  border-color: var(--color-background-alt);
+
+  &:hover {
+    background-color: var(--color-background-alt);
+  }
 }
 
 @media (hover: hover) {
