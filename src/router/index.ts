@@ -1,17 +1,16 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
 import PatientMainView from '@/views/patient/PatientMainView.vue'
 import DiaryView from '@/views/patient/DiaryView.vue'
 import InsulinProfileView from '@/views/patient/InsulinProfileView.vue'
+import PatientProfileView from '@/views/patient/PatientProfileView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView,
+      redirect: '/login'
     },
     {
       path: '/login',
@@ -19,9 +18,10 @@ const router = createRouter({
       component: LoginView,
     },
     {
-      path: '/patient',
+      path: '/patient/:id',
       name: 'patient',
       component: PatientMainView,
+     // props: true,
       children: [
         {
           path: "diary",
@@ -32,6 +32,11 @@ const router = createRouter({
           path: "insulin",
           name: "insulin",
           component: InsulinProfileView
+        },
+        {
+          path: "patient-profile",
+          name: "patient-profile",
+          component: PatientProfileView
         }
       ]
     },

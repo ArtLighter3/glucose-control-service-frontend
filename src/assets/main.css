@@ -1,7 +1,17 @@
 @import './base.css';
+@import 'bootstrap-vue-next/dist/bootstrap-vue-next.css';
+@import 'bootstrap/dist/css/bootstrap.css';
 
 #app {
   font-weight: normal;
+}
+
+.btn-outline-success {
+  border-color: var(--color-background-alt);
+
+  &:hover {
+    background-color: var(--color-background-alt);
+  }
 }
 
 @media (hover: hover) {

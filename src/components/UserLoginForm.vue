@@ -28,19 +28,16 @@
     <button class="btn btn-success btn-block my-2" type="submit">Login</button>
   </form>
 </template>
-<script lang="ts">
-import { defineComponent, reactive } from 'vue'
-import {login} from '@/service/userService'
-import router from '@/router'
+<script setup lang="ts">
+  import { reactive } from 'vue'
+  import {login} from '@/service/userService'
+  import router from '@/router'
 
-interface LoginForm {
-  username: string,
-  password: string,
-  error: boolean
-}
-
-export default defineComponent({
-  setup() {
+  interface LoginForm {
+    username: string,
+    password: string,
+    error: boolean
+  }
     const form: LoginForm = reactive({
       username: '',
       password: '',
@@ -48,27 +45,17 @@ export default defineComponent({
     });
 
     const onSubmit = async () => {
-
-
       await login(form.username, form.password)
         .then((response) => {
-          console.log(response);
           form.error = false;
-
          // response.data.
-          router.push("/patient/diary")
+          router.push({name: "diary", params: {id : `${response.data.id}`}})
         }).catch((err) => {
           console.log(err);
           form.error = true;
         });
       form.password = ''
-
-
     }
-
-    return { form, onSubmit }
-  }
-})
 </script>
 
 <style scoped>

@@ -115,7 +115,7 @@ aside {
   }
 
   &.is-expanded {
-    width: calc(2rem + 200px);
+    width: calc(10rem + 150px);
     .toggle-sidebar-icon {
       transform: rotate(180deg);
     }
