@@ -19,14 +19,19 @@
   margin: 0.2rem;
 }
 
-.border-wrapper {
+.card{
   border-width: 1px;
   border-style: solid;
+  border-radius: 0;
   border-color: var(--color-background-alt);
- }
+}
 
-.error-text {
+.error-text, .invalid-feedback {
   color: var(--color-text-error);
+}
+
+.form-control.is-valid {
+  border-color: var(--color-background-alt);
 }
 
 .btn-outline-success {

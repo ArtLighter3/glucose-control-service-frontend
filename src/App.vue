@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { BOrchestrator } from 'bootstrap-vue-next'
+import { BOrchestrator, BApp } from 'bootstrap-vue-next'
 </script>
 
 <template>
   <header>
     <BOrchestrator></BOrchestrator>
-    <div class="wrapper">
+    <b-app class="wrapper">
       <router-view></router-view>
-    </div>
+    </b-app>
   </header>
 </template>
 
