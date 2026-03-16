@@ -42,6 +42,15 @@
   }
 }
 
+.btn-success {
+  background-color: var(--color-background-alt);
+  border-color: var(--color-background-alt);
+
+  &:hover {
+    background-color: var(--color-text-on-alt-background-hover);
+  }
+}
+
 @media (hover: hover) {
   a:hover {
     background-color: hsla(160, 100%, 37%, 0.2);

@@ -8,5 +8,5 @@ export class ApiExceptionResponse {
 }
 
 export interface FieldErrors {
-  [key: string]: string;
+  [key: string]: String[];
 }

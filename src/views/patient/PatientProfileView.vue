@@ -18,8 +18,7 @@ const id = ref(useRoute().params.id as string);
 .profile-view-wrapper {
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
+  align-items: start;
 }
 </style>
 

@@ -12,27 +12,30 @@ import {
   BFormGroup, BFormSelect, BFormSelectOption,
   BButton,
   BSpinner,
-  BCard} from 'bootstrap-vue-next'
+  BCard, BFormInvalidFeedback
+} from 'bootstrap-vue-next'
 import { type AxiosResponse, isAxiosError } from 'axios'
 import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
 import type { ApiExceptionResponse, FieldErrors } from '@/util/exception.ts'
 
-  interface GlucoseRangeForm {
-    hyperGlucose: number,
-    highGlucose: number,
-    lowGlucose: number,
-    hypoGlucose: number
-  }
-
-  interface UnitsForm {
-    glucoseUnit: GlucoseUnit,
-    carbsUnit: CarbsUnit
-  }
-
-  interface IntegrationForm {
-    isNightscoutEnabled: boolean,
-    nightscoutApiSecret: string
-  }
+  // type ProfilePartForm = object
+  //
+  // interface GlucoseRangeForm extends ProfilePartForm {
+  //   hyperGlucose: number,
+  //   highGlucose: number,
+  //   lowGlucose: number,
+  //   hypoGlucose: number
+  // }
+  //
+  // interface UnitsForm extends ProfilePartForm {
+  //   glucoseUnit: GlucoseUnit,
+  //   carbsUnit: CarbsUnit
+  // }
+  //
+  // interface IntegrationForm extends ProfilePartForm {
+  //   isNightscoutEnabled: boolean,
+  //   nightscoutApiSecret: string
+  // }
 
   const props = defineProps({
     patientId: {
@@ -61,7 +64,7 @@ import type { ApiExceptionResponse, FieldErrors } from '@/util/exception.ts'
       patientProfile.value = (await getPatientProfile(props.patientId)).data;
     } catch (err) {
       if (isAxiosError(err) && err.response) {
-        if (err.response.status !== 400) globalError.value = true;
+        globalError.value = true;
       }
     }
     loading.value = false;
@@ -71,7 +74,10 @@ import type { ApiExceptionResponse, FieldErrors } from '@/util/exception.ts'
   const success = ref(false);
   const fieldErrors = ref<FieldErrors>({});
   const objectErrors = ref<string[]>([]);
-  const submitPatientProfile = async () => {
+  /*const submitProfilePart = async (profilePart: ProfilePartForm) => {
+
+  };*/
+  const submitForm = async () => {
     submitting.value = true;
     try {
       if (globalError.value) return;
@@ -103,11 +109,12 @@ import type { ApiExceptionResponse, FieldErrors } from '@/util/exception.ts'
 </script>
 
 <template>
-  <div class="profile-form-outer-wrapper">
+<!--  <div class="profile-form-outer-wrapper">-->
     <b-spinner v-if="loading" variant="success"></b-spinner>
     <div class="profile-form-inner-wrapper" v-else>
       <h4 class="error-text" v-if="globalError">ОШИБКА</h4>
-      <b-form class="profile-form" v-else @submit.prevent="submitPatientProfile">
+      <b-form class="profile-form" v-else @submit.prevent="submitForm">
+        <h2>НАСТРОЙКИ ПРОФИЛЯ</h2>
         <div class="first-row">
           <b-card class="form-group-wrapper">
             <b-form-group class="form-group" id="glucose-range">
@@ -119,41 +126,57 @@ import type { ApiExceptionResponse, FieldErrors } from '@/util/exception.ts'
                               class="form-group-inner"
                               label="Слишком высокая глюкоза"
                               label-for="hyper-glucose-input"
-                              :state="getValidationState('hyperGlucose', fieldErrors)"
-                              :invalid-feedback="fieldErrors.hyperGlucose">
+                              :state="getValidationState('hyperGlucose', fieldErrors)">
                   <b-form-input class="squared-input-field"
                                 id="hyper-glucose-input" type="number"
                                 v-model="patientProfile.hyperGlucose"/>
+                  <b-form-invalid-feedback>
+                    <span v-for="(message, index) in fieldErrors.hyperGlucose" :key="index">
+                      {{ message }}
+                    </span>
+                  </b-form-invalid-feedback>
                 </b-form-group>
                 <b-form-group key="high-glucose" id="high-glucose"
                               class="form-group-inner"
                               label="Верхняя граница нормы глюкозы"
                               label-for="high-glucose-input"
-                              :state="getValidationState('highGlucose', fieldErrors)"
-                              :invalid-feedback="fieldErrors.highGlucose">
+                              :state="getValidationState('highGlucose', fieldErrors)">
                   <b-form-input class="squared-input-field"
                                 id="high-glucose-input" type="number"
                                 v-model="patientProfile.highGlucose"/>
+                  <b-form-invalid-feedback>
+                    <span v-for="(message, index) in fieldErrors.highGlucose" :key="index">
+                      {{ message }}
+                    </span>
+                  </b-form-invalid-feedback>
                 </b-form-group>
                 <b-form-group key="low-glucose" id="low-glucose"
                               class="form-group-inner"
                               label="Нижняя граница нормы глюкозы"
                               label-for="low-glucose-input"
-                              :state="getValidationState('lowGlucose', fieldErrors)"
-                              :invalid-feedback="fieldErrors.lowGlucose">
+                              :state="getValidationState('lowGlucose', fieldErrors)">
                   <b-form-input class="squared-input-field"
                                 id="low-glucose-input" type="number"
                                 v-model="patientProfile.lowGlucose"/>
+                  <b-form-invalid-feedback>
+                    <span v-for="(message, index) in fieldErrors.lowGlucose" :key="index">
+                      {{ message }}
+                    </span>
+                  </b-form-invalid-feedback>
                 </b-form-group>
                 <b-form-group key="hypo-glucose" id="hypo-glucose"
                               class="form-group-inner"
                               label="Слишком низкая глюкоза"
                               label-for="hypo-glucose-input"
-                              :state="getValidationState('hypoGlucose', fieldErrors)"
-                              :invalid-feedback="fieldErrors.hypoGlucose">
+                              :state="getValidationState('hypoGlucose', fieldErrors)">
                   <b-form-input class="squared-input-field"
                                 id="hypo-glucose-input" type="number"
                                 v-model="patientProfile.hypoGlucose"/>
+                  <b-form-invalid-feedback>
+                    <span v-for="(message, index) in fieldErrors.hypoGlucose" :key="index">
+                      {{ message }}
+                    </span>
+                  </b-form-invalid-feedback>
                 </b-form-group>
               </form-transition-group>
             </b-form-group>
@@ -164,7 +187,8 @@ import type { ApiExceptionResponse, FieldErrors } from '@/util/exception.ts'
               <b-form-group id="glucose-unit"
                             class="form-group-inner"
                             label="Единицы глюкозы"
-                            label-for="glucose-unit-selector">
+                            label-for="glucose-unit-selector"
+                            :state="getValidationState('glucoseUnit', fieldErrors)">
                 <b-form-select class="squared-input-field"
                                id="glucose-unit-selector" v-model="patientProfile.glucoseUnit">
                   <b-form-select-option v-for="glucoseUnit in Object.entries(GlucoseUnit)"
@@ -172,11 +196,17 @@ import type { ApiExceptionResponse, FieldErrors } from '@/util/exception.ts'
                     {{ glucoseUnit[1] }}
                   </b-form-select-option>
                 </b-form-select>
+                <b-form-invalid-feedback>
+                    <span v-for="(message, index) in fieldErrors.glucoseUnit" :key="index">
+                      {{ message }}
+                    </span>
+                </b-form-invalid-feedback>
               </b-form-group>
               <b-form-group id="carbs-unit"
                             class="form-group-inner"
                             label="Единицы углеводов"
-                            label-for="carbs-unit-selector">
+                            label-for="carbs-unit-selector"
+                            :state="getValidationState('carbsUnit', fieldErrors)">
                 <b-form-select class="squared-input-field"
                                id="carbs-unit-selector" v-model="patientProfile.carbsUnit">
                   <b-form-select-option v-for="carbsUnit in Object.entries(CarbsUnit)"
@@ -184,6 +214,11 @@ import type { ApiExceptionResponse, FieldErrors } from '@/util/exception.ts'
                     {{ carbsUnit[1] }}
                   </b-form-select-option>
                 </b-form-select>
+                <b-form-invalid-feedback>
+                    <span v-for="(message, index) in fieldErrors.carbsUnit" :key="index">
+                      {{ message }}
+                    </span>
+                </b-form-invalid-feedback>
               </b-form-group>
             </b-form-group>
           </b-card>
@@ -199,7 +234,7 @@ import type { ApiExceptionResponse, FieldErrors } from '@/util/exception.ts'
         </b-button>
       </b-form>
     </div>
-  </div>
+<!--  </div>-->
 </template>
 
 <style scoped>
@@ -207,15 +242,9 @@ h4{
   text-align: center;
 }
 
-.profile-form-outer-wrapper {
-  display: flex;
-  align-items: center;
-  flex: 1;
-  height: 100%;
-
   .profile-form-inner-wrapper {
     display: flex;
-    align-items: center;
+    align-items: start;
     flex: 1;
 
     .profile-form {
@@ -244,14 +273,10 @@ h4{
           .form-group-inner {
             margin-top: 1.1rem;
           }
-
-          .update-profile-btn {
-
-          }
         }
       }
     }
   }
-}
+
 
 </style>
