@@ -17,22 +17,24 @@ import { type AxiosResponse, isAxiosError } from 'axios'
 import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
 import type { ApiExceptionResponse, FieldErrors } from '@/util/exception.ts'
 
-  interface GlucoseRangeForm {
-    hyperGlucose: number,
-    highGlucose: number,
-    lowGlucose: number,
-    hypoGlucose: number
-  }
-
-  interface UnitsForm {
-    glucoseUnit: GlucoseUnit,
-    carbsUnit: CarbsUnit
-  }
-
-  interface IntegrationForm {
-    isNightscoutEnabled: boolean,
-    nightscoutApiSecret: string
-  }
+  // type ProfilePartForm = object
+  //
+  // interface GlucoseRangeForm extends ProfilePartForm {
+  //   hyperGlucose: number,
+  //   highGlucose: number,
+  //   lowGlucose: number,
+  //   hypoGlucose: number
+  // }
+  //
+  // interface UnitsForm extends ProfilePartForm {
+  //   glucoseUnit: GlucoseUnit,
+  //   carbsUnit: CarbsUnit
+  // }
+  //
+  // interface IntegrationForm extends ProfilePartForm {
+  //   isNightscoutEnabled: boolean,
+  //   nightscoutApiSecret: string
+  // }
 
   const props = defineProps({
     patientId: {
@@ -61,7 +63,7 @@ import type { ApiExceptionResponse, FieldErrors } from '@/util/exception.ts'
       patientProfile.value = (await getPatientProfile(props.patientId)).data;
     } catch (err) {
       if (isAxiosError(err) && err.response) {
-        if (err.response.status !== 400) globalError.value = true;
+        globalError.value = true;
       }
     }
     loading.value = false;
@@ -71,7 +73,10 @@ import type { ApiExceptionResponse, FieldErrors } from '@/util/exception.ts'
   const success = ref(false);
   const fieldErrors = ref<FieldErrors>({});
   const objectErrors = ref<string[]>([]);
-  const submitPatientProfile = async () => {
+  /*const submitProfilePart = async (profilePart: ProfilePartForm) => {
+
+  };*/
+  const submitForm = async () => {
     submitting.value = true;
     try {
       if (globalError.value) return;
@@ -103,11 +108,12 @@ import type { ApiExceptionResponse, FieldErrors } from '@/util/exception.ts'
 </script>
 
 <template>
-  <div class="profile-form-outer-wrapper">
+<!--  <div class="profile-form-outer-wrapper">-->
     <b-spinner v-if="loading" variant="success"></b-spinner>
     <div class="profile-form-inner-wrapper" v-else>
       <h4 class="error-text" v-if="globalError">ОШИБКА</h4>
-      <b-form class="profile-form" v-else @submit.prevent="submitPatientProfile">
+      <b-form class="profile-form" v-else @submit.prevent="submitForm">
+        <h2>НАСТРОЙКИ ПРОФИЛЯ</h2>
         <div class="first-row">
           <b-card class="form-group-wrapper">
             <b-form-group class="form-group" id="glucose-range">
@@ -164,7 +170,9 @@ import type { ApiExceptionResponse, FieldErrors } from '@/util/exception.ts'
               <b-form-group id="glucose-unit"
                             class="form-group-inner"
                             label="Единицы глюкозы"
-                            label-for="glucose-unit-selector">
+                            label-for="glucose-unit-selector"
+                            :state="getValidationState('glucoseUnit', fieldErrors)"
+                            :invalid-feedback="fieldErrors.glucoseUnit">
                 <b-form-select class="squared-input-field"
                                id="glucose-unit-selector" v-model="patientProfile.glucoseUnit">
                   <b-form-select-option v-for="glucoseUnit in Object.entries(GlucoseUnit)"
@@ -176,7 +184,9 @@ import type { ApiExceptionResponse, FieldErrors } from '@/util/exception.ts'
               <b-form-group id="carbs-unit"
                             class="form-group-inner"
                             label="Единицы углеводов"
-                            label-for="carbs-unit-selector">
+                            label-for="carbs-unit-selector"
+                            :state="getValidationState('carbsUnit', fieldErrors)"
+                            :invalid-feedback="fieldErrors.carbsUnit">
                 <b-form-select class="squared-input-field"
                                id="carbs-unit-selector" v-model="patientProfile.carbsUnit">
                   <b-form-select-option v-for="carbsUnit in Object.entries(CarbsUnit)"
@@ -199,7 +209,7 @@ import type { ApiExceptionResponse, FieldErrors } from '@/util/exception.ts'
         </b-button>
       </b-form>
     </div>
-  </div>
+<!--  </div>-->
 </template>
 
 <style scoped>
@@ -207,15 +217,9 @@ h4{
   text-align: center;
 }
 
-.profile-form-outer-wrapper {
-  display: flex;
-  align-items: center;
-  flex: 1;
-  height: 100%;
-
   .profile-form-inner-wrapper {
     display: flex;
-    align-items: center;
+    align-items: start;
     flex: 1;
 
     .profile-form {
@@ -244,14 +248,10 @@ h4{
           .form-group-inner {
             margin-top: 1.1rem;
           }
-
-          .update-profile-btn {
-
-          }
         }
       }
     }
   }
-}
+
 
 </style>
