@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import PatientProfileFormContent from '@/components/PatientProfileFormContent.vue'
+import PatientProfileFormContent from '@/components/patient-view/PatientProfileFormContent.vue'
 import { useRoute } from 'vue-router'
 import { ref } from 'vue'
 
@@ -19,6 +19,7 @@ const id = ref(useRoute().params.id as string);
   display: flex;
   justify-content: center;
   align-items: start;
+  padding: 2rem
 }
 </style>
 

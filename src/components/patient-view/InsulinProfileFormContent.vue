@@ -19,7 +19,7 @@ import {
   postInsulinProfile,
   putInsulinProfile,
 } from '@/service/insulinService.ts'
-import InsulinPropertyByTime from '@/components/InsulinPropertyByTime.vue'
+import InsulinPropertyByTime from '@/components/patient-view/InsulinPropertyByTime.vue'
 
 const props = defineProps({
   patientId: {
@@ -148,7 +148,7 @@ const addValueByTime = (map: {[key: string]: number}, sortedKeys: ComputedRef<st
   else {
     const lastTimeSlot = sortedKeys.value[sortedKeys.value.length - 1];
     //console.log(Time.T23_30.valueOf())
-    if (lastTimeSlot === "23:30") {
+    if (lastTimeSlot === "23:30" || lastTimeSlot === undefined) {
       // for (let i = sortedKeys.value.length - 2; i >= 0; i--) {
       //
       // }

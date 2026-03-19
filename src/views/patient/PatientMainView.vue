@@ -4,13 +4,18 @@ import SideBar, { type SidebarItem } from '@/components/SlidingSidebar.vue'
 
   const sidebarItems: SidebarItem[] = reactive([
     {
-      iconPath: "assets/icons/glucose.svg",
+      iconPath: "assets/icons/main-page.svg",
+      text: "Домашняя страница",
+      routeName: "patient-home"
+    },
+    {
+      iconPath: "assets/icons/diary.svg",
       text: "Дневник самоконтроля",
       routeName: "diary"
     },
     {
       iconPath: "assets/icons/insulin.svg",
-      text: "Инсулиновый профиль",
+      text: "Инсулиновый режим",
       routeName: "insulin"
     },
     {

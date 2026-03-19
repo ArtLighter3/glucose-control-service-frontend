@@ -2,7 +2,7 @@
 
 import { useRoute } from 'vue-router'
 import { ref } from 'vue'
-import InsulinProfileFormContent from '@/components/InsulinProfileFormContent.vue'
+import InsulinProfileFormContent from '@/components/patient-view/InsulinProfileFormContent.vue'
 
 const id = ref(useRoute().params.id as string);
 
@@ -19,6 +19,7 @@ const id = ref(useRoute().params.id as string);
   display: flex;
   justify-content: center;
   align-items: start;
+  padding: 2rem
 }
 </style>
 

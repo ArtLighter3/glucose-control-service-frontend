@@ -24,6 +24,7 @@
   border-style: solid;
   border-radius: 0;
   border-color: var(--color-background-alt);
+  background-color: var(--color-background-alt-lite);
 }
 
 .error-text, .invalid-feedback {

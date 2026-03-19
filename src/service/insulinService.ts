@@ -1,5 +1,6 @@
 import "axios"
 import axios, { type AxiosResponse } from 'axios'
+import type { DiaryEntry, GlucoseEntry } from '@/service/diaryService.ts'
 
 export interface InsulinProfile {
   defaultInsulinToCarbsRatio: number,
@@ -7,6 +8,12 @@ export interface InsulinProfile {
   durationOfInsulinAction: number,
   factorsByTime: { [key: string]: number },
   ratiosByTime: { [key: string]: number },
+}
+
+export interface RecentActivity {
+  recentEntries: DiaryEntry[],
+  lastGlucoseEntry: GlucoseEntry | null,
+  activeInsulin: number | null
 }
 
 // export interface TimeValuePair {
@@ -37,13 +44,29 @@ export async function putInsulinProfile(patientId: string, insulinProfile: Insul
   return response;
 }
 
-function convertMaps(response: AxiosResponse) {
-  const data = response.data;
-  if (data && data.ratiosByTime) {
-    data.ratiosByTime = new Map(Object.entries(data.ratiosByTime));
-    data.factorsByTime = new Map(Object.entries(data.factorsByTime));
-  }
+export async function getRecentActivity(patientId: string) {
+  axios.defaults.withCredentials = true;
+  const now = new Date();
+  const response =
+    await axios.get<RecentActivity>(getRecentActivityURL(patientId), {
+    params: {
+      timestamp: now.toISOString(),
+    }
+  });
+
+  // const data = response.data
+  // if (data && data.)
+
+  return response;
 }
+
+// function convertMaps(response: AxiosResponse) {
+//   const data = response.data;
+//   if (data && data.ratiosByTime) {
+//     data.ratiosByTime = new Map(Object.entries(data.ratiosByTime));
+//     data.factorsByTime = new Map(Object.entries(data.factorsByTime));
+//   }
+// }
 
 function getInsulinProfileURL(patientId: string) {
   return `${API_BASE_URL}/api/v1/patients/${patientId}/insulin-profile`;
@@ -52,3 +75,9 @@ function getInsulinProfileURL(patientId: string) {
 function getInsulinCalculationURL(patientId: string) {
   return `${API_BASE_URL}/api/v1/patients/${patientId}/insulin/calculate`;
 }
+
+function getRecentActivityURL(patientId: string) {
+  return `${API_BASE_URL}/api/v1/patients/${patientId}/recent`;
+}
+
+

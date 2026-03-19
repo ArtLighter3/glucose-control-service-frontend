@@ -53,7 +53,7 @@ import { reactive, ref } from 'vue'
     try {
       form.error = false;
       const response = await login(form.username, form.password);
-      await router.push({ name: "diary", params: { id: `${response.data.id}` } })
+      await router.push({ name: "patient-home", params: { id: `${response.data.id}` } })
     } catch (err) {
       console.log(err);
       form.error = true;

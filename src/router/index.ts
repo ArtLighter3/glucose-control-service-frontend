@@ -4,6 +4,7 @@ import PatientMainView from '@/views/patient/PatientMainView.vue'
 import DiaryView from '@/views/patient/DiaryView.vue'
 import InsulinProfileView from '@/views/patient/InsulinProfileView.vue'
 import PatientProfileView from '@/views/patient/PatientProfileView.vue'
+import HomeView from '@/views/patient/HomeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,6 +38,11 @@ const router = createRouter({
           path: "patient-profile",
           name: "patient-profile",
           component: PatientProfileView
+        },
+        {
+          path: "home",
+          name: "patient-home",
+          component: HomeView
         }
       ]
     },

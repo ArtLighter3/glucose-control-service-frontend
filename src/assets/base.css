@@ -27,6 +27,7 @@
   --color-background-soft: var(--vt-c-white-soft);
   --color-background-mute: var(--vt-c-white-mute);
   --color-background-alt: rgba(0, 153, 0);
+  --color-background-alt-lite: rgba(0, 153, 0, 0.1);
 
   --color-border: var(--vt-c-divider-light-2);
   --color-border-hover: var(--vt-c-divider-light-1);
@@ -46,6 +47,7 @@
     --color-background-soft: var(--vt-c-black-soft);
     --color-background-mute: var(--vt-c-black-mute);
     --color-background-alt: rgba(0, 100, 0);
+    --color-background-alt-lite: rgba(0, 53, 0, 0.75);
 
     --color-border: var(--vt-c-divider-dark-2);
     --color-border-hover: var(--vt-c-divider-dark-1);
