@@ -21,10 +21,10 @@ const props = defineProps<{
   activeInsulin: number | null,
 }>();
 
-const formattedDate = computed(() => {
+const formattedDate = computed((): string => {
   if (props.recentGlucose) {
     const date = new Date(props.recentGlucose.commitedAt);
-    return format(date, "d MMM yyyy", {
+    return format(date, "d MMM yyyy HH:mm", {
       locale: ru
     });
   }

@@ -46,11 +46,10 @@ export async function putInsulinProfile(patientId: string, insulinProfile: Insul
 
 export async function getRecentActivity(patientId: string) {
   axios.defaults.withCredentials = true;
-  const now = new Date();
   const response =
     await axios.get<RecentActivity>(getRecentActivityURL(patientId), {
     params: {
-      timestamp: now.toISOString(),
+      outputZoneOffset: getUtcOffsetString(new Date()),
     }
   });
 
@@ -67,6 +66,19 @@ export async function getRecentActivity(patientId: string) {
 //     data.factorsByTime = new Map(Object.entries(data.factorsByTime));
 //   }
 // }
+
+function getUtcOffsetString(date: Date): string {
+  const offsetMinutes: number = date.getTimezoneOffset();
+  const sign: string = offsetMinutes >= 0 ? '-' : '+'; // Invert the sign to match the standard UTC format (e.g., UTC+05:30)
+  const absOffsetMinutes: number = Math.abs(offsetMinutes);
+  const hours: number = Math.floor(absOffsetMinutes / 60);
+  const minutes: number = absOffsetMinutes % 60;
+
+  const formattedHours: string = hours.toString().padStart(2, '0');
+  const formattedMinutes: string = minutes.toString().padStart(2, '0');
+
+  return `${sign}${formattedHours}:${formattedMinutes}`;
+}
 
 function getInsulinProfileURL(patientId: string) {
   return `${API_BASE_URL}/api/v1/patients/${patientId}/insulin-profile`;

@@ -58,6 +58,7 @@ aside {
   min-height: 100vh;
   overflow: hidden;
 
+
   background-color: var(--color-background-alt);
   color: var(--color-text-on-alt-background);
 

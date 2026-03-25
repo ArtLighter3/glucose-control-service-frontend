@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import {
-  CarbsUnit,
+  CarbsUnit, DefaultPatientProfile,
   getPatientProfile,
   GlucoseUnit,
   type PatientProfile, putPatientProfile
@@ -17,6 +17,9 @@ import {
 import { type AxiosResponse, isAxiosError } from 'axios'
 import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
 import type { ApiExceptionResponse, FieldErrors } from '@/util/exception.ts'
+import { usePatientProfileStore } from '@/stores/patientProfileStore.ts'
+import { storeToRefs } from 'pinia'
+import { useSubmittableForm } from '@/composables/useSubmittableForm.ts'
 
   // type ProfilePartForm = object
   //
@@ -44,41 +47,38 @@ import type { ApiExceptionResponse, FieldErrors } from '@/util/exception.ts'
     }
   });
 
-  const patientProfile = ref<PatientProfile>({
-    glucoseUnit: GlucoseUnit.MILLIMOLES_PER_LITER,
-    carbsUnit: CarbsUnit.GRAMS,
-    diabetesType: 1,
-    hyperGlucose: 15,
-    highGlucose: 9,
-    lowGlucose: 4,
-    hypoGlucose: 3,
-    isNightscoutEnabled: false,
-    nightscoutApiSecret: ""
-  });
+  const patientProfileStore = usePatientProfileStore();
+  const { isFetched, cachedPatientProfile } = storeToRefs(patientProfileStore);
 
+  const patientProfile = ref<PatientProfile>(new DefaultPatientProfile());
   const globalError = ref(false);
   const loading = ref(true);
   onMounted(async () => {
-    try {
-      globalError.value = false;
-      patientProfile.value = (await getPatientProfile(props.patientId)).data;
-    } catch (err) {
-      if (isAxiosError(err) && err.response) {
-        globalError.value = true;
+    globalError.value = false;
+    if (patientProfileStore.isUpToDate) {
+      patientProfile.value = cachedPatientProfile.value;
+    } else {
+      try {
+        patientProfile.value = (await getPatientProfile(props.patientId)).data;
+        cachedPatientProfile.value = patientProfile.value;
+        isFetched.value = true;
+      } catch (err) {
+        if (isAxiosError(err) && err.response) {
+          globalError.value = true;
+        }
       }
     }
     loading.value = false;
   });
 
-  const submitting = ref(false);
-  const success = ref(false);
-  const fieldErrors = ref<FieldErrors>({});
-  const objectErrors = ref<string[]>([]);
   /*const submitProfilePart = async (profilePart: ProfilePartForm) => {
 
   };*/
+  const { submitting, success, fieldErrors, objectErrors, getValidationState}
+    = useSubmittableForm();
   const submitForm = async () => {
     submitting.value = true;
+    isFetched.value = false;
     try {
       if (globalError.value) return;
       fieldErrors.value = {};
@@ -87,6 +87,8 @@ import type { ApiExceptionResponse, FieldErrors } from '@/util/exception.ts'
       const response = await putPatientProfile(props.patientId, patientProfile.value);
       patientProfile.value = response.data;
       success.value = true;
+      cachedPatientProfile.value = patientProfile.value;
+      isFetched.value = true;
     } catch (err) {
       success.value = false;
       if (isAxiosError(err) && err.response) {
@@ -97,14 +99,8 @@ import type { ApiExceptionResponse, FieldErrors } from '@/util/exception.ts'
         }
       }
     }
+
     submitting.value = false;
-  };
-
-  const getValidationState = (fieldName: string, errors: FieldErrors) => {
-    if (success.value) return true;
-    if (errors[fieldName] && errors[fieldName].length > 0) return false;
-
-    return null;
   };
 </script>
 
@@ -126,7 +122,7 @@ import type { ApiExceptionResponse, FieldErrors } from '@/util/exception.ts'
                               class="form-group-inner"
                               label="Слишком высокая глюкоза"
                               label-for="hyper-glucose-input"
-                              :state="getValidationState('hyperGlucose', fieldErrors)">
+                              :state="getValidationState('hyperGlucose')">
                   <b-form-input class="squared-input-field"
                                 id="hyper-glucose-input" type="number"
                                 v-model="patientProfile.hyperGlucose"/>
@@ -140,7 +136,7 @@ import type { ApiExceptionResponse, FieldErrors } from '@/util/exception.ts'
                               class="form-group-inner"
                               label="Верхняя граница нормы глюкозы"
                               label-for="high-glucose-input"
-                              :state="getValidationState('highGlucose', fieldErrors)">
+                              :state="getValidationState('highGlucose')">
                   <b-form-input class="squared-input-field"
                                 id="high-glucose-input" type="number"
                                 v-model="patientProfile.highGlucose"/>
@@ -154,7 +150,7 @@ import type { ApiExceptionResponse, FieldErrors } from '@/util/exception.ts'
                               class="form-group-inner"
                               label="Нижняя граница нормы глюкозы"
                               label-for="low-glucose-input"
-                              :state="getValidationState('lowGlucose', fieldErrors)">
+                              :state="getValidationState('lowGlucose')">
                   <b-form-input class="squared-input-field"
                                 id="low-glucose-input" type="number"
                                 v-model="patientProfile.lowGlucose"/>
@@ -168,7 +164,7 @@ import type { ApiExceptionResponse, FieldErrors } from '@/util/exception.ts'
                               class="form-group-inner"
                               label="Слишком низкая глюкоза"
                               label-for="hypo-glucose-input"
-                              :state="getValidationState('hypoGlucose', fieldErrors)">
+                              :state="getValidationState('hypoGlucose')">
                   <b-form-input class="squared-input-field"
                                 id="hypo-glucose-input" type="number"
                                 v-model="patientProfile.hypoGlucose"/>
@@ -188,7 +184,7 @@ import type { ApiExceptionResponse, FieldErrors } from '@/util/exception.ts'
                             class="form-group-inner"
                             label="Единицы глюкозы"
                             label-for="glucose-unit-selector"
-                            :state="getValidationState('glucoseUnit', fieldErrors)">
+                            :state="getValidationState('glucoseUnit')">
                 <b-form-select class="squared-input-field"
                                id="glucose-unit-selector" v-model="patientProfile.glucoseUnit">
                   <b-form-select-option v-for="glucoseUnit in Object.entries(GlucoseUnit)"
@@ -206,7 +202,7 @@ import type { ApiExceptionResponse, FieldErrors } from '@/util/exception.ts'
                             class="form-group-inner"
                             label="Единицы углеводов"
                             label-for="carbs-unit-selector"
-                            :state="getValidationState('carbsUnit', fieldErrors)">
+                            :state="getValidationState('carbsUnit')">
                 <b-form-select class="squared-input-field"
                                id="carbs-unit-selector" v-model="patientProfile.carbsUnit">
                   <b-form-select-option v-for="carbsUnit in Object.entries(CarbsUnit)"
@@ -238,7 +234,7 @@ import type { ApiExceptionResponse, FieldErrors } from '@/util/exception.ts'
 </template>
 
 <style scoped>
-h4{
+h4 {
   text-align: center;
 }
 

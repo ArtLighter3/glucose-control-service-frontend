@@ -20,6 +20,7 @@ import {
   putInsulinProfile,
 } from '@/service/insulinService.ts'
 import InsulinPropertyByTime from '@/components/patient-view/InsulinPropertyByTime.vue'
+import { useSubmittableForm } from '@/composables/useSubmittableForm.ts'
 
 const props = defineProps({
   patientId: {
@@ -52,10 +53,8 @@ onMounted(async () => {
   loading.value = false
 })
 
-const submitting = ref(false)
-const success = ref(false)
-const fieldErrors = ref<FieldErrors>({})
-const objectErrors = ref<string[]>([])
+const { submitting, success, fieldErrors, objectErrors, getValidationState}
+  = useSubmittableForm();
 const submitForm = async () => {
   submitting.value = true
   try {
@@ -80,13 +79,6 @@ const submitForm = async () => {
     }
   }
   submitting.value = false
-}
-
-const getValidationState = (fieldName: string, errors: FieldErrors) => {
-  if (success.value) return true
-  if (errors[fieldName] && errors[fieldName].length > 0) return false
-
-  return null
 }
 
 const sortedRatioTimeSlots = computed(() => {
@@ -192,7 +184,7 @@ const addValueByTime = (map: {[key: string]: number}, sortedKeys: ComputedRef<st
             class="form-group-inner"
             label="Время действия инсулина (DIA) [час]"
             label-for="dia-input"
-            :state="getValidationState('durationOfInsulinAction', fieldErrors)"
+            :state="getValidationState('durationOfInsulinAction')"
           >
             <b-form-input
               class="squared-input-field"
@@ -224,7 +216,7 @@ const addValueByTime = (map: {[key: string]: number}, sortedKeys: ComputedRef<st
                   :deletable="false"
                   :time-adjustable="false"
                   value-display-name="ICR"
-                  :state="getValidationState('defaultInsulinToCarbsRatio', fieldErrors)"
+                  :state="getValidationState('defaultInsulinToCarbsRatio')"
                   :invalid-feedback-messages="fieldErrors.defaultInsulinToCarbsRatio"
                 ></insulin-property-by-time>
                 <insulin-property-by-time
@@ -236,7 +228,7 @@ const addValueByTime = (map: {[key: string]: number}, sortedKeys: ComputedRef<st
                   @update:time="handleRatiosTimeSlotUpdate(time, $event)"
                   :value="insulinProfile.ratiosByTime[time]"
                   @update:value="handleRatiosValueUpdate(time, $event)"
-                  :state="getValidationState(`ratiosByTime[${time}]`, fieldErrors)"
+                  :state="getValidationState(`ratiosByTime[${time}]`)"
                   :invalid-feedback-messages="fieldErrors[`ratiosByTime[${time}]`]"
                   @delete="deleteRatioByTime(time)"
                 />
@@ -266,7 +258,7 @@ const addValueByTime = (map: {[key: string]: number}, sortedKeys: ComputedRef<st
                   :deletable="false"
                   :time-adjustable="false"
                   value-display-name="ISF"
-                  :state="getValidationState('defaultInsulinSensitivityFactor', fieldErrors)"
+                  :state="getValidationState('defaultInsulinSensitivityFactor')"
                   :invalid-feedback-messages="fieldErrors.defaultInsulinSensitivityFactor"
                 ></insulin-property-by-time>
                 <insulin-property-by-time
@@ -278,7 +270,7 @@ const addValueByTime = (map: {[key: string]: number}, sortedKeys: ComputedRef<st
                   @update:time="handleFactorsTimeSlotUpdate(time, $event)"
                   :value="insulinProfile.factorsByTime[time]"
                   @update:value="handleFactorsValueUpdate(time, $event)"
-                  :state="getValidationState(`factorsByTime[${time}]`, fieldErrors)"
+                  :state="getValidationState(`factorsByTime[${time}]`)"
                   :invalid-feedback-messages="fieldErrors[`factorsByTime[${time}]`]"
                   @delete="deleteFactorByTime(time)"
                 />

@@ -1,5 +1,6 @@
 import "axios"
 import axios from 'axios'
+import { usePatientProfileStore } from '@/stores/patientProfileStore.ts'
 
 export enum GlucoseUnit {
   MILLIMOLES_PER_LITER = "ммоль/л",
@@ -25,9 +26,23 @@ export interface PatientProfile {
   nightscoutApiSecret: string
 }
 
+export class DefaultPatientProfile implements PatientProfile {
+  glucoseUnit = GlucoseUnit.MILLIMOLES_PER_LITER;
+  carbsUnit = CarbsUnit.GRAMS;
+  diabetesType = 1;
+  hyperGlucose = 15;
+  highGlucose = 9;
+  lowGlucose = 4;
+  hypoGlucose = 3;
+  isNightscoutEnabled = false;
+  nightscoutApiSecret = "";
+
+}
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
-export async function getPatientProfile(patientId: string) {
+export async function getPatientProfile(patientId: string)
+{
   axios.defaults.withCredentials = true;
   return axios.get<PatientProfile>(`${API_BASE_URL}/api/v1/patients/${patientId}/patient-profile`);
 }
