@@ -7,7 +7,7 @@ import { BFormInput,
   BButton} from 'bootstrap-vue-next'
 import { type PropType, ref } from 'vue'
 
-//Может и выглядит не очень, но таким образом лекго вычислить следующий слот
+//Может и выглядит не очень, но таким образом легко вычислить следующий слот
 enum Time {
   T00_30 = "00:30",
   T01_00 = "01:00",

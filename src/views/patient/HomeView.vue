@@ -14,7 +14,7 @@ import {
 } from '@/service/patientProfileService.ts'
 import { usePatientProfileStore } from '@/stores/patientProfileStore.ts'
 import { storeToRefs } from 'pinia'
-import AddEntryButton from '@/components/patient-view/AddEntryButton.vue'
+import AddEntryButton from '@/components/patient-view/diary/AddEntryButton.vue'
 
 const id = ref(useRoute().params.id as string);
 const recentActivity = ref<RecentActivity>({
