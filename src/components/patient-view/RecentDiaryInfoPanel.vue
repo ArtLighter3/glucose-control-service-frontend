@@ -13,13 +13,13 @@ const props = defineProps<{
   activeInsulin: number | null,
 }>();
 
-const formattedDate = computed((): string => {
+const formattedDate = computed((): string | null => {
   if (props.recentGlucose) {
     const date = new Date(props.recentGlucose.commitedAt);
     return format(date, "d MMM yyyy HH:mm", {
       locale: ru
     });
-  }
+  } else return null;
 });
 
 </script>
