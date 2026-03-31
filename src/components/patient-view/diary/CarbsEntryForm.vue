@@ -13,11 +13,12 @@ import { ref } from 'vue'
 import { useFormattedCommitionDate } from '@/composables/useFormattedCommitionDate.ts'
 import EntryFormButtons from '@/components/patient-view/diary/EntryFormButtons.vue'
 import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
+import type { FieldErrors } from '@/util/exception.ts'
 
 const props = defineProps<{
   success: boolean,
   objectErrors: string[],
-  fieldErrors: { [key: string]: string[] },
+  fieldErrors: FieldErrors,
   submitting: boolean,
   showUpdateForm: boolean
 }>()

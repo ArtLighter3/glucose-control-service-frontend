@@ -1,14 +1,6 @@
 <script setup lang="ts">
 import {type GlucoseEntry} from '@/service/diaryService.ts'
 import { type CarbsUnit, GlucoseUnit } from '@/service/patientProfileService.ts'
-import {
-  BFormInput,
-  BForm,
-  BFormGroup, BFormSelect, BFormSelectOption,
-  BButton,
-  BSpinner,
-  BCard, BFormInvalidFeedback
-} from 'bootstrap-vue-next'
 import InfoPanelValue from '@/components/patient-view/InfoPanelValue.vue'
 import { computed } from 'vue'
 import { format } from 'date-fns'

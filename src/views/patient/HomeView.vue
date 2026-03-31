@@ -1,58 +1,39 @@
 <script setup lang="ts">
 
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import RecentDiaryInfoPanel from '@/components/patient-view/RecentDiaryInfoPanel.vue'
-import {
-  getRecentActivity,
-  type RecentActivity
-} from '@/service/insulinService.ts'
-import {
-  DefaultPatientProfile,
-  getPatientProfile,
-  type PatientProfile
-} from '@/service/patientProfileService.ts'
-import { usePatientProfileStore } from '@/stores/patientProfileStore.ts'
-import { storeToRefs } from 'pinia'
 import AddEntryButton from '@/components/patient-view/diary/AddEntryButton.vue'
+import { usePatientProfileFetching } from '@/composables/usePatientProfileFetching.ts'
+import { useRecentActivityFetching } from '@/composables/useRecentActivityFetching.ts'
+import TimeChart from '@/components/patient-view/GlucoseTimeChart.vue'
+import {BSpinner, BCard} from 'bootstrap-vue-next'
 
 const id = ref(useRoute().params.id as string);
-const recentActivity = ref<RecentActivity>({
-  recentEntries: [],
-  lastGlucoseEntry: null,
-  activeInsulin: null
-});
 
-const patientProfile = ref<PatientProfile>(new DefaultPatientProfile());
-const patientProfileStore = usePatientProfileStore();
-const { isFetched, cachedPatientProfile } = storeToRefs(patientProfileStore);
-
-onMounted(async () => {
-  try {
-    const response = await getRecentActivity(id.value);
-    if (response.data) recentActivity.value = response.data;
-  } catch (err) {
-    console.log(err);
-  }
-
-  if (patientProfileStore.isUpToDate) {
-    patientProfile.value = cachedPatientProfile.value;
-  } else {
-    patientProfile.value = (await getPatientProfile(id.value)).data;
-    cachedPatientProfile.value = patientProfile.value;
-    isFetched.value = true;
-  }
-});
+const { patientProfile } = usePatientProfileFetching(id.value);
+const { recentActivity, loading: activityLoading } = useRecentActivityFetching(id.value);
 
 </script>
 
 <template>
   <div class="home-view-wrapper">
-    <recent-diary-info-panel class="info-panel"
+    <recent-diary-info-panel v-if="!activityLoading"
       :recent-glucose="recentActivity.lastGlucoseEntry"
       :active-insulin="recentActivity.activeInsulin"
       :carbs-unit="null"
       :overall-day-carbs="null"/>
+    <b-spinner v-else/>
+    <b-card class="chart-wrapper">
+      <time-chart v-if="!activityLoading" :entries="recentActivity.recentEntries"
+                  :glucose-units="patientProfile.glucoseUnit"
+                  :hyper-glucose="patientProfile.hyperGlucose"
+                  :high-glucose="patientProfile.highGlucose"
+                  :low-glucose="patientProfile.lowGlucose"
+                  :hypo-glucose="patientProfile.hypoGlucose"/>
+      <b-spinner v-else/>
+    </b-card>
+
     <div class="add-button-wrapper">
       <add-entry-button :patient-id="id"></add-entry-button>
     </div>
@@ -67,6 +48,16 @@ onMounted(async () => {
   flex-direction: column;
   align-items: center;
   padding: 1rem;
+  gap: 3rem;
+
+  .chart-wrapper {
+    width: 70%;
+    flex-grow: 1;
+
+    @media (max-width: 768px) {
+      width: 85%;
+    }
+  }
 
   .add-button-wrapper {
     position: fixed;

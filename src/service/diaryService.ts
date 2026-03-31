@@ -1,7 +1,6 @@
 import {
   CarbsUnit,
-  type GlucoseUnit,
-  type PatientProfile
+  GlucoseUnit
 } from '@/service/patientProfileService.ts'
 import axios from 'axios'
 
@@ -27,11 +26,11 @@ export enum DiaryEntryType {
 export interface DiaryEntry {
   value: number,
   commitedAt: string,
-  notes: string | null
+  notes: string | null,
 }
 
 export interface GlucoseEntry extends DiaryEntry {
-  type: MeasurementType | null
+  category: MeasurementType | null,
   glucoseUnits: GlucoseUnit | null,
 }
 
@@ -39,19 +38,19 @@ export class DefaultGlucoseEntry implements GlucoseEntry {
   commitedAt = "";
   glucoseUnits = null;
   notes = null;
-  type = null;
+  category = null;
   value = 0.0;
 }
 
 export interface InsulinEntry extends DiaryEntry {
-  type: InsulinType
+  insulinType: InsulinType
 }
 
 export class DefaultInsulinEntry implements InsulinEntry {
   commitedAt = "";
   notes = null;
   value = 0.0;
-  type = InsulinType.SHORT;
+  insulinType = InsulinType.SHORT;
 }
 
 export interface MedicationEntry extends DiaryEntry {
@@ -74,6 +73,22 @@ export class DefaultCarbsEntry implements CarbsEntry {
   notes = null;
   value = 0.0;
   carbsUnits = null;
+}
+
+export function isGlucoseEntry(obj: any): obj is GlucoseEntry {
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    'value' in obj &&
+    typeof obj.value === 'number' &&
+    'commitedAt' in obj &&
+    typeof obj.commitedAt === 'string' &&
+    // 'notes' in obj &&
+    //typeof obj.notes === 'object' &&
+    'category' in obj &&
+    'glucoseUnits' in obj &&
+    Object.keys(GlucoseUnit).includes(obj.glucoseUnits)
+  );
 }
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL

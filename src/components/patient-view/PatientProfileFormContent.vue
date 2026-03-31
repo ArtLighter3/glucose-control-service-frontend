@@ -1,10 +1,6 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
 import {
-  CarbsUnit, DefaultPatientProfile,
-  getPatientProfile,
-  GlucoseUnit,
-  type PatientProfile, putPatientProfile
+  CarbsUnit, GlucoseUnit
 } from '@/service/patientProfileService.ts'
 import {
   BFormInput,
@@ -14,12 +10,8 @@ import {
   BSpinner,
   BCard, BFormInvalidFeedback
 } from 'bootstrap-vue-next'
-import { type AxiosResponse, isAxiosError } from 'axios'
 import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
-import type { ApiExceptionResponse, FieldErrors } from '@/util/exception.ts'
-import { usePatientProfileStore } from '@/stores/patientProfileStore.ts'
-import { storeToRefs } from 'pinia'
-import { useSubmittableForm } from '@/composables/useSubmittableForm.ts'
+import { usePatientProfileFetching } from '@/composables/usePatientProfileFetching.ts'
 
   // type ProfilePartForm = object
   //
@@ -47,61 +39,9 @@ import { useSubmittableForm } from '@/composables/useSubmittableForm.ts'
     }
   });
 
-  const patientProfileStore = usePatientProfileStore();
-  const { isFetched, cachedPatientProfile } = storeToRefs(patientProfileStore);
+  const { patientProfile, globalError, loading, submit, submitting, success,
+    fieldErrors, objectErrors, getValidationState } = usePatientProfileFetching(props.patientId);
 
-  const patientProfile = ref<PatientProfile>(new DefaultPatientProfile());
-  const globalError = ref(false);
-  const loading = ref(true);
-  onMounted(async () => {
-    globalError.value = false;
-    if (patientProfileStore.isUpToDate) {
-      patientProfile.value = cachedPatientProfile.value;
-    } else {
-      try {
-        patientProfile.value = (await getPatientProfile(props.patientId)).data;
-        cachedPatientProfile.value = patientProfile.value;
-        isFetched.value = true;
-      } catch (err) {
-        if (isAxiosError(err) && err.response) {
-          globalError.value = true;
-        }
-      }
-    }
-    loading.value = false;
-  });
-
-  /*const submitProfilePart = async (profilePart: ProfilePartForm) => {
-
-  };*/
-  const { submitting, success, fieldErrors, objectErrors, getValidationState}
-    = useSubmittableForm();
-  const submitForm = async () => {
-    submitting.value = true;
-    isFetched.value = false;
-    try {
-      if (globalError.value) return;
-      fieldErrors.value = {};
-      objectErrors.value = [];
-
-      const response = await putPatientProfile(props.patientId, patientProfile.value);
-      patientProfile.value = response.data;
-      success.value = true;
-      cachedPatientProfile.value = patientProfile.value;
-      isFetched.value = true;
-    } catch (err) {
-      success.value = false;
-      if (isAxiosError(err) && err.response) {
-        if (err.response.status === 400 && err.response.data) {
-          const exceptionResponse = err.response as AxiosResponse<ApiExceptionResponse>;
-          fieldErrors.value = exceptionResponse.data.fieldErrors;
-          objectErrors.value = exceptionResponse.data.objectErrors;
-        }
-      }
-    }
-
-    submitting.value = false;
-  };
 </script>
 
 <template>
@@ -109,7 +49,7 @@ import { useSubmittableForm } from '@/composables/useSubmittableForm.ts'
     <b-spinner v-if="loading" variant="success"></b-spinner>
     <div class="profile-form-inner-wrapper" v-else>
       <h4 class="error-text" v-if="globalError">ОШИБКА</h4>
-      <b-form class="profile-form" v-else @submit.prevent="submitForm">
+      <b-form class="profile-form" v-else @submit.prevent="submit">
         <h2>НАСТРОЙКИ ПРОФИЛЯ</h2>
         <div class="first-row">
           <b-card class="form-group-wrapper">

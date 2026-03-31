@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, type ComputedRef, onMounted, ref } from 'vue'
+import { computed, type ComputedRef } from 'vue'
 import {
   BFormInput,
   BForm,
@@ -10,17 +10,11 @@ import {
   BSpinner,
   BCard, BFormInvalidFeedback
 } from 'bootstrap-vue-next'
-import { type AxiosResponse, isAxiosError } from 'axios'
 import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
-import type { ApiExceptionResponse, FieldErrors } from '@/util/exception.ts'
-import {
-  getInsulinProfile,
-  type InsulinProfile,
-  postInsulinProfile,
-  putInsulinProfile,
-} from '@/service/insulinService.ts'
 import InsulinPropertyByTime from '@/components/patient-view/InsulinPropertyByTime.vue'
-import { useSubmittableForm } from '@/composables/useSubmittableForm.ts'
+import {
+  useInsulinProfileFetchingAndSubmitting
+} from '@/composables/useInsulinProfileFetchingAndSubmitting.ts'
 
 const props = defineProps({
   patientId: {
@@ -29,57 +23,9 @@ const props = defineProps({
   },
 })
 
-const insulinProfile = ref<InsulinProfile>({
-  defaultInsulinToCarbsRatio: 30,
-  defaultInsulinSensitivityFactor: 30,
-  durationOfInsulinAction: 5,
-  factorsByTime: {},
-  ratiosByTime: {},
-})
-
-const globalError = ref(false)
-const loading = ref(true)
-const insulinProfileDoesNotExist = ref(false)
-onMounted(async () => {
-  try {
-    globalError.value = false
-    insulinProfile.value = (await getInsulinProfile(props.patientId)).data
-  } catch (err) {
-    if (isAxiosError(err) && err.response) {
-      if (err.response.status === 404) insulinProfileDoesNotExist.value = true
-      else globalError.value = true
-    }
-  }
-  loading.value = false
-})
-
-const { submitting, success, fieldErrors, objectErrors, getValidationState}
-  = useSubmittableForm();
-const submitForm = async () => {
-  submitting.value = true
-  try {
-    if (globalError.value) return
-    fieldErrors.value = {}
-    objectErrors.value = []
-
-    const response = insulinProfileDoesNotExist.value
-      ? await postInsulinProfile(props.patientId, insulinProfile.value)
-      : await putInsulinProfile(props.patientId, insulinProfile.value)
-    insulinProfile.value = response.data
-    success.value = true
-    insulinProfileDoesNotExist.value = false
-  } catch (err) {
-    success.value = false
-    if (isAxiosError(err) && err.response) {
-      if (err.response.status === 400 && err.response.data) {
-        const exceptionResponse = err.response as AxiosResponse<ApiExceptionResponse>
-        fieldErrors.value = exceptionResponse.data.fieldErrors
-        objectErrors.value = exceptionResponse.data.objectErrors
-      }
-    }
-  }
-  submitting.value = false
-}
+const {insulinProfile, globalError, loading,
+  submit, submitting, success, fieldErrors, objectErrors,
+  getValidationState} = useInsulinProfileFetchingAndSubmitting(props.patientId);
 
 const sortedRatioTimeSlots = computed(() => {
   return Object.keys(insulinProfile.value.ratiosByTime).sort();
@@ -168,7 +114,7 @@ const addValueByTime = (map: {[key: string]: number}, sortedKeys: ComputedRef<st
   <b-spinner v-if="loading" variant="success"></b-spinner>
   <div class="insulin-profile-form-inner-wrapper" v-else>
     <h4 class="error-text" v-if="globalError">ОШИБКА</h4>
-    <b-form class="insulin-profile-form" v-else @submit.prevent="submitForm">
+    <b-form class="insulin-profile-form" v-else @submit.prevent="submit">
       <h2>ИНСУЛИНОВЫЙ РЕЖИМ</h2>
       <b-card class="form-group-wrapper">
         <form-transition-group>

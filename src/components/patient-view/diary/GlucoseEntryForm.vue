@@ -15,11 +15,12 @@ import { ref } from 'vue'
 import { useFormattedCommitionDate } from '@/composables/useFormattedCommitionDate.ts'
 import EntryFormButtons from '@/components/patient-view/diary/EntryFormButtons.vue'
 import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
+import type { FieldErrors } from '@/util/exception.ts'
 
 const props = defineProps<{
   success: boolean,
   objectErrors: string[],
-  fieldErrors: { [key: string]: string[] },
+  fieldErrors: FieldErrors,
   submitting: boolean,
   showUpdateForm: boolean
 }>()
@@ -84,13 +85,13 @@ const submit = () => {
       id="category"
       label="Категория"
       label-for="category-selector"
-      :state="getValidationState('type')"
+      :state="getValidationState('category')"
     >
       <b-form-select
         class="squared-input-field"
         id="category-selector"
         key="category-selector"
-        v-model="glucoseEntry.type"
+        v-model="glucoseEntry.category"
       >
         <b-form-select-option key="null" :value="null">Нет</b-form-select-option>
         <b-form-select-option
@@ -102,7 +103,7 @@ const submit = () => {
         </b-form-select-option>
       </b-form-select>
       <b-form-invalid-feedback>
-        <span v-for="(message, index) in fieldErrors.type" :key="index">
+        <span v-for="(message, index) in fieldErrors.category" :key="index">
           {{ message }}
         </span>
       </b-form-invalid-feedback>

@@ -17,7 +17,6 @@ const props = defineProps({
 const { isOpen: isSelectionOpen, openModal: openSelection, closeModal: closeSelection } = useModal()
 
 const currentEntryType = ref<DiaryEntryType>(DiaryEntryType.GLUCOSE_ENTRY)
-console.log(currentEntryType);
 
 const { isOpen: isEntryFormOpen, closeModal: closeEntryForm } = useModal()
 const openEntryForm = (type: DiaryEntryType) => {

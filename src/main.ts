@@ -9,6 +9,10 @@ import VueAxios from 'vue-axios'
 import axios from 'axios'
 import { createBootstrap } from 'bootstrap-vue-next'
 
+import { Chart, registerables } from 'chart.js';
+import ChartAnnotation from 'chartjs-plugin-annotation';
+
+Chart.register(...registerables, ChartAnnotation);
 
 const app = createApp(App)
 

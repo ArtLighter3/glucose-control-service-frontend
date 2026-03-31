@@ -1,14 +1,14 @@
 <template>
-  <b-form class="form" @submit.prevent="submitLoginForm">
+  <b-form class="form" @submit.prevent="submitLogin">
     <form-transition-group>
-      <div v-if="form.error" class="error-text" key="err">
+      <div v-if="userLogin.error" class="error-text" key="err">
         Неверное имя пользователя или пароль!
       </div>
       <b-form-group class="b-form-group" id="login-form" key="login"
                     label="Логин" label-for="login-input">
         <b-form-input class="squared-input-field"
           id="login-input"
-          v-model="form.username"
+          v-model="userLogin.username"
           required
         />
       </b-form-group>
@@ -16,7 +16,7 @@
                     label="Пароль" label-for="password-input">
         <b-form-input class="squared-input-field"
           id="password-input"
-          v-model="form.password"
+          v-model="userLogin.password"
           type="password"
           required
         />
@@ -28,39 +28,12 @@
   </b-form>
 </template>
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
-  import {login} from '@/service/userService'
-  import router from '@/router'
-  import { BFormInput, BFormGroup, BForm, BButton } from 'bootstrap-vue-next'
+import { BFormInput, BFormGroup, BForm, BButton } from 'bootstrap-vue-next'
   import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
+import { useLogin } from '@/composables/useLogin.ts'
 
-  interface LoginForm {
-    username: string,
-    password: string,
-    error: boolean
-  }
+const {loading, userLogin, submitLogin} = useLogin();
 
-  const loading = ref(false)
-
-  const form: LoginForm = reactive({
-    username: '',
-    password: '',
-    error: false
-  });
-
-  const submitLoginForm = async () => {
-    loading.value = true;
-    try {
-      form.error = false;
-      const response = await login(form.username, form.password);
-      await router.push({ name: "patient-home", params: { id: `${response.data.id}` } })
-    } catch (err) {
-      console.log(err);
-      form.error = true;
-    }
-    loading.value = false;
-    form.password = ''
-  }
 </script>
 
 <style scoped>

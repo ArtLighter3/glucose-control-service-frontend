@@ -49,7 +49,7 @@ export async function getRecentActivity(patientId: string) {
   const response =
     await axios.get<RecentActivity>(getRecentActivityURL(patientId), {
     params: {
-      outputZoneOffset: getUtcOffsetString(new Date()),
+      outputZoneOffset: getUtcOffsetString(new Date())
     }
   });
 
@@ -69,7 +69,7 @@ export async function getRecentActivity(patientId: string) {
 
 function getUtcOffsetString(date: Date): string {
   const offsetMinutes: number = date.getTimezoneOffset();
-  const sign: string = offsetMinutes >= 0 ? '-' : '+'; // Invert the sign to match the standard UTC format (e.g., UTC+05:30)
+  const sign: string = offsetMinutes >= 0 ? '-' : '+';
   const absOffsetMinutes: number = Math.abs(offsetMinutes);
   const hours: number = Math.floor(absOffsetMinutes / 60);
   const minutes: number = absOffsetMinutes % 60;
