@@ -1,6 +1,5 @@
 import "axios"
-import axios from 'axios'
-import { usePatientProfileStore } from '@/stores/patientProfileStore.ts'
+import apiClient from '@/service/apiClient.ts'
 
 export enum GlucoseUnit {
   MILLIMOLES_PER_LITER = "ммоль/л",
@@ -39,16 +38,11 @@ export class DefaultPatientProfile implements PatientProfile {
 
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
-
-export async function getPatientProfile(patientId: string)
-{
-  axios.defaults.withCredentials = true;
-  return axios.get<PatientProfile>(`${API_BASE_URL}/api/v1/patients/${patientId}/patient-profile`);
+export async function getPatientProfile(patientId: string) {
+  return apiClient.get<PatientProfile>(`/patients/${patientId}/patient-profile`);
 }
 
 export async function putPatientProfile(patientId: string, patientProfile: PatientProfile) {
-  axios.defaults.withCredentials = true;
-  return axios.put<PatientProfile>(`${API_BASE_URL}/api/v1/patients/${patientId}/patient-profile`,
-    patientProfile);
+  return apiClient
+    .put<PatientProfile>(`/patients/${patientId}/patient-profile`, patientProfile);
 }

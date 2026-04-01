@@ -2,7 +2,7 @@
   <div class="login-page">
     <div class="login-form-wrapper">
       <h4 class="login-text">ВХОД В СИСТЕМУ</h4>
-      <user-login-form/>
+      <user-login-form @login:success="redirectToHome"/>
     </div>
 
   </div>
@@ -10,6 +10,14 @@
 
 <script setup lang="ts">
 import UserLoginForm from '@/components/UserLoginForm.vue'
+import { useAuthStore } from '@/stores/authStore.ts'
+import router from '@/router'
+
+const authStore = useAuthStore();
+
+const redirectToHome = () => {
+  router.push({ name: "patient-home", params: { id: `${authStore.getId()}` } });
+};
 </script>
 
 <style scoped>

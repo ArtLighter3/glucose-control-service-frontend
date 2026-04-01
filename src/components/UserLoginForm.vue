@@ -1,7 +1,7 @@
 <template>
   <b-form class="form" @submit.prevent="submitLogin">
     <form-transition-group>
-      <div v-if="userLogin.error" class="error-text" key="err">
+      <div v-if="error" class="error-text" key="err">
         Неверное имя пользователя или пароль!
       </div>
       <b-form-group class="b-form-group" id="login-form" key="login"
@@ -30,9 +30,15 @@
 <script setup lang="ts">
 import { BFormInput, BFormGroup, BForm, BButton } from 'bootstrap-vue-next'
   import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
-import { useLogin } from '@/composables/useLogin.ts'
+import { useLogin } from '@/composables/fetching/useLogin.ts'
+import { watch } from 'vue'
 
-const {loading, userLogin, submitLogin} = useLogin();
+const { loading, userLogin, submitLogin, error, successfulLogin } = useLogin();
+
+const emit = defineEmits(['login:success']);
+watch(successfulLogin, (newValue) => {
+  if (newValue) emit('login:success');
+})
 
 </script>
 

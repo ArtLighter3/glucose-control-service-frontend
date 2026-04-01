@@ -8,7 +8,7 @@ import GlucoseEntryForm from '@/components/patient-view/diary/GlucoseEntryForm.v
 import InsulinEntryForm from '@/components/patient-view/diary/InsulinEntryForm.vue'
 import CarbsEntryForm from '@/components/patient-view/diary/CarbsEntryForm.vue'
 import MedicationEntryForm from '@/components/patient-view/diary/MedicationEntryForm.vue'
-import { useDiaryEntrySubmitting } from '@/composables/useDiaryEntrySubmitting.ts'
+import { useDiaryEntrySubmitting } from '@/composables/fetching/useDiaryEntrySubmitting.ts'
 
 const props = defineProps<{
   patientId: string

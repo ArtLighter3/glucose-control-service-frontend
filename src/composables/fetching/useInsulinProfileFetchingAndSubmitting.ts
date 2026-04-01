@@ -17,17 +17,17 @@ export function useInsulinProfileFetchingAndSubmitting(patientId: string) {
     ratiosByTime: {},
   })
 
-  const globalError = ref(false)
+  const fetchingError = ref(false)
   const loading = ref(true)
   const insulinProfileDoesNotExist = ref(false)
   onMounted(async () => {
     try {
-      globalError.value = false
+      fetchingError.value = false
       insulinProfile.value = (await getInsulinProfile(patientId)).data
     } catch (err) {
       if (isAxiosError(err) && err.response) {
         if (err.response.status === 404) insulinProfileDoesNotExist.value = true
-        else globalError.value = true
+        else fetchingError.value = true
       }
     }
     loading.value = false
@@ -38,7 +38,7 @@ export function useInsulinProfileFetchingAndSubmitting(patientId: string) {
   const submit = async () => {
     submitting.value = true
     try {
-      if (globalError.value) return
+      if (fetchingError.value) return
       fieldErrors.value = {}
       objectErrors.value = []
 
@@ -63,7 +63,7 @@ export function useInsulinProfileFetchingAndSubmitting(patientId: string) {
 
   return {
     insulinProfile,
-    globalError,
+    fetchingError,
     loading,
     submit,
     submitting,

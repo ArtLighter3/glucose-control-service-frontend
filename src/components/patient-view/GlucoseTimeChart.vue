@@ -9,6 +9,8 @@ import { computed, ref } from 'vue'
 import 'chartjs-adapter-luxon'
 import { GlucoseUnit } from '@/service/patientProfileService.ts'
 
+type TimeRange = "day" | "month" | "week";
+
 ChartJS.register(TimeScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const props = defineProps<{
@@ -18,6 +20,7 @@ const props = defineProps<{
   highGlucose?: number;
   lowGlucose?: number;
   hypoGlucose?: number;
+  timeRange: TimeRange;
  // chartOptions: ChartOptions<'line'>;
 }>();
 const fontSize = ref(16);
@@ -26,6 +29,8 @@ const fontSize = ref(16);
 //   return (props.hyperGlucose !== undefined && props.hyperGlucose !== null)
 //     ? props.hyperGlucose + 2 : 40;
 // });
+
+
 
 const data = computed((): ChartData<'line'> => {
   return {

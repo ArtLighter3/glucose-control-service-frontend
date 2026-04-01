@@ -12,7 +12,7 @@ import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
 import InsulinPropertyByTime from '@/components/patient-view/InsulinPropertyByTime.vue'
 import {
   useInsulinProfileFetchingAndSubmitting
-} from '@/composables/useInsulinProfileFetchingAndSubmitting.ts'
+} from '@/composables/fetching/useInsulinProfileFetchingAndSubmitting.ts'
 
 const props = defineProps({
   patientId: {

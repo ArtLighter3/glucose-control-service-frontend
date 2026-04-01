@@ -11,7 +11,10 @@ import {
   BCard, BFormInvalidFeedback
 } from 'bootstrap-vue-next'
 import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
-import { usePatientProfileFetching } from '@/composables/usePatientProfileFetching.ts'
+import { usePatientProfileFetching } from '@/composables/fetching/usePatientProfileFetching.ts'
+// import { watch } from 'vue'
+// import { useAuthStore } from '@/stores/authStore.ts'
+// import { storeToRefs } from 'pinia'
 
   // type ProfilePartForm = object
   //
@@ -39,16 +42,27 @@ import { usePatientProfileFetching } from '@/composables/usePatientProfileFetchi
     }
   });
 
-  const { patientProfile, globalError, loading, submit, submitting, success,
-    fieldErrors, objectErrors, getValidationState } = usePatientProfileFetching(props.patientId);
 
+  const { patientProfile, fetchingError,
+    loading, submit, submitting, success, fieldErrors, objectErrors, getValidationState }
+    = usePatientProfileFetching(props.patientId);
+
+  // const authStore = useAuthStore();
+  // const { userSession } = storeToRefs(authStore);
+  // const emit = defineEmits(['unauthorized:refresh', 'unauthorized:keep']);
+  // watch(userSession, (newValue) => {
+  //   if (newValue === null) {
+  //     if (fetchingError.value) emit('unauthorized:refresh');
+  //     else emit('unauthorized:keep');
+  //   }
+  // });
 </script>
 
 <template>
 <!--  <div class="profile-form-outer-wrapper">-->
     <b-spinner v-if="loading" variant="success"></b-spinner>
     <div class="profile-form-inner-wrapper" v-else>
-      <h4 class="error-text" v-if="globalError">ОШИБКА</h4>
+      <h4 class="error-text" v-if="fetchingError">ОШИБКА ЗАГРУЗКИ ПРОФИЛЯ</h4>
       <b-form class="profile-form" v-else @submit.prevent="submit">
         <h2>НАСТРОЙКИ ПРОФИЛЯ</h2>
         <div class="first-row">

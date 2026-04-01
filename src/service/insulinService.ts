@@ -1,6 +1,7 @@
 import "axios"
 import axios, { type AxiosResponse } from 'axios'
 import type { DiaryEntry, GlucoseEntry } from '@/service/diaryService.ts'
+import apiClient from '@/service/apiClient.ts'
 
 export interface InsulinProfile {
   defaultInsulinToCarbsRatio: number,
@@ -16,56 +17,35 @@ export interface RecentActivity {
   activeInsulin: number | null
 }
 
-// export interface TimeValuePair {
-//   [key: Time]: number;
-// }
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
-
 export async function getInsulinProfile(patientId: string) {
-  axios.defaults.withCredentials = true;
-  const response = await axios.get<InsulinProfile>(getInsulinProfileURL(patientId));
+  const response = await apiClient.get<InsulinProfile>(getInsulinProfileURL(patientId));
  // convertMaps(response);
   return response;
 }
 
 export async function postInsulinProfile(patientId: string, insulinProfile: InsulinProfile) {
-  axios.defaults.withCredentials = true;
-  const response = await axios.post<InsulinProfile>(getInsulinProfileURL(patientId), insulinProfile);
+  const response = await apiClient.post<InsulinProfile>(getInsulinProfileURL(patientId), insulinProfile);
   //convertMaps(response);
   return response;
 }
 
 export async function putInsulinProfile(patientId: string, insulinProfile: InsulinProfile) {
-  axios.defaults.withCredentials = true;
  // console.log(insulinProfile)
-  const response = await axios.put<InsulinProfile>(getInsulinProfileURL(patientId), insulinProfile);
+  const response = await apiClient.put<InsulinProfile>(getInsulinProfileURL(patientId), insulinProfile);
   //convertMaps(response);
   return response;
 }
 
 export async function getRecentActivity(patientId: string) {
-  axios.defaults.withCredentials = true;
   const response =
-    await axios.get<RecentActivity>(getRecentActivityURL(patientId), {
+    await apiClient.get<RecentActivity>(getRecentActivityURL(patientId), {
     params: {
       outputZoneOffset: getUtcOffsetString(new Date())
     }
   });
 
-  // const data = response.data
-  // if (data && data.)
-
   return response;
 }
-
-// function convertMaps(response: AxiosResponse) {
-//   const data = response.data;
-//   if (data && data.ratiosByTime) {
-//     data.ratiosByTime = new Map(Object.entries(data.ratiosByTime));
-//     data.factorsByTime = new Map(Object.entries(data.factorsByTime));
-//   }
-// }
 
 function getUtcOffsetString(date: Date): string {
   const offsetMinutes: number = date.getTimezoneOffset();
@@ -81,15 +61,15 @@ function getUtcOffsetString(date: Date): string {
 }
 
 function getInsulinProfileURL(patientId: string) {
-  return `${API_BASE_URL}/api/v1/patients/${patientId}/insulin-profile`;
+  return `/patients/${patientId}/insulin-profile`;
 }
 
 function getInsulinCalculationURL(patientId: string) {
-  return `${API_BASE_URL}/api/v1/patients/${patientId}/insulin/calculate`;
+  return `/patients/${patientId}/insulin/calculate`;
 }
 
 function getRecentActivityURL(patientId: string) {
-  return `${API_BASE_URL}/api/v1/patients/${patientId}/recent`;
+  return `/patients/${patientId}/recent`;
 }
 
 

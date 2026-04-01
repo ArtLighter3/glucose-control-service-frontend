@@ -3,6 +3,7 @@ import {
   GlucoseUnit
 } from '@/service/patientProfileService.ts'
 import axios from 'axios'
+import apiClient from '@/service/apiClient.ts'
 
 export enum MeasurementType {
   AFTER_MEAL = "После еды",
@@ -91,16 +92,12 @@ export function isGlucoseEntry(obj: any): obj is GlucoseEntry {
   );
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
-
 export async function postDiaryEntry(patientId: string, entry: DiaryEntry, type: DiaryEntryType) {
-  axios.defaults.withCredentials = true;
-  return axios.post<DiaryEntry>(getEntryCreationURL(patientId, type), entry);
+  return apiClient.post<DiaryEntry>(getEntryCreationURL(patientId, type), entry);
 }
 
 export async function putDiaryEntry(patientId: string, entry: DiaryEntry, type: DiaryEntryType) {
-  axios.defaults.withCredentials = true;
-  return axios.put<DiaryEntry>(getEntryCreationURL(patientId, type), entry);
+  return apiClient.put<DiaryEntry>(getEntryCreationURL(patientId, type), entry);
 }
 
 // export function getDefaultFormByType(type: DiaryEntryType) : DiaryEntry {
@@ -117,7 +114,7 @@ export async function putDiaryEntry(patientId: string, entry: DiaryEntry, type: 
 // }
 
 function getEntryCreationURL(patientId: string, type: string) {
-  return `${API_BASE_URL}/api/v1/patients/${patientId}/entries/${type}`;
+  return `/patients/${patientId}/entries/${type}`;
 }
 
 

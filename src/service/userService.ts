@@ -1,5 +1,6 @@
 import "axios"
 import axios from 'axios'
+import apiClient from '@/service/apiClient.ts'
 
 export interface UserSession {
   id: number,
@@ -9,19 +10,15 @@ export interface UserSession {
 
 export interface UserLogin {
   username: string,
-  password: string,
-  error: boolean
+  password: string
 }
 
-//const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
-const AUTH_LOGIN_URL = `${API_BASE_URL}/api/v1/auth/process-login`;
+const AUTH_LOGIN_URL = `/auth/process-login`;
 
-export async function login(username: string, password: string) {
-  axios.defaults.withCredentials = true;
+export async function login(userLogin: UserLogin) {
   const loginFormData = new FormData();
-  loginFormData.append("username", username);
-  loginFormData.append("password", password);
+  loginFormData.append("username", userLogin.username);
+  loginFormData.append("password", userLogin.password);
 
-  return axios.post<UserSession>(AUTH_LOGIN_URL, loginFormData);
+  return apiClient.post<UserSession>(AUTH_LOGIN_URL, loginFormData);
 }

@@ -13,21 +13,21 @@ export function usePatientProfileFetching(patientId: string) {
     = storeToRefs(patientProfileStore);
 
   const patientProfile = ref<PatientProfile>(new DefaultPatientProfile());
-  const globalError = ref(false);
+  const fetchingError = ref<boolean>(false);
   const loading = ref(true);
 
   onMounted(async () => {
-    globalError.value = false;
+    fetchingError.value = false;
     if (patientProfileStore.isUpToDate) {
-      patientProfile.value = cachedPatientProfile.value;
+      patientProfile.value = {...cachedPatientProfile.value};
     } else {
       try {
         patientProfile.value = (await getPatientProfile(patientId)).data;
-        cachedPatientProfile.value = patientProfile.value;
+        cachedPatientProfile.value = {...patientProfile.value};
         isFetched.value = true;
       } catch (err) {
         if (isAxiosError(err) && err.response) {
-          globalError.value = true;
+          fetchingError.value = true;
         }
       }
     }
@@ -42,7 +42,7 @@ export function usePatientProfileFetching(patientId: string) {
     submitting.value = true;
     isFetched.value = false;
     try {
-      if (globalError.value) return;
+      if (fetchingError.value) return;
       fieldErrors.value = {};
       objectErrors.value = [];
 
@@ -50,7 +50,7 @@ export function usePatientProfileFetching(patientId: string) {
         = await putPatientProfile(patientId, patientProfile.value);
       patientProfile.value = response.data;
       success.value = true;
-      cachedPatientProfile.value = patientProfile.value;
+      cachedPatientProfile.value = {...patientProfile.value};
       isFetched.value = true;
     } catch (err) {
       success.value = false;
@@ -69,7 +69,7 @@ export function usePatientProfileFetching(patientId: string) {
 
   return {
     patientProfile,
-    globalError,
+    fetchingError,
     loading,
     submit,
     submitting,
