@@ -2,15 +2,15 @@ import "axios"
 import apiClient from '@/service/apiClient.ts'
 
 export enum GlucoseUnit {
-  MILLIMOLES_PER_LITER = "ммоль/л",
-  MILLIGRAMS_PER_DECILITER = "мг/дл"
+  MILLIMOLES_PER_LITER = "MILLIMOLES_PER_LITER",
+  MILLIGRAMS_PER_DECILITER = "MILLIGRAMS_PER_DECILITER"
 }
 
 export enum CarbsUnit {
-  GRAMS = "грамм",
-  BREAD_UNITS_10 = "хлебная единица (10г)",
-  BREAD_UNITS_12 = "хлебная единица (12г)",
-  BREAD_UNITS_15 = "хлебная единица (15г)"
+  GRAMS = "GRAMS",
+  BREAD_UNITS_10 = "BREAD_UNITS_10",
+  BREAD_UNITS_12 = "BREAD_UNITS_12",
+  BREAD_UNITS_15 = "BREAD_UNITS_15"
 }
 
 export interface PatientProfile {

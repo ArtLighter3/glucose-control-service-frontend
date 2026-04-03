@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import {type GlucoseEntry} from '@/service/diaryService.ts'
-import { type CarbsUnit, GlucoseUnit } from '@/service/patientProfileService.ts'
+import { type CarbsUnit } from '@/service/patientProfileService.ts'
 import InfoPanelValue from '@/components/patient-view/InfoPanelValue.vue'
 import { computed } from 'vue'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale/ru'
+import {
+  getCarbsUnitShortName,
+  getGlucoseUnitName
+} from '@/util/enumToStringLiterals.ts'
 
 const props = defineProps<{
   recentGlucose: GlucoseEntry | null,
@@ -29,11 +33,12 @@ const formattedDate = computed((): string | null => {
     <info-panel-value class="panel-item carbs-item"
                       name="Углеводы за день"
                       :value="overallDayCarbs"
-                      :units="carbsUnit ? CarbsUnit[carbsUnit] : null"/>
+                      :units="carbsUnit ? getCarbsUnitShortName(carbsUnit) : null"/>
     <info-panel-value class="panel-item glucose-item"
                       :name="formattedDate"
                       :value="recentGlucose?.value"
-                      :units="recentGlucose ? GlucoseUnit[recentGlucose.glucoseUnits] : null"/>
+                      :units="recentGlucose && recentGlucose.glucoseUnits ?
+                            getGlucoseUnitName(recentGlucose.glucoseUnits) : null"/>
     <info-panel-value class="panel-item insulin-item"
                       name="Активный инсулин"
                       :value="activeInsulin"

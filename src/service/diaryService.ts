@@ -2,26 +2,27 @@ import {
   CarbsUnit,
   GlucoseUnit
 } from '@/service/patientProfileService.ts'
-import axios from 'axios'
 import apiClient from '@/service/apiClient.ts'
+import { getUtcOffsetString } from '@/util/utc.ts'
+import { getDiaryEntryTypeURLCodename } from '@/util/enumToStringLiterals.ts'
 
 export enum MeasurementType {
-  AFTER_MEAL = "После еды",
-  BEFORE_MEAL = "До еды"
+  AFTER_MEAL = "AFTER_MEAL",
+  BEFORE_MEAL = "BEFORE_MEAL"
 }
 
 export enum InsulinType {
-  LONG = "Пролонгированный",
-  SHORT_CARBS = "Компенсирующий",
-  SHORT_CORRECTION = "Корректирующий",
-  SHORT = "Короткого действия"
+  LONG = "LONG",
+  SHORT_CARBS = "SHORT_CARBS",
+  SHORT_CORRECTION = "SHORT_CORRECTION",
+  SHORT = "SHORT"
 }
 
 export enum DiaryEntryType {
-  GLUCOSE_ENTRY = "glucose",
-  INSULIN_ENTRY = "insulin",
-  MEDICATION_ENTRY = "medication",
-  CARBS_ENTRY = "carbs"
+  GLUCOSE_ENTRY = "GLUCOSE_ENTRY",
+  INSULIN_ENTRY = "INSULIN_ENTRY",
+  MEDICATION_ENTRY = "MEDICATION_ENTRY",
+  CARBS_ENTRY = "CARBS_ENTRY"
 }
 
 export interface DiaryEntry {
@@ -76,21 +77,28 @@ export class DefaultCarbsEntry implements CarbsEntry {
   carbsUnits = null;
 }
 
-export function isGlucoseEntry(obj: any): obj is GlucoseEntry {
-  return (
-    typeof obj === 'object' &&
-    obj !== null &&
-    'value' in obj &&
-    typeof obj.value === 'number' &&
-    'commitedAt' in obj &&
-    typeof obj.commitedAt === 'string' &&
-    // 'notes' in obj &&
-    //typeof obj.notes === 'object' &&
-    'category' in obj &&
-    'glucoseUnits' in obj &&
-    Object.keys(GlucoseUnit).includes(obj.glucoseUnits)
-  );
+export interface DiaryEntryWithType {
+  type: DiaryEntryType,
+  entryInfo: DiaryEntry
 }
+
+
+//
+// export function isGlucoseEntry(obj: any): obj is GlucoseEntry {
+//   return (
+//     typeof obj === 'object' &&
+//     obj !== null &&
+//     'value' in obj &&
+//     typeof obj.value === 'number' &&
+//     'commitedAt' in obj &&
+//     typeof obj.commitedAt === 'string' &&
+//     // 'notes' in obj &&
+//     //typeof obj.notes === 'object' &&
+//     'category' in obj &&
+//     'glucoseUnits' in obj &&
+//     Object.keys(GlucoseUnit).includes(obj.glucoseUnits)
+//   );
+// }
 
 export async function postDiaryEntry(patientId: string, entry: DiaryEntry, type: DiaryEntryType) {
   return apiClient.post<DiaryEntry>(getEntryCreationURL(patientId, type), entry);
@@ -98,6 +106,16 @@ export async function postDiaryEntry(patientId: string, entry: DiaryEntry, type:
 
 export async function putDiaryEntry(patientId: string, entry: DiaryEntry, type: DiaryEntryType) {
   return apiClient.put<DiaryEntry>(getEntryCreationURL(patientId, type), entry);
+}
+
+export async function getDiaryEntries(patientId: string, from: Date, to: Date) {
+  return apiClient.get<DiaryEntryWithType[]>(getEntryFetchingURL(patientId), {
+    params: {
+      outputZoneOffset: getUtcOffsetString(new Date()),
+      from: from.toISOString(),
+      to: to.toISOString()
+    }
+  });
 }
 
 // export function getDefaultFormByType(type: DiaryEntryType) : DiaryEntry {
@@ -113,8 +131,12 @@ export async function putDiaryEntry(patientId: string, entry: DiaryEntry, type: 
 //   }
 // }
 
-function getEntryCreationURL(patientId: string, type: string) {
-  return `/patients/${patientId}/entries/${type}`;
+function getEntryCreationURL(patientId: string, type: DiaryEntryType) {
+  return `/patients/${patientId}/entries/${getDiaryEntryTypeURLCodename(type)}`;
+}
+
+function getEntryFetchingURL(patientId: string) {
+  return `/patients/${patientId}/entries`;
 }
 
 

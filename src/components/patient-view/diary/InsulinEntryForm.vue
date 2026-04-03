@@ -15,6 +15,7 @@ import { useFormattedCommitionDate } from '@/composables/useFormattedCommitionDa
 import EntryFormButtons from '@/components/patient-view/diary/EntryFormButtons.vue'
 import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
 import type { FieldErrors } from '@/util/exception.ts'
+import { getInsulinTypeName } from '../../../util/enumToStringLiterals.ts'
 
 const props = defineProps<{
   success: boolean,
@@ -97,7 +98,7 @@ const submit = () => {
           :key="type[0]"
           :value="type[0]"
         >
-          {{ type[1] }}
+          {{ getInsulinTypeName(type[1]) }}
         </b-form-select-option>
       </b-form-select>
       <b-form-invalid-feedback>

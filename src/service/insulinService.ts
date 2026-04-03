@@ -1,7 +1,8 @@
 import "axios"
 import axios, { type AxiosResponse } from 'axios'
-import type { DiaryEntry, GlucoseEntry } from '@/service/diaryService.ts'
+import type { DiaryEntry, DiaryEntryWithType, GlucoseEntry } from '@/service/diaryService.ts'
 import apiClient from '@/service/apiClient.ts'
+import { getUtcOffsetString } from '@/util/utc.ts'
 
 export interface InsulinProfile {
   defaultInsulinToCarbsRatio: number,
@@ -12,7 +13,7 @@ export interface InsulinProfile {
 }
 
 export interface RecentActivity {
-  recentEntries: DiaryEntry[],
+  recentEntries: DiaryEntryWithType[],
   lastGlucoseEntry: GlucoseEntry | null,
   activeInsulin: number | null
 }
@@ -45,19 +46,6 @@ export async function getRecentActivity(patientId: string) {
   });
 
   return response;
-}
-
-function getUtcOffsetString(date: Date): string {
-  const offsetMinutes: number = date.getTimezoneOffset();
-  const sign: string = offsetMinutes >= 0 ? '-' : '+';
-  const absOffsetMinutes: number = Math.abs(offsetMinutes);
-  const hours: number = Math.floor(absOffsetMinutes / 60);
-  const minutes: number = absOffsetMinutes % 60;
-
-  const formattedHours: string = hours.toString().padStart(2, '0');
-  const formattedMinutes: string = minutes.toString().padStart(2, '0');
-
-  return `${sign}${formattedHours}:${formattedMinutes}`;
 }
 
 function getInsulinProfileURL(patientId: string) {

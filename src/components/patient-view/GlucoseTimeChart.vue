@@ -1,36 +1,78 @@
 <script setup lang="ts">
 import {
-  Chart as ChartJS, TimeScale, LinearScale, PointElement,
-  LineElement, Title, Tooltip, Legend, type ChartData, type ChartOptions, type Point
+  Chart as ChartJS,
+  type ChartData,
+  type ChartOptions,
+  Legend,
+  LinearScale,
+  LineElement,
+  type Point,
+  PointElement,
+  TimeScale,
+  Title,
+  Tooltip,
 } from 'chart.js'
-import { Line } from 'vue-chartjs';
-import { type DiaryEntry, isGlucoseEntry } from '@/service/diaryService.ts'
+import { Line } from 'vue-chartjs'
+import { DiaryEntryType, type DiaryEntryWithType } from '@/service/diaryService.ts'
 import { computed, ref } from 'vue'
 import 'chartjs-adapter-luxon'
 import { GlucoseUnit } from '@/service/patientProfileService.ts'
 
-type TimeRange = "day" | "month" | "week";
+type TimeRange = 'day' | 'month' | 'week'
 
-ChartJS.register(TimeScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+ChartJS.register(TimeScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
 const props = defineProps<{
-  entries: DiaryEntry[];
-  glucoseUnits: GlucoseUnit;
-  hyperGlucose?: number;
-  highGlucose?: number;
-  lowGlucose?: number;
-  hypoGlucose?: number;
-  timeRange: TimeRange;
- // chartOptions: ChartOptions<'line'>;
-}>();
-const fontSize = ref(16);
+  entries: DiaryEntryWithType[]
+  glucoseUnits: GlucoseUnit
+  hyperGlucose?: number
+  highGlucose?: number
+  lowGlucose?: number
+  hypoGlucose?: number
+  timeRange: TimeRange
+  // chartOptions: ChartOptions<'line'>;
+}>()
+const fontSize = ref(16)
 
 // const maxGlucose = computed(() => {
 //   return (props.hyperGlucose !== undefined && props.hyperGlucose !== null)
 //     ? props.hyperGlucose + 2 : 40;
 // });
-
-
+const xMin = computed(() => {
+  switch (props.timeRange) {
+    case 'day':
+      return '00:00'
+    case 'week':
+      return 'Mon'
+  }
+  return '1'
+})
+const xMax = computed(() => {
+  switch (props.timeRange) {
+    case 'day':
+      return '23:59'
+    case 'week':
+      return 'Sun'
+  }
+  return '31'
+})
+const xFormat = computed(() => {
+  switch (props.timeRange) {
+    case 'day':
+      return 'HH:mm'
+    case 'week':
+      return 'ccc'
+  }
+  return 'd'
+})
+const xUnit = computed(() => {
+  switch (props.timeRange) {
+    case 'day':
+      return 'hour'
+    //case 'week': return "day";
+  }
+  return 'day'
+})
 
 const data = computed((): ChartData<'line'> => {
   return {
@@ -38,12 +80,12 @@ const data = computed((): ChartData<'line'> => {
       {
         backgroundColor: '#000',
         data: props.entries
-          .filter((item) => isGlucoseEntry(item))
-          .map((item): Point => ({x: item.commitedAt, y: item.value}))
+          .filter((item) => item.type === DiaryEntryType.GLUCOSE_ENTRY)
+          .map((item): Point => ({ x: item.entryInfo.commitedAt, y: item.entryInfo.value })),
       },
     ],
   }
-});
+})
 
 const options = computed((): ChartOptions<'line'> => {
   return {
@@ -54,46 +96,46 @@ const options = computed((): ChartOptions<'line'> => {
       x: {
         type: 'time',
         time: {
-          unit: 'hour',
+          unit: xUnit.value,
           displayFormats: {
-            hour: 'HH:mm',
+            hour: xFormat.value /*props.timeRange === 'day' ? 'HH:mm' : 'd LLL',*/,
           },
         },
         title: {
           display: true,
           text: 'Время',
-          color: "#000",
+          color: '#000',
           font: {
-            size: fontSize.value
-          }
+            size: fontSize.value,
+          },
         },
         ticks: {
-          color: "#000",
+          color: '#000',
           font: {
-            size: fontSize.value
-          }
+            size: fontSize.value,
+          },
         },
-        min: "00:00",
-        max: "23:59"
+        min: xMin.value,
+        max: xMax.value,
       },
       y: {
         type: 'linear',
         title: {
           display: true,
           text: `Глюкоза [${GlucoseUnit[props.glucoseUnits as keyof typeof GlucoseUnit]}]`,
-          color: "#000",
+          color: '#000',
           font: {
-            size: fontSize.value
-          }
+            size: fontSize.value,
+          },
         },
         ticks: {
-          color: "#000",
+          color: '#000',
           font: {
-            size: fontSize.value
-          }
+            size: fontSize.value,
+          },
         },
         min: 0,
-       // max: maxGlucose.value,
+        // max: maxGlucose.value,
       },
     },
     plugins: {
@@ -104,12 +146,12 @@ const options = computed((): ChartOptions<'line'> => {
         enabled: true,
       },
       title: {
-        color: "#000",
+        color: '#000',
         display: true,
-        text: "Уровень глюкозы",
+        text: 'Уровень глюкозы',
         font: {
-          size: fontSize.value
-        }
+          size: fontSize.value,
+        },
       },
       annotation: {
         annotations: {
@@ -137,11 +179,11 @@ const options = computed((): ChartOptions<'line'> => {
             yMax: props.highGlucose,
             yMin: props.lowGlucose,
             label: {
-              content: "Целевой диапазон",
+              content: 'Целевой диапазон',
               display: true,
               position: 'start',
-              color: 'rgba(0, 0, 0, 0.5)'
-            }
+              color: 'rgba(0, 0, 0, 0.5)',
+            },
           },
           // highGlucose: {
           //   type: 'line',
@@ -176,12 +218,11 @@ const options = computed((): ChartOptions<'line'> => {
               backgroundColor: 'rgba(0, 0, 255, 0.5)',
             },
           },
-        }
-      }
-    }
+        },
+      },
+    },
   }
-});
-
+})
 </script>
 
 <template>
@@ -191,6 +232,5 @@ const options = computed((): ChartOptions<'line'> => {
 <style scoped>
 .time-chart {
   padding: 1rem;
-
 }
 </style>

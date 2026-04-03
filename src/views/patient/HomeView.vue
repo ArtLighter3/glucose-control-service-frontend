@@ -30,7 +30,8 @@ const { recentActivity, loading: activityLoading } = useRecentActivityFetching(i
                   :hyper-glucose="patientProfile.hyperGlucose"
                   :high-glucose="patientProfile.highGlucose"
                   :low-glucose="patientProfile.lowGlucose"
-                  :hypo-glucose="patientProfile.hypoGlucose"/>
+                  :hypo-glucose="patientProfile.hypoGlucose"
+                  time-range="day"/>
       <b-spinner v-else/>
     </b-card>
 

@@ -12,6 +12,7 @@ import {
 } from 'bootstrap-vue-next'
 import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
 import { usePatientProfileFetching } from '@/composables/fetching/usePatientProfileFetching.ts'
+import { getCarbsUnitName, getGlucoseUnitName } from '../../util/enumToStringLiterals.ts'
 // import { watch } from 'vue'
 // import { useAuthStore } from '@/stores/authStore.ts'
 // import { storeToRefs } from 'pinia'
@@ -143,7 +144,7 @@ import { usePatientProfileFetching } from '@/composables/fetching/usePatientProf
                                id="glucose-unit-selector" v-model="patientProfile.glucoseUnit">
                   <b-form-select-option v-for="glucoseUnit in Object.entries(GlucoseUnit)"
                                         :key="glucoseUnit[0]" :value="glucoseUnit[0]">
-                    {{ glucoseUnit[1] }}
+                    {{ getGlucoseUnitName(glucoseUnit[1]) }}
                   </b-form-select-option>
                 </b-form-select>
                 <b-form-invalid-feedback>
@@ -161,7 +162,7 @@ import { usePatientProfileFetching } from '@/composables/fetching/usePatientProf
                                id="carbs-unit-selector" v-model="patientProfile.carbsUnit">
                   <b-form-select-option v-for="carbsUnit in Object.entries(CarbsUnit)"
                                         :key="carbsUnit[0]" :value="carbsUnit[0]">
-                    {{ carbsUnit[1] }}
+                    {{ getCarbsUnitName(carbsUnit[1]) }}
                   </b-form-select-option>
                 </b-form-select>
                 <b-form-invalid-feedback>
