@@ -11,11 +11,9 @@ export function useFormattedCommitionDate() {
       return localISO.slice(0, 16);
     },
     set: (newValue: string) => {
-      console.log(newValue)
       if (newValue) {
         datetime.value = new Date(newValue);
         commitedAtStr.value = datetime.value.toISOString();
-        console.log(commitedAtStr)
       }
     }
   });

@@ -24,6 +24,8 @@ const openEntryForm = (type: DiaryEntryType) => {
   currentEntryType.value = type
   isEntryFormOpen.value = true
 }
+
+const emit = defineEmits(['entries:updated']);
 </script>
 
 <template>
@@ -53,7 +55,8 @@ const openEntryForm = (type: DiaryEntryType) => {
     </div>
   </base-modal>
   <base-modal :is-open="isEntryFormOpen" @close="closeEntryForm" title="">
-    <add-entry-form-content :entry-type="currentEntryType" :patient-id="props.patientId" />
+    <add-entry-form-content :entry-type="currentEntryType" :patient-id="props.patientId"
+                            @entries:updated="$emit('entries:updated'); closeEntryForm()"/>
   </base-modal>
 </template>
 

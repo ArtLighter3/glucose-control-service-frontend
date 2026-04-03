@@ -17,6 +17,7 @@ import { DiaryEntryType, type DiaryEntryWithType } from '@/service/diaryService.
 import { computed, ref } from 'vue'
 import 'chartjs-adapter-luxon'
 import { GlucoseUnit } from '@/service/patientProfileService.ts'
+import { getGlucoseUnitName } from '@/util/enumToStringLiterals.ts'
 
 type TimeRange = 'day' | 'month' | 'week'
 
@@ -122,7 +123,7 @@ const options = computed((): ChartOptions<'line'> => {
         type: 'linear',
         title: {
           display: true,
-          text: `Глюкоза [${GlucoseUnit[props.glucoseUnits as keyof typeof GlucoseUnit]}]`,
+          text: `Глюкоза [${getGlucoseUnitName(props.glucoseUnits)}]`,
           color: '#000',
           font: {
             size: fontSize.value,

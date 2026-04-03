@@ -6,6 +6,7 @@ import { storeToRefs } from 'pinia'
 import { useModal } from '@/composables/useModal.ts'
 import UserLoginForm from '@/components/UserLoginForm.vue'
 import BaseModal from '@/components/BaseModal.vue'
+import { useRefreshComponent } from '@/composables/useRefreshComponent.ts'
 
   const sidebarItems: SidebarItem[] = reactive([
     {
@@ -31,7 +32,7 @@ import BaseModal from '@/components/BaseModal.vue'
 
 const { isOpen, openModal, closeModal } = useModal();
 
-const key = ref(0);
+const { componentKey: key, refresh } = useRefreshComponent();
 
 const authStore = useAuthStore();
 const { userSession } = storeToRefs(authStore);
@@ -39,18 +40,12 @@ watch(userSession, (newValue) => {
   if (newValue === null) openModal();
 });
 
-const refresh = () => {
-  closeModal()
-  //Перемонтирование router-view с key
-  if (key.value > 10) key.value -= 1;
-  else key.value += 1;
-};
 
 </script>
 
 <template>
   <base-modal :is-open="isOpen" title="ВХОД В СИСТЕМУ">
-    <user-login-form @login:success="refresh"/>
+    <user-login-form @login:success="closeModal(); refresh()"/>
   </base-modal>
   <div class="patient-view">
     <side-bar :items="sidebarItems"/>

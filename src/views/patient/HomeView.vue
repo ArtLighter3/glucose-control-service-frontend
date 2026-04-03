@@ -65,6 +65,11 @@ const { recentActivity, loading: activityLoading } = useRecentActivityFetching(i
     bottom: 100px;
     right: 100px;
     z-index: 999;
+
+    @media (max-width: 768px) {
+      right: 50px;
+      bottom: 100px;
+    }
   }
 }
 

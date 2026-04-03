@@ -10,7 +10,7 @@ import {
   BFormSelect,
   BFormSelectOption
 } from 'bootstrap-vue-next'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useFormattedCommitionDate } from '@/composables/useFormattedCommitionDate.ts'
 import EntryFormButtons from '@/components/patient-view/diary/EntryFormButtons.vue'
 import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
@@ -22,7 +22,8 @@ const props = defineProps<{
   objectErrors: string[],
   fieldErrors: FieldErrors,
   submitting: boolean,
-  showUpdateForm: boolean
+  showUpdateForm: boolean,
+  entryToUpdate?: InsulinEntry
 }>()
 
 const getValidationState = (fieldName: string) => {
@@ -36,6 +37,13 @@ const getValidationState = (fieldName: string) => {
 const {commitedAtStr, formattedDate} = useFormattedCommitionDate();
 
 const insulinEntry = ref(new DefaultInsulinEntry());
+
+onMounted(() => {
+  if (props.showUpdateForm && props.entryToUpdate !== undefined) {
+    insulinEntry.value = {...props.entryToUpdate};
+    formattedDate.value = insulinEntry.value.commitedAt;
+  }
+});
 
 const emit = defineEmits<{
   (e: 'add', entry: InsulinEntry): void
@@ -150,6 +158,7 @@ const submit = () => {
       </b-form-invalid-feedback>
     </b-form-group>
     <entry-form-buttons :submitting="submitting"
+                        :show-delete-button="showUpdateForm"
                         @save="submit"
                         @delete="$emit('delete', commitedAtStr)"/>
     </form-transition-group>

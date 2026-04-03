@@ -108,6 +108,14 @@ export async function putDiaryEntry(patientId: string, entry: DiaryEntry, type: 
   return apiClient.put<DiaryEntry>(getEntryCreationURL(patientId, type), entry);
 }
 
+export async function deleteDiaryEntry(patientId: string, type: DiaryEntryType,  commitedAt: string) {
+  return apiClient.delete(getEntryCreationURL(patientId, type), {
+    params: {
+      commitedAt: commitedAt
+    }
+  });
+}
+
 export async function getDiaryEntries(patientId: string, from: Date, to: Date) {
   return apiClient.get<DiaryEntryWithType[]>(getEntryFetchingURL(patientId), {
     params: {

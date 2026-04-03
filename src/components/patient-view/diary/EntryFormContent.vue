@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { BButton } from 'bootstrap-vue-next'
 import {
-  DiaryEntryType,
+  type DiaryEntry,
+  DiaryEntryType
 } from '@/service/diaryService.ts'
 import BaseModal from '@/components/BaseModal.vue'
 import GlucoseEntryForm from '@/components/patient-view/diary/GlucoseEntryForm.vue'
@@ -9,16 +10,25 @@ import InsulinEntryForm from '@/components/patient-view/diary/InsulinEntryForm.v
 import CarbsEntryForm from '@/components/patient-view/diary/CarbsEntryForm.vue'
 import MedicationEntryForm from '@/components/patient-view/diary/MedicationEntryForm.vue'
 import { useDiaryEntrySubmitting } from '@/composables/fetching/useDiaryEntrySubmitting.ts'
+import { watch } from 'vue'
 
 const props = defineProps<{
   patientId: string
   entryType: DiaryEntryType
+  showUpdateForm?: boolean,
+  entryToUpdate?: DiaryEntry
 }>()
 
-const { conflict, setAndSubmit, submit, submitting,
-  success, fieldErrors, objectErrors, getValidationState }
+const { conflict, setAndSubmit, submit, remove, submitting,
+  success, fieldErrors, objectErrors }
   = useDiaryEntrySubmitting(props.patientId, props.entryType);
 
+const emit = defineEmits(['entries:updated']);
+watch(success, (newValue) => {
+  if (newValue) {
+    emit('entries:updated');
+  }
+});
 </script>
 
 <template>
@@ -30,9 +40,11 @@ const { conflict, setAndSubmit, submit, submitting,
       :submitting="submitting"
       :object-errors="objectErrors"
       :field-errors="fieldErrors"
-      :show-update-form="false"
+      :show-update-form="showUpdateForm"
+      :entry-to-update="entryToUpdate"
       @add="setAndSubmit(false, $event)"
       @update="setAndSubmit(true, $event)"
+      @delete="remove($event)"
     />
     <insulin-entry-form
       v-else-if="entryType === DiaryEntryType.INSULIN_ENTRY"
@@ -41,9 +53,11 @@ const { conflict, setAndSubmit, submit, submitting,
       :submitting="submitting"
       :object-errors="objectErrors"
       :field-errors="fieldErrors"
-      :show-update-form="false"
+      :show-update-form="showUpdateForm"
+      :entry-to-update="entryToUpdate"
       @add="setAndSubmit(false, $event)"
       @update="setAndSubmit(true, $event)"
+      @delete="remove($event)"
     />
     <carbs-entry-form
       v-else-if="entryType === DiaryEntryType.CARBS_ENTRY"
@@ -52,9 +66,11 @@ const { conflict, setAndSubmit, submit, submitting,
       :submitting="submitting"
       :object-errors="objectErrors"
       :field-errors="fieldErrors"
-      :show-update-form="false"
+      :show-update-form="showUpdateForm"
+      :entry-to-update="entryToUpdate"
       @add="setAndSubmit(false, $event)"
       @update="setAndSubmit(true, $event)"
+      @delete="remove($event)"
     />
     <medication-entry-form
       v-else-if="entryType === DiaryEntryType.MEDICATION_ENTRY"
@@ -63,9 +79,11 @@ const { conflict, setAndSubmit, submit, submitting,
       :submitting="submitting"
       :object-errors="objectErrors"
       :field-errors="fieldErrors"
-      :show-update-form="false"
+      :show-update-form="showUpdateForm"
+      :entry-to-update="entryToUpdate"
       @add="setAndSubmit(false, $event)"
       @update="setAndSubmit(true, $event)"
+      @delete="remove($event)"
     />
   </div>
   <base-modal :is-open="conflict" title="Запись на это время уже существует. Перезаписать?">

@@ -33,6 +33,10 @@ const entryListByDay = computed(() => {
 const entryListSortedKeys = computed(() => {
   return Object.keys(entryListByDay.value).sort((a, b) => b.localeCompare(a));
 });
+
+const emit = defineEmits<{
+  (e: 'entry:click', entry: DiaryEntryWithType): void
+}>();
 </script>
 
 <template>
@@ -42,7 +46,8 @@ const entryListSortedKeys = computed(() => {
       <diary-entry-item v-for="(entry, index) in entryListByDay[day]"
                         class="entry-item"
                         :key="`${day}-${index}`"
-                        :entry="entry"/>
+                        :entry="entry"
+                        @click="$emit('entry:click', $event)"/>
     </div>
   </div>
 </template>

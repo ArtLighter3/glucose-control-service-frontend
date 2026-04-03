@@ -11,19 +11,20 @@ import {
   BFormSelect,
   BFormSelectOption
 } from 'bootstrap-vue-next'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useFormattedCommitionDate } from '@/composables/useFormattedCommitionDate.ts'
 import EntryFormButtons from '@/components/patient-view/diary/EntryFormButtons.vue'
 import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
 import type { FieldErrors } from '@/util/exception.ts'
-import { getMeasurementTypeName } from '../../../util/enumToStringLiterals.ts'
+import { getMeasurementTypeName } from '@/util/enumToStringLiterals.ts'
 
 const props = defineProps<{
   success: boolean,
   objectErrors: string[],
   fieldErrors: FieldErrors,
   submitting: boolean,
-  showUpdateForm: boolean
+  showUpdateForm: boolean,
+  entryToUpdate?: GlucoseEntry
 }>()
 
 const getValidationState = (fieldName: string) => {
@@ -37,6 +38,13 @@ const getValidationState = (fieldName: string) => {
 const {commitedAtStr, formattedDate} = useFormattedCommitionDate();
 
 const glucoseEntry = ref(new DefaultGlucoseEntry());
+
+onMounted(() => {
+  if (props.showUpdateForm && props.entryToUpdate !== undefined) {
+    glucoseEntry.value = {...props.entryToUpdate};
+    formattedDate.value = glucoseEntry.value.commitedAt;
+  }
+});
 
 const emit = defineEmits<{
   (e: 'add', entry: GlucoseEntry): void
@@ -152,6 +160,7 @@ const submit = () => {
       </b-form-invalid-feedback>
     </b-form-group>
     <entry-form-buttons :submitting="submitting"
+                        :show-delete-button="showUpdateForm"
                         @save="submit"
                         @delete="$emit('delete', commitedAtStr)"/>
     </form-transition-group>

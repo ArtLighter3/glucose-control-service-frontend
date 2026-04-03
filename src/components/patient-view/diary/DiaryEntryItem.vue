@@ -57,11 +57,13 @@ const formattedDate = computed(() => {
   });
 });
 
-const emit = defineEmits(['click']);
+const emit = defineEmits<{
+  (e: 'click', entry: DiaryEntryWithType): void
+}>();
 </script>
 
 <template>
-  <div class="item-wrapper">
+  <div class="item-wrapper" @click="$emit('click', entry)">
     <img v-if="iconPath !== null" :src="`/src/${iconPath}`" alt="" class="entry-icon" />
     <div class="main-info-wrapper">
       <div class="value-info-wrapper">
@@ -107,7 +109,7 @@ const emit = defineEmits(['click']);
     display: flex;
     flex-direction: column;
     align-items: start;
-    gap: 1rem;
+
 
     .value-info-wrapper {
       display: flex;
