@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { BButton } from 'bootstrap-vue-next'
 import {
+  type CarbsEntry,
   type DiaryEntry,
-  DiaryEntryType
+  DiaryEntryType, type GlucoseEntry, type InsulinEntry, type MedicationEntry
 } from '@/service/diaryService.ts'
 import BaseModal from '@/components/BaseModal.vue'
 import GlucoseEntryForm from '@/components/patient-view/diary/GlucoseEntryForm.vue'
@@ -11,10 +12,13 @@ import CarbsEntryForm from '@/components/patient-view/diary/CarbsEntryForm.vue'
 import MedicationEntryForm from '@/components/patient-view/diary/MedicationEntryForm.vue'
 import { useDiaryEntrySubmitting } from '@/composables/fetching/useDiaryEntrySubmitting.ts'
 import { watch } from 'vue'
+import { CarbsUnit, type GlucoseUnit } from '@/service/patientProfileService.ts'
 
 const props = defineProps<{
   patientId: string
-  entryType: DiaryEntryType
+  entryType: DiaryEntryType,
+  glucoseUnit?: GlucoseUnit,
+  carbsUnit?: CarbsUnit,
   showUpdateForm?: boolean,
   entryToUpdate?: DiaryEntry
 }>()
@@ -40,8 +44,9 @@ watch(success, (newValue) => {
       :submitting="submitting"
       :object-errors="objectErrors"
       :field-errors="fieldErrors"
-      :show-update-form="showUpdateForm"
-      :entry-to-update="entryToUpdate"
+      :show-update-form="showUpdateForm !== undefined ? showUpdateForm : false"
+      :entry-to-update="entryToUpdate as GlucoseEntry"
+      :glucose-unit="glucoseUnit"
       @add="setAndSubmit(false, $event)"
       @update="setAndSubmit(true, $event)"
       @delete="remove($event)"
@@ -53,8 +58,8 @@ watch(success, (newValue) => {
       :submitting="submitting"
       :object-errors="objectErrors"
       :field-errors="fieldErrors"
-      :show-update-form="showUpdateForm"
-      :entry-to-update="entryToUpdate"
+      :show-update-form="showUpdateForm !== undefined ? showUpdateForm : false"
+      :entry-to-update="entryToUpdate as InsulinEntry"
       @add="setAndSubmit(false, $event)"
       @update="setAndSubmit(true, $event)"
       @delete="remove($event)"
@@ -66,8 +71,9 @@ watch(success, (newValue) => {
       :submitting="submitting"
       :object-errors="objectErrors"
       :field-errors="fieldErrors"
-      :show-update-form="showUpdateForm"
-      :entry-to-update="entryToUpdate"
+      :show-update-form="showUpdateForm !== undefined ? showUpdateForm : false"
+      :entry-to-update="entryToUpdate as CarbsEntry"
+      :carbs-unit="carbsUnit"
       @add="setAndSubmit(false, $event)"
       @update="setAndSubmit(true, $event)"
       @delete="remove($event)"
@@ -79,8 +85,8 @@ watch(success, (newValue) => {
       :submitting="submitting"
       :object-errors="objectErrors"
       :field-errors="fieldErrors"
-      :show-update-form="showUpdateForm"
-      :entry-to-update="entryToUpdate"
+      :show-update-form="showUpdateForm !== undefined ? showUpdateForm : false"
+      :entry-to-update="entryToUpdate as MedicationEntry"
       @add="setAndSubmit(false, $event)"
       @update="setAndSubmit(true, $event)"
       @delete="remove($event)"

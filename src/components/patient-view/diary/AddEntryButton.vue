@@ -6,13 +6,13 @@ import EntryTypeItem from '@/components/patient-view/diary/EntryTypeItem.vue'
 import AddEntryFormContent from '@/components/patient-view/diary/EntryFormContent.vue'
 import { DiaryEntryType } from '@/service/diaryService.ts'
 import { ref } from 'vue'
+import { CarbsUnit, type GlucoseUnit } from '@/service/patientProfileService.ts'
 
-const props = defineProps({
-  patientId: {
-    type: String,
-    required: true,
-  },
-})
+const props = defineProps<{
+  patientId: string,
+  glucoseUnit?: GlucoseUnit,
+  carbsUnit?: CarbsUnit,
+}>();
 
 const { isOpen: isSelectionOpen, openModal: openSelection, closeModal: closeSelection } = useModal()
 
@@ -25,7 +25,7 @@ const openEntryForm = (type: DiaryEntryType) => {
   isEntryFormOpen.value = true
 }
 
-const emit = defineEmits(['entries:updated']);
+const emit = defineEmits(['entries:added']);
 </script>
 
 <template>
@@ -56,7 +56,8 @@ const emit = defineEmits(['entries:updated']);
   </base-modal>
   <base-modal :is-open="isEntryFormOpen" @close="closeEntryForm" title="">
     <add-entry-form-content :entry-type="currentEntryType" :patient-id="props.patientId"
-                            @entries:updated="$emit('entries:updated'); closeEntryForm()"/>
+                            :glucose-unit="glucoseUnit" :carbs-unit="carbsUnit"
+                            @entries:updated="$emit('entries:added'); closeEntryForm()"/>
   </base-modal>
 </template>
 

@@ -12,17 +12,19 @@ import {
   BFormSelectOption
 } from 'bootstrap-vue-next'
 import { onMounted, ref } from 'vue'
-import { useFormattedCommitionDate } from '@/composables/useFormattedCommitionDate.ts'
+import { useFormattedDate } from '@/composables/useFormattedDate.ts'
 import EntryFormButtons from '@/components/patient-view/diary/EntryFormButtons.vue'
 import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
 import type { FieldErrors } from '@/util/exception.ts'
-import { getMeasurementTypeName } from '@/util/enumToStringLiterals.ts'
+import { getGlucoseUnitName, getMeasurementTypeName } from '@/util/enumToStringLiterals.ts'
+import type { GlucoseUnit } from '@/service/patientProfileService.ts'
 
 const props = defineProps<{
   success: boolean,
   objectErrors: string[],
   fieldErrors: FieldErrors,
   submitting: boolean,
+  glucoseUnit?: GlucoseUnit,
   showUpdateForm: boolean,
   entryToUpdate?: GlucoseEntry
 }>()
@@ -35,9 +37,9 @@ const getValidationState = (fieldName: string) => {
   return null;
 };
 
-const {commitedAtStr, formattedDate} = useFormattedCommitionDate();
+const {dateISOString: commitedAtStr, formattedDate} = useFormattedDate(new Date());
 
-const glucoseEntry = ref(new DefaultGlucoseEntry());
+const glucoseEntry = ref<GlucoseEntry>(new DefaultGlucoseEntry());
 
 onMounted(() => {
   if (props.showUpdateForm && props.entryToUpdate !== undefined) {
@@ -71,7 +73,7 @@ const submit = () => {
       class="entry-form-group"
       key="value"
       id="value"
-      label="Значение глюкозы [ммоль/л]"
+      :label="`Значение глюкозы [${getGlucoseUnitName(glucoseUnit)}]`"
       label-for="value-input"
       :state="getValidationState('value')"
     >
@@ -123,6 +125,7 @@ const submit = () => {
       id="commited-at"
       label="Дата и время"
       label-for="commited-at-input"
+      :disabled="showUpdateForm"
       :state="getValidationState('commitedAt')"
     >
       <b-form-input

@@ -10,16 +10,19 @@ import {
   BFormInvalidFeedback
 } from 'bootstrap-vue-next'
 import { onMounted, ref } from 'vue'
-import { useFormattedCommitionDate } from '@/composables/useFormattedCommitionDate.ts'
+import { useFormattedDate } from '@/composables/useFormattedDate.ts'
 import EntryFormButtons from '@/components/patient-view/diary/EntryFormButtons.vue'
 import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
 import type { FieldErrors } from '@/util/exception.ts'
+import type { CarbsUnit } from '@/service/patientProfileService.ts'
+import { getCarbsUnitShortName } from '@/util/enumToStringLiterals.ts'
 
 const props = defineProps<{
   success: boolean,
   objectErrors: string[],
   fieldErrors: FieldErrors,
   submitting: boolean,
+  carbsUnit?: CarbsUnit,
   showUpdateForm: boolean,
   entryToUpdate?: CarbsEntry
 }>()
@@ -32,9 +35,9 @@ const getValidationState = (fieldName: string) => {
   return null;
 };
 
-const {commitedAtStr, formattedDate} = useFormattedCommitionDate();
+const {dateISOString: commitedAtStr, formattedDate} = useFormattedDate(new Date());
 
-const carbsEntry = ref(new DefaultCarbsEntry());
+const carbsEntry = ref<CarbsEntry>(new DefaultCarbsEntry());
 
 onMounted(() => {
   if (props.showUpdateForm && props.entryToUpdate !== undefined) {
@@ -68,7 +71,7 @@ const submit = () => {
       class="entry-form-group"
       key="value"
       id="value"
-      label="Количество углеводов [грамм]"
+      :label="`Количество углеводов [${getCarbsUnitShortName(carbsUnit)}]`"
       label-for="value-input"
       :state="getValidationState('value')"
     >
@@ -91,6 +94,7 @@ const submit = () => {
       id="commited-at"
       label="Дата и время"
       label-for="commited-at-input"
+      :disabled="showUpdateForm"
       :state="getValidationState('commitedAt')"
     >
       <b-form-input

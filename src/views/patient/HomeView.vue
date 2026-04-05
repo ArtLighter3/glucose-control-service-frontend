@@ -36,7 +36,9 @@ const { recentActivity, loading: activityLoading } = useRecentActivityFetching(i
     </b-card>
 
     <div class="add-button-wrapper">
-      <add-entry-button :patient-id="id"></add-entry-button>
+      <add-entry-button :glucose-unit="patientProfile.glucoseUnit"
+                        :carbs-unit="patientProfile.carbsUnit"
+                        :patient-id="id"></add-entry-button>
     </div>
   </div>
 

@@ -4,6 +4,7 @@ import DiaryEntryItem from '@/components/patient-view/diary/DiaryEntryItem.vue'
 import { computed } from 'vue'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale/ru'
+import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
 
 interface EntriesByDay {
   [key: string]: DiaryEntryWithType[];
@@ -43,11 +44,13 @@ const emit = defineEmits<{
   <div class="entries-wrapper">
     <div class="one-day-entries" v-for="(day) in entryListSortedKeys" :key="day">
       <h3> {{ format(day, "eeee, d MMM, yyyy", { locale: ru }) }}</h3>
+      <form-transition-group>
       <diary-entry-item v-for="(entry, index) in entryListByDay[day]"
                         class="entry-item"
                         :key="`${day}-${index}`"
                         :entry="entry"
                         @click="$emit('entry:click', $event)"/>
+      </form-transition-group>
     </div>
   </div>
 </template>

@@ -1,8 +1,8 @@
 import { computed, ref } from 'vue'
 
-export function useFormattedCommitionDate() {
-  const datetime = ref(new Date());
-  const commitedAtStr = ref(datetime.value.toISOString());
+export function useFormattedDate(startDate: Date) {
+  const datetime = ref(startDate);
+  const dateISOString = ref(datetime.value.toISOString());
 
   const formattedDate = computed({
     get: () => {
@@ -13,10 +13,10 @@ export function useFormattedCommitionDate() {
     set: (newValue: string) => {
       if (newValue) {
         datetime.value = new Date(newValue);
-        commitedAtStr.value = datetime.value.toISOString();
+        dateISOString.value = datetime.value.toISOString();
       }
     }
   });
 
-  return { commitedAtStr, formattedDate };
+  return { dateISOString, formattedDate };
 }

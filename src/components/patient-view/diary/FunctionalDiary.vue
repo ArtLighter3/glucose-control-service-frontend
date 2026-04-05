@@ -11,36 +11,31 @@ import DiaryEntriesList from '@/components/patient-view/diary/DiaryEntriesList.v
 import AddEntryFormContent from '@/components/patient-view/diary/EntryFormContent.vue'
 import BaseModal from '@/components/BaseModal.vue'
 import { useModal } from '@/composables/useModal.ts'
+import { CarbsUnit, type GlucoseUnit } from '@/service/patientProfileService.ts'
 
-const props = defineProps({
-  patientId: {
-    type: String,
-    required: true,
-  },
-  filtered: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-  from: {
-    type: Date,
-    required: false,
-  },
-  to: {
-    type: Date,
-    required: false,
-  },
-});
+const props = defineProps<{
+  patientId: string,
+  filtered?: boolean,
+  from?: Date,
+  to?: Date,
+  glucoseUnit?: GlucoseUnit,
+  carbsUnit?: CarbsUnit,
+}>();
 
 const loading = ref(false);
 const entries = ref<DiaryEntryWithType[]>([]);
 
 onMounted(async () => {
+  await refreshDiary();
+});
+const refreshDiary = async () => {
   loading.value = true
   const lastWeek = new Date()
   lastWeek.setDate(lastWeek.getDate() - 7)
   try {
-    const response = await getDiaryEntries(props.patientId, lastWeek, new Date())
+    const response = await getDiaryEntries(props.patientId,
+      (!props.filtered || props.from === undefined) ? lastWeek : props.from,
+      (!props.filtered || props.to === undefined) ? new Date() : props.to)
     entries.value = response.data
   } catch (err) {
     if (isAxiosError(err)) {
@@ -48,7 +43,7 @@ onMounted(async () => {
     }
   }
   loading.value = false
-});
+};
 
 const entryToUpdate = ref<DiaryEntryWithType>({
   type: DiaryEntryType.GLUCOSE_ENTRY,
@@ -60,6 +55,8 @@ const openEntryUpdateForm = (entryWithType: DiaryEntryWithType) => {
   entryToUpdate.value = entryWithType;
   openEntryForm();
 };
+
+//defineExpose(refreshDiary, loading);
 </script>
 
 <template>
@@ -75,7 +72,9 @@ const openEntryUpdateForm = (entryWithType: DiaryEntryWithType) => {
       :show-update-form="true"
       :entry-to-update="entryToUpdate.entryInfo"
       :patient-id="props.patientId"
-      @entries:updated="$emit('entries:updated')"
+      :glucose-unit="glucoseUnit"
+      :carbs-unit="carbsUnit"
+      @entries:updated="refreshDiary(); closeEntryForm()"
     />
   </base-modal>
 </template>

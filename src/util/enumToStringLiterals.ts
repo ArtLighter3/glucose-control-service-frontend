@@ -45,8 +45,8 @@ const carbsUnitToShortStringRepresentation: EnumStringRepresentation = {
   "BREAD_UNITS_15": "ХЕ"
 };
 
-function getOrEmptyString(mappedType: EnumStringRepresentation, key: string | null) {
-  if (key === null) return "";
+function getOrEmptyString(mappedType: EnumStringRepresentation, key: string | null | undefined) {
+  if (key === null || key === undefined) return "";
 
   const value = mappedType[key];
   if (value === undefined) return "";
@@ -54,26 +54,26 @@ function getOrEmptyString(mappedType: EnumStringRepresentation, key: string | nu
   return value;
 }
 
-export function getMeasurementTypeName(category: MeasurementType | null) {
+export function getMeasurementTypeName(category: MeasurementType | null | undefined) {
   return getOrEmptyString(measurementTypeToStringRepresentation, category);
 }
 
-export function getInsulinTypeName(insulinType: InsulinType | null) {
+export function getInsulinTypeName(insulinType: InsulinType | null | undefined) {
   return getOrEmptyString(insulinTypeToStringRepresentation, insulinType);
 }
 
-export function getDiaryEntryTypeURLCodename(entryType: DiaryEntryType | null) {
+export function getDiaryEntryTypeURLCodename(entryType: DiaryEntryType | null | undefined) {
   return getOrEmptyString(entryTypeToURL, entryType);
 }
 
-export function getCarbsUnitName(carbsUnit: CarbsUnit | null) {
+export function getCarbsUnitName(carbsUnit: CarbsUnit | null | undefined) {
   return getOrEmptyString(carbsUnitToStringRepresentation, carbsUnit);
 }
 
-export function getCarbsUnitShortName(carbsUnit: CarbsUnit | null) {
+export function getCarbsUnitShortName(carbsUnit: CarbsUnit | null | undefined) {
   return getOrEmptyString(carbsUnitToShortStringRepresentation, carbsUnit);
 }
 
-export function getGlucoseUnitName(glucoseUnit: GlucoseUnit | null) {
+export function getGlucoseUnitName(glucoseUnit: GlucoseUnit | null | undefined) {
   return getOrEmptyString(glucoseUnitToStringRepresentation, glucoseUnit);
 }
