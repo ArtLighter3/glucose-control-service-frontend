@@ -2,39 +2,35 @@ import { onMounted, ref } from 'vue'
 import { type AxiosResponse, isAxiosError } from 'axios'
 import { useSubmittableForm } from '@/composables/useSubmittableForm.ts'
 import type { ApiExceptionResponse } from '@/util/exception.ts'
-import {
-  getInsulinProfile,
-  type InsulinProfile,
-  postInsulinProfile, putInsulinProfile
-} from '@/service/insulinService.ts'
+import type { UserUpdatableInfo } from '@/service/userService.ts'
+import { getUserInfo, putUserInfo } from '@/service/userService.ts'
 
-export function useInsulinProfileFetchingAndSubmitting(patientId: string) {
-  const insulinProfile = ref<InsulinProfile>({
-    defaultInsulinToCarbsRatio: 30,
-    defaultInsulinSensitivityFactor: 30,
-    durationOfInsulinAction: 5,
-    factorsByTime: {},
-    ratiosByTime: {},
+export function useUserInfoFetchingAndSubmitting(patientId: string) {
+  const userInfo = ref<UserUpdatableInfo>({
+    email: null,
+    firstName: "",
+    middleName: null,
+    lastName: "",
+    birthDate: null
   })
 
   const fetchingError = ref(false)
   const loading = ref(true)
-  const insulinProfileDoesNotExist = ref(false)
   onMounted(async () => {
     loading.value = true;
     try {
       fetchingError.value = false
-      insulinProfile.value = (await getInsulinProfile(patientId)).data
+      userInfo.value = (await getUserInfo(patientId)).data
     } catch (err) {
       if (isAxiosError(err) && err.response) {
-        if (err.response.status === 404) insulinProfileDoesNotExist.value = true
-        else fetchingError.value = true
+        fetchingError.value = true
       }
     }
     loading.value = false
   })
 
-  const { submitting, success, fieldErrors, objectErrors, getValidationState}
+  const { submitting, success,
+    fieldErrors, objectErrors, getValidationState}
     = useSubmittableForm();
   const submit = async () => {
     submitting.value = true
@@ -43,17 +39,15 @@ export function useInsulinProfileFetchingAndSubmitting(patientId: string) {
       fieldErrors.value = {}
       objectErrors.value = []
 
-      const response = insulinProfileDoesNotExist.value
-        ? await postInsulinProfile(patientId, insulinProfile.value)
-        : await putInsulinProfile(patientId, insulinProfile.value)
-      insulinProfile.value = response.data
+      const response = await putUserInfo(patientId, userInfo.value)
+      userInfo.value = response.data;
       success.value = true
-      insulinProfileDoesNotExist.value = false
     } catch (err) {
       success.value = false
       if (isAxiosError(err) && err.response) {
         if (err.response.status === 400 && err.response.data) {
-          const exceptionResponse = err.response as AxiosResponse<ApiExceptionResponse>
+          const exceptionResponse
+            = err.response as AxiosResponse<ApiExceptionResponse>
           fieldErrors.value = exceptionResponse.data.fieldErrors
           objectErrors.value = exceptionResponse.data.objectErrors
         }
@@ -63,7 +57,7 @@ export function useInsulinProfileFetchingAndSubmitting(patientId: string) {
   }
 
   return {
-    insulinProfile,
+    userInfo,
     fetchingError,
     loading,
     submit,

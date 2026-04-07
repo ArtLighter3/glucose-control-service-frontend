@@ -20,9 +20,7 @@ export interface PatientProfile {
   hyperGlucose: number,
   highGlucose: number,
   lowGlucose: number,
-  hypoGlucose: number,
-  isNightscoutEnabled: boolean,
-  nightscoutApiSecret: string
+  hypoGlucose: number
 }
 
 export class DefaultPatientProfile implements PatientProfile {
@@ -33,9 +31,6 @@ export class DefaultPatientProfile implements PatientProfile {
   highGlucose = 9;
   lowGlucose = 4;
   hypoGlucose = 3;
-  isNightscoutEnabled = false;
-  nightscoutApiSecret = "";
-
 }
 
 export async function getPatientProfile(patientId: string) {

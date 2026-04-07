@@ -27,7 +27,7 @@ import { useRefreshComponent } from '@/composables/useRefreshComponent.ts'
     {
       iconPath: "assets/icons/settings.svg",
       text: "Настройки профиля",
-      routeName: "patient-profile"
+      routeName: "patient-settings"
     }]);
 
 const { isOpen, openModal, closeModal } = useModal();

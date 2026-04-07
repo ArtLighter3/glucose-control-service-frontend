@@ -12,6 +12,7 @@ import AddEntryFormContent from '@/components/patient-view/diary/EntryFormConten
 import BaseModal from '@/components/BaseModal.vue'
 import { useModal } from '@/composables/useModal.ts'
 import { CarbsUnit, type GlucoseUnit } from '@/service/patientProfileService.ts'
+import { BSpinner } from 'bootstrap-vue-next'
 
 const props = defineProps<{
   patientId: string,
@@ -61,7 +62,8 @@ const openEntryUpdateForm = (entryWithType: DiaryEntryWithType) => {
 
 <template>
   <div class="diary-wrapper">
-    <diary-entries-list
+    <b-spinner v-if="loading" variant="success"/>
+    <diary-entries-list v-else
       @entry:click="openEntryUpdateForm($event)"
       :entries="entries"
     ></diary-entries-list>

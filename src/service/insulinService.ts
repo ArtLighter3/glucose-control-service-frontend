@@ -1,6 +1,5 @@
 import "axios"
-import axios, { type AxiosResponse } from 'axios'
-import type { DiaryEntry, DiaryEntryWithType, GlucoseEntry } from '@/service/diaryService.ts'
+import type { DiaryEntryWithType, GlucoseEntry } from '@/service/diaryService.ts'
 import apiClient from '@/service/apiClient.ts'
 import { getUtcOffsetString } from '@/util/utc.ts'
 

@@ -1,8 +1,6 @@
-import { reactive, ref } from 'vue'
+import { ref } from 'vue'
 import { login, type UserLogin } from '@/service/userService.ts'
-import router from '@/router'
 import { useAuthStore } from '@/stores/authStore.ts'
-import { storeToRefs } from 'pinia'
 
 export function useLogin() {
   const loading = ref(false);

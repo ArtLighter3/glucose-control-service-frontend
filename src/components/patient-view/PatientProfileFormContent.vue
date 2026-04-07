@@ -65,7 +65,7 @@ import { getCarbsUnitName, getGlucoseUnitName } from '../../util/enumToStringLit
     <div class="profile-form-inner-wrapper" v-else>
       <h4 class="error-text" v-if="fetchingError">ОШИБКА ЗАГРУЗКИ ПРОФИЛЯ</h4>
       <b-form class="profile-form" v-else @submit.prevent="submit">
-        <h2>НАСТРОЙКИ ПРОФИЛЯ</h2>
+        <h2>Основные</h2>
         <div class="first-row">
           <b-card class="form-group-wrapper">
             <b-form-group class="form-group" id="glucose-range">
@@ -203,6 +203,7 @@ h4 {
       flex-direction: column;
       align-items: center;
       height: 100%;
+
       flex: 1;
 
       .first-row {
