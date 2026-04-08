@@ -19,7 +19,7 @@ const id = ref(useRoute().params.id as string);
   display: flex;
   justify-content: center;
   align-items: start;
-  padding: 2rem
+  padding: 2rem;
 }
 </style>
 

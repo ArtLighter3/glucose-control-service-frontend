@@ -2,6 +2,7 @@
 import { BButton } from 'bootstrap-vue-next'
 import BaseModal from '@/components/BaseModal.vue'
 import { useModal } from '@/composables/useModal.ts'
+import ConfirmDialogModal from '@/components/ConfirmDialogModal.vue'
 
 const props = defineProps({
   showDeleteButton: {
@@ -50,28 +51,12 @@ const confirmDeletion = () => {
       Удалить
     </b-button>
   </div>
-  <base-modal v-if="showDeleteButton" :is-open="isOpen" title="Удалить запись?">
-    <div class="button-row">
-      <b-button
-        class="button-row-item"
-        variant="outline-success"
-        squared
-        size="lg"
-        @click="confirmDeletion()"
-      >
-        Да
-      </b-button>
-      <b-button
-        class="button-row-item"
-        variant="outline-danger"
-        squared
-        size="lg"
-        @click="closeModal()"
-      >
-        Нет
-      </b-button>
-    </div>
-  </base-modal>
+  <confirm-dialog-modal :is-open="isOpen"
+                        title="Удаление записи"
+                        text="Вы уверены?"
+                        @confirm="confirmDeletion"
+                        @cancel="closeModal"
+  />
 </template>
 
 <style scoped>

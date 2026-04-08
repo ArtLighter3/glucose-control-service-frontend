@@ -1,5 +1,4 @@
 import "axios"
-import axios from 'axios'
 import apiClient from '@/service/apiClient.ts'
 
 export interface UserSession {
@@ -24,7 +23,6 @@ export interface UserRegistration {
   birthDate: string | null
 }
 
-
 export interface UserUpdatableInfo {
   email: string | null,
   firstName: string,
@@ -43,6 +41,10 @@ export async function login(userLogin: UserLogin) {
 
 export async function register(userRegistration: UserRegistration) {
   return apiClient.post("/auth/register", userRegistration);
+}
+
+export async function logout() {
+  return apiClient.post("/auth/logout");
 }
 
 export async function getUserInfo(patientId: string) {

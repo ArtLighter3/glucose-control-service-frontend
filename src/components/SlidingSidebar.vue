@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { h, onMounted, ref } from 'vue'
 
 export interface SidebarItem {
   iconPath: string,
@@ -45,6 +45,13 @@ defineExpose({isExpanded});
                   :key="index" :to="{name:item.routeName}">
        <img class="sidebar-item-icon" :src="`/src/${item.iconPath}`" alt="">
        <span class="sidebar-item-text">{{ item.text }}</span>
+     </router-link>
+     <router-link class="sidebar-item logout-item"
+                  :to="{name:'logout'}"
+                  key="logout"
+     >
+       <img class="sidebar-item-icon" :src="`/src/assets/icons/logout.svg`" alt="">
+       <span class="sidebar-item-text">Выйти из аккаунта</span>
      </router-link>
    </div>
  </aside>
@@ -101,6 +108,10 @@ aside {
       padding-top: 0.25rem;
       padding-bottom: 0.25rem;
 
+      &.logout-item {
+        margin-top: auto;
+      }
+
       .sidebar-item-text {
         transition: 0.1s ease-out;
         color: var(--color-text-on-alt-background);
@@ -113,6 +124,7 @@ aside {
         background: var(--color-text-on-alt-background-hover);
       }
     }
+
   }
 
   &.is-expanded {

@@ -5,18 +5,28 @@ import DiaryView from '@/views/patient/DiaryView.vue'
 import InsulinProfileView from '@/views/patient/InsulinProfileView.vue'
 import HomeView from '@/views/patient/HomeView.vue'
 import ProfileSettingsView from '@/views/patient/ProfileSettingsView.vue'
+import { useAuthStore } from '@/stores/authStore.ts'
+import RedirectingWelcomeView from '@/views/RedirectingWelcomeView.vue'
+import LogoutView from '@/views/LogoutView.vue'
+
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      redirect: '/login'
+      component: RedirectingWelcomeView,
     },
     {
       path: '/login',
       name: 'login',
       component: LoginView,
+    },
+    {
+      path: '/logout',
+      name: 'logout',
+      component: LogoutView
     },
     {
       path: '/patient/:id',

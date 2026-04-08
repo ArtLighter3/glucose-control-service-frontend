@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { login, type UserLogin } from '@/service/userService.ts'
+import { login, logout, type UserLogin } from '@/service/userService.ts'
 import { useAuthStore } from '@/stores/authStore.ts'
 
 export function useLogin() {
@@ -32,11 +32,21 @@ export function useLogin() {
     loading.value = false;
   }
 
+  const submitLogout = async () => {
+    try {
+      const response = await logout();
+    } catch (err) {
+      console.log(err);
+    }
+    authStore.logout();
+  };
+
   return {
     loading,
     userLogin,
     submitLogin,
     error,
-    successfulLogin
+    successfulLogin,
+    submitLogout
   }
 }

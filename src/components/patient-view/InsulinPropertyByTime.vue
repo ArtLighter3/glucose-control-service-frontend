@@ -129,7 +129,7 @@ const emit = defineEmits<{
                   v-model="value"/>
     <b-button class="row-element" @click="$emit('delete', time)"
               v-if="deletable" variant="danger" size="md" squared>
-      Удалить
+      X
     </b-button>
   </div>
   <b-form-invalid-feedback :key="`${id}-invalid-feedback`" :state="state">
@@ -149,6 +149,11 @@ const emit = defineEmits<{
   .row-element {
     margin-left: 1rem;
     margin-right: 1rem;
+
+    @media (max-width: 768px) {
+      margin-left: 0.2rem;
+      margin-right: 0.2rem;
+    }
   }
 }
 

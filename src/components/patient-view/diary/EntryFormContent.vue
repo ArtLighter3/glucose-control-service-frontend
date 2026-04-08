@@ -13,6 +13,7 @@ import MedicationEntryForm from '@/components/patient-view/diary/MedicationEntry
 import { useDiaryEntrySubmitting } from '@/composables/fetching/useDiaryEntrySubmitting.ts'
 import { watch } from 'vue'
 import { CarbsUnit, type GlucoseUnit } from '@/service/patientProfileService.ts'
+import ConfirmDialogModal from '@/components/ConfirmDialogModal.vue'
 
 const props = defineProps<{
   patientId: string
@@ -92,35 +93,13 @@ watch(success, (newValue) => {
       @delete="remove($event)"
     />
   </div>
-  <base-modal :is-open="conflict" title="Запись на это время уже существует. Перезаписать?">
-    <div class="update-prompt">
-      <b-button
-        class="update-prompt-btn"
-        variant="outline-success"
-        size="lg"
-        squared
-        @click="submit(true)"
-        >Да</b-button
-      >
-      <b-button
-        class="update-prompt-btn"
-        variant="outline-danger"
-        size="lg"
-        squared
-        @click="conflict = false"
-        >Нет</b-button
-      >
-    </div>
-  </base-modal>
+  <confirm-dialog-modal :is-open="conflict"
+                        text="Запись на это время уже существует. Перезаписать?"
+                        title="Обновление записи"
+                        @confirm="submit(true)"
+                        @cancel="conflict = false"/>
 </template>
 
 <style scoped>
-.update-prompt {
-  display: flex;
-  justify-content: space-evenly;
 
-  .update-prompt-btn {
-    width: 40%;
-  }
-}
 </style>

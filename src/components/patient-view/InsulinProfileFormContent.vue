@@ -273,6 +273,14 @@ h4 {
           width: 100%;
         }
       }
+
+      @media (max-width: 768px) {
+        width: 90%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      padding-left: 1.5rem;
     }
   }
 }
