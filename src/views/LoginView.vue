@@ -12,8 +12,11 @@
 import UserLoginForm from '@/components/UserLoginForm.vue'
 import { useAuthStore } from '@/stores/authStore.ts'
 import router from '@/router'
+import { useCsrfFetching } from '@/composables/fetching/useCsrfFetching.ts'
 
 const authStore = useAuthStore();
+
+useCsrfFetching();
 
 const redirectToHome = () => {
   router.push({ name: "patient-home", params: { id: `${authStore.getId()}` } });

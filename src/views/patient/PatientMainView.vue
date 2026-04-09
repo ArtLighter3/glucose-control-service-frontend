@@ -7,6 +7,7 @@ import { useModal } from '@/composables/useModal.ts'
 import UserLoginForm from '@/components/UserLoginForm.vue'
 import BaseModal from '@/components/BaseModal.vue'
 import { useRefreshComponent } from '@/composables/useRefreshComponent.ts'
+import { useCsrfFetching } from '@/composables/fetching/useCsrfFetching.ts'
 
   const sidebarItems: SidebarItem[] = reactive([
     {
@@ -33,6 +34,8 @@ import { useRefreshComponent } from '@/composables/useRefreshComponent.ts'
 const { isOpen, openModal, closeModal } = useModal();
 
 const { componentKey: key, refresh } = useRefreshComponent();
+
+useCsrfFetching();
 
 const authStore = useAuthStore();
 const { userSession } = storeToRefs(authStore);

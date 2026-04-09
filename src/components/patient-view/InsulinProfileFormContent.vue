@@ -288,12 +288,12 @@ h4 {
       }
 
       @media (max-width: 768px) {
-        width: 90%;
+        width: 100%;
       }
     }
 
     @media (max-width: 768px) {
-      padding-left: 1.5rem;
+      padding-left: 2rem;
     }
   }
 }

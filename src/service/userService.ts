@@ -55,6 +55,10 @@ export async function putUserInfo(patientId: string, userInfo: UserUpdatableInfo
   return apiClient.put<UserUpdatableInfo>(getUserURL(patientId), userInfo);
 }
 
+export async function getCsrf() {
+  return apiClient.get("/auth/csrf");
+}
+
 function getUserURL(patientId: string) {
   return `/users/${patientId}`;
 }

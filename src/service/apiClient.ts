@@ -3,7 +3,10 @@ import { useAuthStore } from '@/stores/authStore';
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
-  withCredentials: true
+  withCredentials: true,
+  withXSRFToken: true,
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN',
 });
 
 apiClient.interceptors.response.use(
