@@ -14,7 +14,7 @@
 
 <template>
   <div class="sidebar-item-wrapper">
-    <img v-if="icon" :src="icon" alt="" class="sidebar-item-icon"/>
+    <img v-if="icon !== undefined" :src="icon" alt="" class="sidebar-item-icon"/>
     <span class="sidebar-item-text">{{ text }}</span>
   </div>
 </template>

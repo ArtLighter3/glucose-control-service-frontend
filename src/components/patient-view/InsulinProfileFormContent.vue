@@ -21,7 +21,7 @@ const props = defineProps({
   },
 })
 
-const {insulinProfile, globalError, loading,
+const {insulinProfile, fetchingError, loading,
   submit, submitting, success, fieldErrors, objectErrors,
   getValidationState} = useInsulinProfileFetchingAndSubmitting(props.patientId);
 
@@ -80,29 +80,41 @@ const addFactorByTime = () => {
 }
 const addValueByTime = (map: {[key: string]: number}, sortedKeys: ComputedRef<string[]>) => {
   if (sortedKeys.value.length <= 0) map["00:30"] = 30;
-  else if (sortedKeys.value.length === 23) return;
+  else if (sortedKeys.value.length === 47) return;
   else {
     const lastTimeSlot = sortedKeys.value[sortedKeys.value.length - 1];
-    //console.log(Time.T23_30.valueOf())
-    if (lastTimeSlot === "23:30" || lastTimeSlot === undefined) {
-      // for (let i = sortedKeys.value.length - 2; i >= 0; i--) {
-      //
-      // }
-      //TODO
-      return;
+    let newTimeSlot = "00:30";
+
+    if (lastTimeSlot === undefined) return;
+    else if (lastTimeSlot === "23:30") {
+      //необходимо найти самый поздний незанятый временной слот
+      let minutes = "00", hours = "23";
+      for (let i = 47; i >= 0; i--) {
+        newTimeSlot = `${hours.padStart(2, '0')}:${minutes}`;
+
+        if (map[newTimeSlot] === undefined) break;
+
+        //Отнимаем 30 минут от временного слота
+        if (minutes === "00") {
+          minutes = "30";
+          hours = `${parseInt(hours) - 1}`;
+        } else if (minutes === "30") {
+          minutes = "00";
+        }
+      }
+    } else {
+      //Прибавление 30 минут к последнему временному слоту
+      let minutes = lastTimeSlot.slice(-2);
+      let hours = lastTimeSlot.slice(0, 2);
+      if (minutes === "00") {
+        minutes = "30";
+      } else if (minutes === "30") {
+        minutes = "00";
+        hours = `${parseInt(hours) + 1}`;
+      } else return;
+      newTimeSlot = `${hours.padStart(2, '0')}:${minutes}`;
     }
 
-    let minutes = lastTimeSlot.slice(-2);
-    let hours = lastTimeSlot.slice(0, 2);
-    if (minutes === "00") {
-      minutes = "30";
-    }
-    else if (minutes === "30") {
-      minutes = "00";
-      hours = `${parseInt(hours) + 1}`;
-    } else return;
-
-    const newTimeSlot = `${hours.padStart(2, '0')}:${minutes}`;
     map[newTimeSlot] = 30;
   }
 };
@@ -111,7 +123,7 @@ const addValueByTime = (map: {[key: string]: number}, sortedKeys: ComputedRef<st
 <template>
   <b-spinner v-if="loading" variant="success"></b-spinner>
   <div class="insulin-profile-form-inner-wrapper" v-else>
-    <h4 class="error-text" v-if="globalError">ОШИБКА</h4>
+    <h4 class="error-text" v-if="fetchingError">ОШИБКА</h4>
     <b-form class="insulin-profile-form" v-else @submit.prevent="submit">
       <h2>ИНСУЛИНОВЫЙ РЕЖИМ</h2>
       <b-card class="form-group-wrapper">
