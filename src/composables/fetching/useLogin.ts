@@ -1,6 +1,8 @@
 import { ref } from 'vue'
 import { login, logout, type UserLogin } from '@/service/userService.ts'
 import { useAuthStore } from '@/stores/authStore.ts'
+import { usePatientProfileStore } from '@/stores/patientProfileStore.ts'
+import { DefaultPatientProfile } from '@/service/patientProfileService.ts'
 
 export function useLogin() {
   const loading = ref(false);
@@ -8,6 +10,7 @@ export function useLogin() {
   const successfulLogin = ref(false);
 
   const authStore = useAuthStore();
+  const patientProfileStore = usePatientProfileStore();
 
   const userLogin = ref<UserLogin>({
     username: '',
@@ -39,6 +42,8 @@ export function useLogin() {
       console.log(err);
     }
     authStore.logout();
+    patientProfileStore.isFetched = false;
+    patientProfileStore.cachedPatientProfile = new DefaultPatientProfile();
   };
 
   return {
