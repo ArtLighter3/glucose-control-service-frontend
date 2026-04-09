@@ -13,13 +13,13 @@ import InsulinPropertyByTime from '@/components/patient-view/InsulinPropertyByTi
 import {
   useInsulinProfileFetchingAndSubmitting
 } from '@/composables/fetching/useInsulinProfileFetchingAndSubmitting.ts'
+import type { GlucoseUnit } from '@/service/patientProfileService.ts'
+import { getGlucoseUnitName } from '@/util/enumToStringLiterals.ts'
 
-const props = defineProps({
-  patientId: {
-    type: String,
-    required: true,
-  },
-})
+const props = defineProps<{
+  patientId: string,
+  glucoseUnit: GlucoseUnit
+}>()
 
 const {insulinProfile, fetchingError, loading,
   submit, submitting, success, fieldErrors, objectErrors,
@@ -203,7 +203,8 @@ const addValueByTime = (map: {[key: string]: number}, sortedKeys: ComputedRef<st
             key="isf"
             id="isf"
             class="form-group-inner"
-            label="Фактор чувствительности к инсулину (ISF) [ммоль/л/ед]"
+            :label="`Фактор чувствительности к инсулину (ISF)
+            [${getGlucoseUnitName(glucoseUnit)}/ед]`"
             label-for="default-isf-input"
           >
             <b-card>
