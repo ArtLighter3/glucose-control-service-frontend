@@ -1,14 +1,16 @@
 <template>
   <Teleport to="body">
     <modal-transition-group>
-      <div v-if="isOpen" class="modal-overlay" @click.self="$emit('close')">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h3>{{ title }}</h3>
-          </div>
-          <div class="modal-body">
-            <slot></slot>
-          </div>
+      <div v-if="isOpen" class="modal-overlay" key="overlay" @click.self="$emit('close')">
+        <div class="modal-content" key="content">
+          <form-transition-group>
+            <div class="modal-header" key="header">
+              <h3>{{ title }}</h3>
+            </div>
+            <div class="modal-body" key="body">
+              <slot></slot>
+            </div>
+          </form-transition-group>
         </div>
       </div>
     </modal-transition-group>
@@ -17,8 +19,8 @@
 
 <script setup lang="ts">
 import { defineEmits } from 'vue';
-import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
 import ModalTransitionGroup from '@/components/ModalTransitionGroup.vue'
+import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
 
 const props = defineProps({
   isOpen: {

@@ -62,18 +62,6 @@ const emit = defineEmits(['entries:added']);
 </template>
 
 <style scoped>
-.circular-btn {
-  width: 40px;
-  height: 40px;
-  padding: 2rem;
-  border-radius: 50%;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 2rem;
-}
-
 .entry-type-select {
   display: flex;
   flex-wrap: wrap;

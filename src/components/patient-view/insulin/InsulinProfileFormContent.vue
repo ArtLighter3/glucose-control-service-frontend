@@ -9,7 +9,7 @@ import {
   BCard, BFormInvalidFeedback
 } from 'bootstrap-vue-next'
 import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
-import InsulinPropertyByTime from '@/components/patient-view/InsulinPropertyByTime.vue'
+import InsulinPropertyByTime from '@/components/patient-view/insulin/InsulinPropertyByTime.vue'
 import {
   useInsulinProfileFetchingAndSubmitting
 } from '@/composables/fetching/useInsulinProfileFetchingAndSubmitting.ts'

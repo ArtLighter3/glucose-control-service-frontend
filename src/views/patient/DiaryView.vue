@@ -3,7 +3,7 @@
 import FunctionalDiary from '@/components/patient-view/diary/FunctionalDiary.vue'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
-import AddEntryButton from '@/components/patient-view/diary/AddEntryButton.vue'
+import AddEntryButton from '@/components/patient-view/diary/AddEntryFunctionalButton.vue'
 import { useRefreshComponent } from '@/composables/useRefreshComponent.ts'
 import { usePatientProfileFetching } from '@/composables/fetching/usePatientProfileFetching.ts'
 import { BButton, BForm, BFormGroup, BFormInput, BCard } from 'bootstrap-vue-next'

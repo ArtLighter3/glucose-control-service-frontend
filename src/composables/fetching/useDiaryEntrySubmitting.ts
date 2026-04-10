@@ -21,33 +21,33 @@ export function useDiaryEntrySubmitting(patientId: string, entryType: DiaryEntry
     await submit(alreadyExists)
   }
   const submit = async (alreadyExists: boolean) => {
-    submitting.value = true
+    submitting.value = true;
     success.value = false;
-    conflict.value = false
+    conflict.value = false;
     try {
       if (diaryEntry.value === null) return;
 
-      fieldErrors.value = {}
-      objectErrors.value = []
+      fieldErrors.value = {};
+      objectErrors.value = [];
 
       const response = alreadyExists
         ? await putDiaryEntry(patientId, diaryEntry.value, entryType)
-        : await postDiaryEntry(patientId, diaryEntry.value, entryType)
-      success.value = true
+        : await postDiaryEntry(patientId, diaryEntry.value, entryType);
+      success.value = true;
     } catch (err) {
-      success.value = false
+      success.value = false;
       if (isAxiosError(err) && err.response) {
         if (err.response.status === 400 && err.response.data) {
           const exceptionResponse
             = err.response as AxiosResponse<ApiExceptionResponse>
-          fieldErrors.value = exceptionResponse.data.fieldErrors
-          objectErrors.value = exceptionResponse.data.objectErrors
+          fieldErrors.value = exceptionResponse.data.fieldErrors;
+          objectErrors.value = exceptionResponse.data.objectErrors;
         } else if (err.response.status === 409) {
-          conflict.value = true
+          conflict.value = true;
         }
       }
     }
-    submitting.value = false
+    submitting.value = false;
   }
   const remove = async (commitedAt: string) => {
     submitting.value = true;
@@ -55,9 +55,9 @@ export function useDiaryEntrySubmitting(patientId: string, entryType: DiaryEntry
     try {
       //if (diaryEntry.value === null) return;
       await deleteDiaryEntry(patientId, entryType, commitedAt);
-      success.value = true
+      success.value = true;
     } catch (err) {
-      success.value = false
+      success.value = false;
       if (isAxiosError(err) && err.response) {
         console.log(err);
       }

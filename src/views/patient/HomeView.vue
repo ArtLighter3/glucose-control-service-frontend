@@ -3,7 +3,7 @@
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import RecentDiaryInfoPanel from '@/components/patient-view/RecentDiaryInfoPanel.vue'
-import AddEntryButton from '@/components/patient-view/diary/AddEntryButton.vue'
+import AddEntryButton from '@/components/patient-view/diary/AddEntryFunctionalButton.vue'
 import { usePatientProfileFetching } from '@/composables/fetching/usePatientProfileFetching.ts'
 import { useRecentActivityFetching } from '@/composables/fetching/useRecentActivityFetching.ts'
 import TimeChart from '@/components/patient-view/GlucoseTimeChart.vue'

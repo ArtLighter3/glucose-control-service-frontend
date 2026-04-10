@@ -55,6 +55,7 @@ import {
                               class="form-group-inner"
                               label="API Secret"
                               label-for="nightscout-api-secret-input"
+                              :disabled="!integrationProfile.isNightscoutEnabled"
                               :state="getValidationState('nightscoutApiSecret')">
                   <b-form-input class="squared-input-field"
                                 id="nightscout-api-secret-input" type="text"
