@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { BButton } from 'bootstrap-vue-next'
 import {
   type CarbsEntry,
   type DiaryEntry,
   DiaryEntryType, type GlucoseEntry, type InsulinEntry, type MedicationEntry
 } from '@/service/diaryService.ts'
-import BaseModal from '@/components/BaseModal.vue'
 import GlucoseEntryForm from '@/components/patient-view/diary/GlucoseEntryForm.vue'
 import InsulinEntryForm from '@/components/patient-view/diary/InsulinEntryForm.vue'
 import CarbsEntryForm from '@/components/patient-view/diary/CarbsEntryForm.vue'
@@ -22,7 +20,7 @@ const props = defineProps<{
   carbsUnit?: CarbsUnit,
   showUpdateForm?: boolean,
   entryToUpdate?: DiaryEntry
-}>()
+}>();
 
 const { conflict, setAndSubmit, submit, remove, submitting,
   success, fieldErrors, objectErrors }

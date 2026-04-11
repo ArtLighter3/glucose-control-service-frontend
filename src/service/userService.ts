@@ -13,13 +13,13 @@ export interface UserLogin {
 }
 
 export interface UserRegistration {
-  username: string,
-  password: string,
-  repeatedPassword: string,
+  username: string | null,
+  password: string | null,
+  repeatedPassword: string | null,
   email: string | null,
-  firstName: string,
+  firstName: string | null,
   middleName: string | null,
-  lastName: string,
+  lastName: string | null,
   birthDate: string | null
 }
 

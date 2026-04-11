@@ -22,23 +22,40 @@
         />
       </b-form-group>
 
-      <b-button class="login-button" key="login-button" :loading="loading" loading-fill
-                variant="outline-success" type="submit" squared>Вход</b-button>
+      <b-button class="login-button"
+                key="login-button"
+                :loading="loading"
+                loading-fill
+                variant="outline-success"
+                type="submit"
+                squared
+                size="lg"
+      >
+        Вход
+      </b-button>
     </form-transition-group>
   </b-form>
+  <div class="registration-option" @click="redirectToRegistration">
+    Регистрация
+  </div>
 </template>
 <script setup lang="ts">
 import { BFormInput, BFormGroup, BForm, BButton } from 'bootstrap-vue-next'
   import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
 import { useLogin } from '@/composables/fetching/useLogin.ts'
 import { watch } from 'vue'
+import router from '@/router'
 
 const { loading, userLogin, submitLogin, error, successfulLogin } = useLogin();
+
+const redirectToRegistration = () => {
+  router.push({name: "register"});
+};
 
 const emit = defineEmits(['login:success']);
 watch(successfulLogin, (newValue) => {
   if (newValue) emit('login:success');
-})
+});
 
 </script>
 
@@ -53,5 +70,12 @@ watch(successfulLogin, (newValue) => {
 
 .login-button {
   margin: 0.5rem;
+}
+
+.registration-option {
+  margin-top: 2rem;
+  text-align: center;
+  opacity: 0.5;
+  cursor: pointer;
 }
 </style>

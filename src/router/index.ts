@@ -8,6 +8,7 @@ import ProfileSettingsView from '@/views/patient/ProfileSettingsView.vue'
 import { useAuthStore } from '@/stores/authStore.ts'
 import RedirectingWelcomeView from '@/views/RedirectingWelcomeView.vue'
 import LogoutView from '@/views/LogoutView.vue'
+import RegisterView from '@/views/RegisterView.vue'
 
 
 
@@ -27,6 +28,11 @@ const router = createRouter({
       path: '/logout',
       name: 'logout',
       component: LogoutView
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: RegisterView
     },
     {
       path: '/patient/:id',

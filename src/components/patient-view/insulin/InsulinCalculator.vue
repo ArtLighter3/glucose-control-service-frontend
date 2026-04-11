@@ -2,7 +2,6 @@
 
 import { CarbsUnit, GlucoseUnit } from '@/service/patientProfileService.ts'
 import {
-  getCarbsUnitName,
   getCarbsUnitShortName,
   getGlucoseUnitName
 } from '@/util/enumToStringLiterals.ts'
@@ -211,6 +210,7 @@ watch((calculationData.value), () => {
     .show-details-text {
       margin-top: 1rem;
       cursor: pointer;
+      opacity: 0.5;
     }
 
     .details {
