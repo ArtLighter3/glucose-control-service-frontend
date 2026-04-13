@@ -12,9 +12,6 @@ export default defineConfig({
     vueJsx(),
     vueDevTools(),
   ],
-  //define: {
-  //  'process.env': {} // This mocks the process.env object
- // },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
