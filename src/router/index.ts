@@ -9,7 +9,7 @@ import { useAuthStore } from '@/stores/authStore.ts'
 import RedirectingWelcomeView from '@/views/RedirectingWelcomeView.vue'
 import LogoutView from '@/views/LogoutView.vue'
 import RegisterView from '@/views/RegisterView.vue'
-
+import DoctorMainView from '@/views/doctor/DoctorMainView.vue'
 
 
 const router = createRouter({
@@ -62,6 +62,11 @@ const router = createRouter({
         }
       ]
     },
+    {
+      path: "/doctor/:id",
+      name: "doctor",
+      component: DoctorMainView,
+    }
   ],
 })
 
