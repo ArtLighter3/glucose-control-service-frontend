@@ -41,13 +41,13 @@
   --section-gap: 160px;
 }
 
-@media (prefers-color-scheme: dark) {
+/*@media (prefers-color-scheme: dark) {
   :root {
     --color-background: var(--vt-c-black);
     --color-background-soft: var(--vt-c-black-soft);
     --color-background-mute: var(--vt-c-black-mute);
     --color-background-alt: rgba(0, 100, 0);
-    --color-background-alt-lite: rgba(0, 53, 0, 0.75);
+    --color-background-alt-lite: rgba(0, 53, 0, 0.1);
 
     --color-border: var(--vt-c-divider-dark-2);
     --color-border-hover: var(--vt-c-divider-dark-1);
@@ -58,7 +58,7 @@
     --color-text-on-alt-background: var(--vt-c-white-soft);
     --color-text-on-alt-background-hover: rgba(0, 153, 0);
   }
-}
+}*/
 
 *,
 *::before,
