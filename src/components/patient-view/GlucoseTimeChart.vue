@@ -18,6 +18,7 @@ import { computed, ref } from 'vue'
 import 'chartjs-adapter-luxon'
 import { GlucoseUnit } from '@/service/patientProfileService.ts'
 import { getGlucoseUnitName } from '@/util/enumToStringLiterals.ts'
+import { DateTime } from 'luxon'
 
 type TimeRange = 'day' | 'month' | 'week'
 
@@ -44,16 +45,25 @@ const xMin = computed(() => {
     case 'day':
       return '00:00'
     case 'week':
+//       const dayWeekAgo = new Date();
+//       dayWeekAgo.setDate(dayWeekAgo.getDate() - 7);
+//     //return format(dayWeekAgo, 'yyyy-MM-dd HH:mm:ss');
+    //       return DateTime.fromISO(dayWeekAgo.toISOString());
       return 'Mon'
+    case 'month':
+//       const dayMonthAgo = new Date();
+//       dayMonthAgo.setDate(dayMonthAgo.getDate() - 30);
+    //       return DateTime.fromISO(dayMonthAgo.toISOString());
+      return '1';
   }
-  return '1'
+  return '1';
 })
 const xMax = computed(() => {
   switch (props.timeRange) {
     case 'day':
       return '23:59'
     case 'week':
-      return 'Sun'
+      return 'Sun';
   }
   return '31'
 })
@@ -69,10 +79,11 @@ const xFormat = computed(() => {
 const xUnit = computed(() => {
   switch (props.timeRange) {
     case 'day':
-      return 'hour'
-    //case 'week': return "day";
+      return 'hour';
+    case 'week':
+      return 'week';
   }
-  return 'day'
+  return 'month';
 })
 
 const data = computed((): ChartData<'line'> => {
@@ -98,8 +109,9 @@ const options = computed((): ChartOptions<'line'> => {
         type: 'time',
         time: {
           unit: xUnit.value,
+          isoWeekday: true,
           displayFormats: {
-            hour: xFormat.value /*props.timeRange === 'day' ? 'HH:mm' : 'd LLL',*/,
+            hour: xFormat.value,
           },
         },
         title: {

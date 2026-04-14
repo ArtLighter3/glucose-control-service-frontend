@@ -10,6 +10,7 @@ import RedirectingWelcomeView from '@/views/RedirectingWelcomeView.vue'
 import LogoutView from '@/views/LogoutView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import DoctorMainView from '@/views/doctor/DoctorMainView.vue'
+import AttachedPatientsView from '@/views/doctor/AttachedPatientsView.vue'
 
 
 const router = createRouter({
@@ -63,9 +64,16 @@ const router = createRouter({
       ]
     },
     {
-      path: "/doctor/:id",
-      name: "doctor",
+      path: '/doctor/:id',
+      name: 'doctor',
       component: DoctorMainView,
+      children: [
+        {
+          path: 'attached-patients',
+          name: 'attached-patients',
+          component: AttachedPatientsView
+        }
+      ]
     }
   ],
 })

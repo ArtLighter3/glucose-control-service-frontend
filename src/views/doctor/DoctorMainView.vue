@@ -11,20 +11,11 @@ import { useCsrfFetching } from '@/composables/fetching/useCsrfFetching.ts'
 
   const sidebarItems: SidebarItem[] = reactive([
     {
-      iconPath: "assets/icons/main-page.svg",
-      text: "Домашняя страница",
-      routeName: "patient-home"
+      iconPath: "assets/icons/patient-list.svg",
+      text: "Мои пациенты",
+      routeName: "attached-patients"
     },
-    {
-      iconPath: "assets/icons/diary.svg",
-      text: "Дневник самоконтроля",
-      routeName: "diary"
-    },
-    {
-      iconPath: "assets/icons/settings.svg",
-      text: "Настройки профиля",
-      routeName: "patient-settings"
-    }]);
+  ]);
 
 const { isOpen, openModal, closeModal } = useModal();
 
@@ -37,7 +28,6 @@ const { userSession } = storeToRefs(authStore);
 watch(userSession, (newValue) => {
   if (newValue === null) openModal();
 });
-
 
 </script>
 

@@ -30,20 +30,20 @@ onMounted(async () => {
   await refreshDiary();
 });
 const refreshDiary = async () => {
-  loading.value = true
-  const lastWeek = new Date()
-  lastWeek.setDate(lastWeek.getDate() - 7)
+  loading.value = true;
+  const lastWeek = new Date();
+  lastWeek.setDate(lastWeek.getDate() - 7);
   try {
     const response = await getDiaryEntries(props.patientId,
       (!props.filtered || props.from === undefined) ? lastWeek : props.from,
-      (!props.filtered || props.to === undefined) ? new Date() : props.to)
-    entries.value = response.data
+      (!props.filtered || props.to === undefined) ? new Date() : props.to);
+    entries.value = response.data;
   } catch (err) {
     if (isAxiosError(err)) {
-      console.log(err)
+      console.log(err);
     }
   }
-  loading.value = false
+  loading.value = false;
 };
 
 const entryToUpdate = ref<DiaryEntryWithType>({
