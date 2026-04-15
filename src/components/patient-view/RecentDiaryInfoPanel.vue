@@ -33,16 +33,19 @@ const formattedDate = computed((): string | null => {
     <info-panel-value class="panel-item carbs-item"
                       name="Углеводы за день"
                       :value="overallDayCarbs"
-                      :units="carbsUnit ? getCarbsUnitShortName(carbsUnit) : null"/>
+                      :units="carbsUnit ? getCarbsUnitShortName(carbsUnit) : null"
+    />
     <info-panel-value class="panel-item glucose-item"
                       :name="formattedDate"
                       :value="recentGlucose?.value"
                       :units="recentGlucose && recentGlucose.glucoseUnits ?
-                            getGlucoseUnitName(recentGlucose.glucoseUnits) : null"/>
+                            getGlucoseUnitName(recentGlucose.glucoseUnits) : null"
+    />
     <info-panel-value class="panel-item insulin-item"
                       name="Активный инсулин"
                       :value="activeInsulin"
-                      units="ЕД"/>
+                      units="ЕД"
+    />
   </div>
 </template>
 

@@ -22,7 +22,8 @@ const { recentActivity, loading: activityLoading } = useRecentActivityFetching(i
       :recent-glucose="recentActivity.lastGlucoseEntry"
       :active-insulin="recentActivity.activeInsulin"
       :carbs-unit="null"
-      :overall-day-carbs="null"/>
+      :overall-day-carbs="null"
+    />
     <b-spinner variant="success" v-else/>
     <b-card class="chart-wrapper">
       <time-chart v-if="!activityLoading" :entries="recentActivity.recentEntries"
@@ -38,7 +39,8 @@ const { recentActivity, loading: activityLoading } = useRecentActivityFetching(i
     <div class="add-button-wrapper">
       <add-entry-button :glucose-unit="patientProfile.glucoseUnit"
                         :carbs-unit="patientProfile.carbsUnit"
-                        :patient-id="id"></add-entry-button>
+                        :patient-id="id"
+      />
     </div>
   </div>
 

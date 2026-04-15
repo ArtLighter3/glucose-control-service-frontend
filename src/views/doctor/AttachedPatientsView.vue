@@ -9,7 +9,7 @@ const id = ref(useRoute().params.id as string);
 
 <template>
   <div class="attached-patients-view">
-    <functional-patients-list :doctor-id="id"/>
+    <functional-patients-list :doctor-id="id" />
   </div>
 </template>
 

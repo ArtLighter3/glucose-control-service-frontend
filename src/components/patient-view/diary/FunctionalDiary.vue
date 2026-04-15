@@ -13,6 +13,7 @@ import BaseModal from '@/components/BaseModal.vue'
 import { useModal } from '@/composables/useModal.ts'
 import { CarbsUnit, type GlucoseUnit } from '@/service/patientProfileService.ts'
 import { BSpinner } from 'bootstrap-vue-next'
+import { useDiaryEntriesFetching } from '@/composables/fetching/useDiaryEntriesFetching'
 
 const props = defineProps<{
   patientId: string,
@@ -23,27 +24,14 @@ const props = defineProps<{
   carbsUnit?: CarbsUnit,
 }>();
 
-const loading = ref(false);
-const entries = ref<DiaryEntryWithType[]>([]);
 
-onMounted(async () => {
-  await refreshDiary();
-});
-const refreshDiary = async () => {
-  loading.value = true;
-  const lastWeek = new Date();
-  lastWeek.setDate(lastWeek.getDate() - 7);
-  try {
-    const response = await getDiaryEntries(props.patientId,
-      (!props.filtered || props.from === undefined) ? lastWeek : props.from,
-      (!props.filtered || props.to === undefined) ? new Date() : props.to);
-    entries.value = response.data;
-  } catch (err) {
-    if (isAxiosError(err)) {
-      console.log(err);
-    }
-  }
-  loading.value = false;
+const { loading, entries, refreshDiary }
+  = useDiaryEntriesFetching(props.patientId,
+    (props.filtered) ? props.from : undefined,
+    (props.filtered) ? props.to : undefined);
+
+const refresh = async () => {
+  await refreshDiary(props.from, props.to);
 };
 
 const entryToUpdate = ref<DiaryEntryWithType>({
@@ -66,7 +54,7 @@ const openEntryUpdateForm = (entryWithType: DiaryEntryWithType) => {
     <diary-entries-list v-else
       @entry:click="openEntryUpdateForm($event)"
       :entries="entries"
-    ></diary-entries-list>
+    />
   </div>
   <base-modal :is-open="isEntryFormOpen" @close="closeEntryForm" title="">
     <add-entry-form-content
@@ -76,7 +64,7 @@ const openEntryUpdateForm = (entryWithType: DiaryEntryWithType) => {
       :patient-id="props.patientId"
       :glucose-unit="glucoseUnit"
       :carbs-unit="carbsUnit"
-      @entries:updated="refreshDiary(); closeEntryForm()"
+      @entries:updated="refresh(); closeEntryForm()"
     />
   </base-modal>
 </template>
