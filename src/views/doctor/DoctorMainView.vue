@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import SideBar, { type SidebarItem } from '@/components/SlidingSidebar.vue'
-import { computed, reactive, ref, watch } from 'vue'
+import { reactive, watch } from 'vue'
 import { useAuthStore } from '@/stores/authStore.ts'
 import { storeToRefs } from 'pinia'
 import { useModal } from '@/composables/useModal.ts'
@@ -14,6 +14,11 @@ import { useCsrfFetching } from '@/composables/fetching/useCsrfFetching.ts'
       iconPath: "assets/icons/patient-list.svg",
       text: "Мои пациенты",
       routeName: "attached-patients"
+    },
+    {
+      iconPath: "assets/icons/settings.svg",
+      text: "Настройки аккаунта",
+      routeName: "doctor-settings"
     },
   ]);
 

@@ -5,12 +5,12 @@ import DiaryView from '@/views/patient/DiaryView.vue'
 import InsulinProfileView from '@/views/patient/InsulinProfileView.vue'
 import HomeView from '@/views/patient/HomeView.vue'
 import ProfileSettingsView from '@/views/patient/ProfileSettingsView.vue'
-import { useAuthStore } from '@/stores/authStore.ts'
 import RedirectingWelcomeView from '@/views/RedirectingWelcomeView.vue'
 import LogoutView from '@/views/LogoutView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import DoctorMainView from '@/views/doctor/DoctorMainView.vue'
 import AttachedPatientsView from '@/views/doctor/AttachedPatientsView.vue'
+import DoctorSettingsView from '@/views/doctor/DoctorSettingsView.vue'
 
 
 const router = createRouter({
@@ -72,6 +72,11 @@ const router = createRouter({
           path: 'attached-patients',
           name: 'attached-patients',
           component: AttachedPatientsView
+        },
+        {
+          path: 'settings',
+          name: 'doctor-settings',
+          component: DoctorSettingsView
         }
       ]
     }

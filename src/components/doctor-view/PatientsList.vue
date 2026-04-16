@@ -22,7 +22,7 @@ const emit = defineEmits<{
                          v-for="(patient, index) in patients"
                          :key="index"
                          :patient-info="patient"
-                         @click="$emit('patient:click', $event)"
+                         @click="$emit('patient:click', patient)"
       />
     </form-transition-group>
   </div>

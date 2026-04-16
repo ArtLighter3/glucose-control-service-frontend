@@ -14,16 +14,17 @@ const props = defineProps<{
   carbsUnit?: CarbsUnit,
 }>();
 
-const { isOpen: isSelectionOpen, openModal: openSelection, closeModal: closeSelection } = useModal()
+const { isOpen: isSelectionOpen, openModal: openSelection, closeModal: closeSelection }
+  = useModal();
 
-const currentEntryType = ref<DiaryEntryType>(DiaryEntryType.GLUCOSE_ENTRY)
+const currentEntryType = ref<DiaryEntryType>(DiaryEntryType.GLUCOSE_ENTRY);
 
-const { isOpen: isEntryFormOpen, closeModal: closeEntryForm } = useModal()
+const { isOpen: isEntryFormOpen, closeModal: closeEntryForm } = useModal();
 const openEntryForm = (type: DiaryEntryType) => {
-  closeSelection()
-  currentEntryType.value = type
-  isEntryFormOpen.value = true
-}
+  closeSelection();
+  currentEntryType.value = type;
+  isEntryFormOpen.value = true;
+};
 
 const emit = defineEmits(['entries:added']);
 </script>
@@ -57,7 +58,8 @@ const emit = defineEmits(['entries:added']);
   <base-modal :is-open="isEntryFormOpen" @close="closeEntryForm" title="">
     <add-entry-form-content :entry-type="currentEntryType" :patient-id="props.patientId"
                             :glucose-unit="glucoseUnit" :carbs-unit="carbsUnit"
-                            @entries:updated="$emit('entries:added'); closeEntryForm()"/>
+                            @entries:updated="$emit('entries:added'); closeEntryForm()"
+    />
   </base-modal>
 </template>
 

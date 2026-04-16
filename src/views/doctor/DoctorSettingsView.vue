@@ -1,12 +1,9 @@
 <script setup lang="ts">
 
-import PatientProfileFormContent from '@/components/patient-view/PatientProfileFormContent.vue'
 import { useRoute } from 'vue-router'
 import { ref } from 'vue'
 import { BTabs, BTab } from 'bootstrap-vue-next'
 import UserInfoFormContent from '@/components/UserInfoFormContent.vue'
-import IntegrationProfileFormContent
-  from '@/components/patient-view/IntegrationProfileFormContent.vue'
 
 const id = ref(useRoute().params.id as string);
 
@@ -15,17 +12,10 @@ const id = ref(useRoute().params.id as string);
 <template>
   <div class="settings-view-wrapper">
     <b-tabs pills class="tabs-wrapper" justified>
-      <b-tab title="Основные" active>
-        <patient-profile-form-content :patientId="id"/>
-      </b-tab>
-      <b-tab title="Аккаунт" lazy>
+      <b-tab title="Аккаунт" active>
         <user-info-form-content :user-id="id"/>
       </b-tab>
-      <b-tab title="Интеграция" lazy>
-        <integration-profile-form-content :patient-id="id"/>
-      </b-tab>
     </b-tabs>
-
   </div>
 </template>
 

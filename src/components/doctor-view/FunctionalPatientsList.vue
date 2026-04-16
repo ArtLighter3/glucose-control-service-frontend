@@ -6,8 +6,9 @@ import { type PatientInfo,
 import PatientsList from '@/components/doctor-view/PatientsList.vue'
 import { isAxiosError } from 'axios'
 import BaseModal from '@/components/BaseModal.vue'
+import PatientSummaryWithTabs from '@/components/doctor-view/PatientSummaryWithTabs.vue'
 import { useModal } from '@/composables/useModal.ts'
-import { BSpinner } from 'bootstrap-vue-next'
+import { BSpinner, BButton } from 'bootstrap-vue-next'
 import { usePagination } from '@/composables/usePagination'
 import { watch } from 'vue'
 
@@ -43,25 +44,28 @@ watch((page), async (newPage) => {
   await getPatients();
 });
 
-// const entryToUpdate = ref<DiaryEntryWithType>({
-//   type: DiaryEntryType.GLUCOSE_ENTRY,
-//   entryInfo: new DefaultGlucoseEntry()
-// });
-// const { isOpen: isEntryFormOpen, openModal: openEntryForm, closeModal: closeEntryForm }
-//   = useModal();
-// const openEntryUpdateForm = (entryWithType: DiaryEntryWithType) => {
-//   entryToUpdate.value = entryWithType;
-//   openEntryForm();
-// };
+const showPatientSummary = ref(false);
+const patientInfo = ref<PatientInfo | null>(null);
+const openPatientSummary = (clickedPatientInfo: PatientInfo) => {
+  patientInfo.value = clickedPatientInfo;
+  showPatientSummary.value = true;
+};
+const closePatientSummary = () => {
+  showPatientSummary.value = false;
+};
 
-//defineExpose(refreshDiary, loading);
 </script>
 
 <template>
-  <div class="patients-list-wrapper">
+  <div v-if="showPatientSummary" class="back-nav-link">
+    <b-button variant="success" class="circular-btn" size="lg" @click="closePatientSummary">
+      <img src="@/assets/icons/back-arrow.svg" alt="Назад" />
+    </b-button>
+  </div>
+  <div v-if="!showPatientSummary" class="patients-list-wrapper">
     <b-spinner v-if="loading" variant="success"/>
     <patients-list v-else
-      @patient:click=""
+      @patient:click="openPatientSummary($event)"
       :patients="patients"
     />
     <div v-if="pageCount > 1" class="pages-wrapper">
@@ -73,6 +77,9 @@ watch((page), async (newPage) => {
         {{ pageIndex }}
       </div>
     </div>
+  </div>
+  <div v-else class="patient-summary-outer-wrapper">
+     <patient-summary-with-tabs v-if="patientInfo !== null" :patient-info="patientInfo"/>
   </div>
 </template>
 
@@ -94,6 +101,29 @@ watch((page), async (newPage) => {
     .page {
       cursor: pointer;
     }
+  }
+}
+
+.patient-summary-outer-wrapper {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media (max-width: 768px) {
+      padding-left: 4rem;
+  }
+}
+
+.back-nav-link {
+  position: fixed;
+  bottom: 100px;
+  right: 100px;
+  z-index: 999;
+
+  @media (max-width: 768px) {
+    right: 50px;
+    bottom: 100px;
   }
 }
 </style>

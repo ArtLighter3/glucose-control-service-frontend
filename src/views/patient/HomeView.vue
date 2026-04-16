@@ -24,7 +24,7 @@ const { recentActivity, loading: activityLoading } = useRecentActivityFetching(i
       :carbs-unit="null"
       :overall-day-carbs="null"
     />
-    <b-spinner variant="success" v-else/>
+    <b-spinner variant="success" v-else />
     <b-card class="chart-wrapper">
       <time-chart v-if="!activityLoading" :entries="recentActivity.recentEntries"
                   :glucose-units="patientProfile.glucoseUnit"
@@ -32,7 +32,8 @@ const { recentActivity, loading: activityLoading } = useRecentActivityFetching(i
                   :high-glucose="patientProfile.highGlucose"
                   :low-glucose="patientProfile.lowGlucose"
                   :hypo-glucose="patientProfile.hypoGlucose"
-                  time-range="day"/>
+                  time-range="day"
+      />
       <b-spinner variant="success" v-else/>
     </b-card>
 

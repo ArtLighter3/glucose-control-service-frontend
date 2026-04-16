@@ -12,7 +12,7 @@ import {
 } from '@/composables/fetching/useUserInfoFetchingAndSubmitting.ts'
 
   const props = defineProps({
-    patientId: {
+    userId: {
       type: String,
       required: true
     }
@@ -21,7 +21,7 @@ import {
 
   const { userInfo, fetchingError,
     loading, submit, submitting, success, fieldErrors, objectErrors, getValidationState }
-    = useUserInfoFetchingAndSubmitting(props.patientId);
+    = useUserInfoFetchingAndSubmitting(props.userId);
 </script>
 
 <template>
