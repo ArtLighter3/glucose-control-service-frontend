@@ -8,6 +8,7 @@ import UserLoginForm from '@/components/UserLoginForm.vue'
 import BaseModal from '@/components/BaseModal.vue'
 import { useRefreshComponent } from '@/composables/useRefreshComponent.ts'
 import { useCsrfFetching } from '@/composables/fetching/useCsrfFetching.ts'
+import { useRedirectionToRolePanel } from '@/composables/useRedirectionToRolePanel.ts'
 
   const sidebarItems: SidebarItem[] = reactive([
     {
@@ -33,12 +34,13 @@ const { userSession } = storeToRefs(authStore);
 watch(userSession, (newValue) => {
   if (newValue === null) openModal();
 });
+const { redirectToHome } = useRedirectionToRolePanel();
 
 </script>
 
 <template>
   <base-modal :is-open="isOpen" title="ВХОД В СИСТЕМУ">
-    <user-login-form @login:success="closeModal(); refresh()"/>
+    <user-login-form @login:success="closeModal(); redirectToHome()"/>
   </base-modal>
   <div class="doctor-view">
     <side-bar :items="sidebarItems"/>

@@ -19,6 +19,25 @@
   margin: 0.2rem;
 }
 
+.page-link {
+  border-radius: 0 !important;
+  color: var(--color-text);
+  border-color: var(--color-background-alt);
+}
+
+.page-item.active .page-link {
+  background-color: var(--color-background-alt) !important;
+  border-color: var(--color-background-alt) !important;
+  color: #fff !important;
+  box-shadow: none;
+  outline: none;
+}
+
+.page-link:hover {
+  background-color: var(--color-background-alt); /* Your desired hover background */
+  color: #fff;
+}
+
 .circular-btn {
   width: 40px;
   height: 40px;

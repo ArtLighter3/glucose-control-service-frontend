@@ -8,7 +8,7 @@ import { isAxiosError } from 'axios'
 import BaseModal from '@/components/BaseModal.vue'
 import PatientSummaryWithTabs from '@/components/doctor-view/PatientSummaryWithTabs.vue'
 import { useModal } from '@/composables/useModal.ts'
-import { BSpinner, BButton } from 'bootstrap-vue-next'
+import { BSpinner, BButton, BPagination } from 'bootstrap-vue-next'
 import { usePagination } from '@/composables/usePagination'
 import { watch } from 'vue'
 
@@ -19,7 +19,7 @@ const props = defineProps<{
 const loading = ref(false);
 const patients = ref<PatientInfo[]>([]);
 
-const { page, pageCount } = usePagination(0);
+const { page, pageIndex, totalElements, pageSize } = usePagination(1);
 
 onMounted(async () => {
   await getPatients();
@@ -28,10 +28,11 @@ onMounted(async () => {
 const getPatients = async () => {
   loading.value = true;
     try {
-      const response = await getAttachedPatients(props.doctorId, page.value);
+      const response = await getAttachedPatients(props.doctorId, pageIndex.value);
       patients.value = response.data.content;
-      if (response.data.totalPages !== undefined)
-        pageCount.value = response.data.totalPages;
+      pageSize.value = response.data.size;
+      if (response.data.totalElements !== undefined)
+        totalElements.value = response.data.totalElements;
     } catch (err) {
       if (isAxiosError(err)) {
         console.log(err);
@@ -68,15 +69,14 @@ const closePatientSummary = () => {
       @patient:click="openPatientSummary($event)"
       :patients="patients"
     />
-    <div v-if="pageCount > 1" class="pages-wrapper">
-      <div v-for="pageIndex in pageCount"
-           :key="pageIndex"
-           class="page"
-           @click="page = (pageIndex - 1)"
-      >
-        {{ pageIndex }}
-      </div>
-    </div>
+    <b-pagination
+      class="pages-wrapper"
+      v-model="page"
+      :total-rows="totalElements"
+      :per-page="pageSize"
+      size="lg"
+      align="center"
+    />
   </div>
   <div v-else class="patient-summary-outer-wrapper">
      <patient-summary-with-tabs v-if="patientInfo !== null" :patient-info="patientInfo"/>
@@ -86,6 +86,9 @@ const closePatientSummary = () => {
 <style scoped>
 .patients-list-wrapper {
   padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 
   @media (max-width: 768px) {
     padding-left: 5rem;
@@ -93,14 +96,7 @@ const closePatientSummary = () => {
   }
 
   .pages-wrapper {
-    margin-top: 2rem;
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-
-    .page {
-      cursor: pointer;
-    }
+    margin-top: 1rem;
   }
 }
 

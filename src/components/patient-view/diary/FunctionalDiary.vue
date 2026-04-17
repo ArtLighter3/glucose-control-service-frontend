@@ -52,7 +52,6 @@ const openEntryUpdateForm = (entryWithType: DiaryEntryWithType) => {
   openEntryForm();
 };
 
-
 //defineExpose(refreshDiary, loading);
 </script>
 
