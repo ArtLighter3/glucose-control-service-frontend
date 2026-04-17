@@ -10,39 +10,25 @@ import PatientSummaryWithTabs from '@/components/doctor-view/PatientSummaryWithT
 import { useModal } from '@/composables/useModal.ts'
 import { BSpinner, BButton, BPagination } from 'bootstrap-vue-next'
 import { usePagination } from '@/composables/usePagination'
+import { useAttachedPatientsFetching } from '@/composables/fetching/useAttachedPatientsFetching'
 import { watch } from 'vue'
+import SearchField from '@/components/SearchField.vue'
 
 const props = defineProps<{
   doctorId: string,
 }>();
 
-const loading = ref(false);
-const patients = ref<PatientInfo[]>([]);
-
-const { page, pageIndex, totalElements, pageSize } = usePagination(1);
-
 onMounted(async () => {
   await getPatients();
 });
 
-const getPatients = async () => {
-  loading.value = true;
-    try {
-      const response = await getAttachedPatients(props.doctorId, pageIndex.value);
-      patients.value = response.data.content;
-      pageSize.value = response.data.size;
-      if (response.data.totalElements !== undefined)
-        totalElements.value = response.data.totalElements;
-    } catch (err) {
-      if (isAxiosError(err)) {
-        console.log(err);
-      }
-    }
-    loading.value = false;
-};
+const { loading, patients, page, totalElements, pageSize, getPatients, searchPatients }
+  = useAttachedPatientsFetching(props.doctorId);
+
+const currentQuery = ref('');
 
 watch((page), async (newPage) => {
-  await getPatients();
+  await searchPatients(currentQuery.value);
 });
 
 const showPatientSummary = ref(false);
@@ -64,12 +50,17 @@ const closePatientSummary = () => {
     </b-button>
   </div>
   <div v-if="!showPatientSummary" class="patients-list-wrapper">
-    <b-spinner v-if="loading" variant="success"/>
+    <search-field
+      class="align-center"
+      :loading="false"
+      @search="currentQuery = $event; searchPatients($event)"
+    />
+    <b-spinner v-if="loading" variant="success" />
     <patients-list v-else
       @patient:click="openPatientSummary($event)"
       :patients="patients"
     />
-    <b-pagination
+    <b-pagination v-if="totalElements > pageSize"
       class="pages-wrapper"
       v-model="page"
       :total-rows="totalElements"
@@ -89,15 +80,18 @@ const closePatientSummary = () => {
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  gap: 1rem;
+
+  .align-center {
+    align-self: center;
+    border-color: var(--color-background-alt);
+  }
 
   @media (max-width: 768px) {
-    padding-left: 5rem;
+    padding-left: 4.32rem;
     padding-right: 2rem;
   }
 
-  .pages-wrapper {
-    margin-top: 1rem;
-  }
 }
 
 .patient-summary-outer-wrapper {

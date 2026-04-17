@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 import { ref } from 'vue'
-import { BTabs, BTab } from 'bootstrap-vue-next'
+import { BTabs, BTab, BSpinner } from 'bootstrap-vue-next'
 import RecentDiaryInfoPanel from '@/components/patient-view/RecentDiaryInfoPanel.vue'
 import DiaryEntriesList from '@/components/patient-view/diary/DiaryEntriesList.vue'
 import { useRecentActivityFetching } from '@/composables/fetching/useRecentActivityFetching.ts'
