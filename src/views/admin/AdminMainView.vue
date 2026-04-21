@@ -11,14 +11,14 @@ import { useRedirectionToRolePanel } from '@/composables/useRedirectionToRolePan
 
   const sidebarItems: SidebarItem[] = reactive([
     {
-      iconPath: "assets/icons/patient-list.svg",
-      text: "Мои пациенты",
-      routeName: "attached-patients"
+      iconPath: "assets/icons/users.svg",
+      text: "Пользователи",
+      routeName: "users"
     },
     {
       iconPath: "assets/icons/settings.svg",
       text: "Настройки аккаунта",
-      routeName: "doctor-settings"
+      routeName: "admin-settings"
     },
   ]);
 
@@ -39,14 +39,14 @@ const { redirectToHome } = useRedirectionToRolePanel();
   <base-modal :is-open="isOpen" title="ВХОД В СИСТЕМУ">
     <user-login-form @login:success="closeModal(); redirectToHome()"/>
   </base-modal>
-  <div class="doctor-view">
+  <div class="admin-view">
     <side-bar :items="sidebarItems"/>
     <router-view :key="key" class="page-content-wrapper"/>
   </div>
 </template>
 
 <style scoped>
-.doctor-view {
+.admin-view {
   display: flex;
 
   .page-content-wrapper {

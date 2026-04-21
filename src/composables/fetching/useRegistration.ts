@@ -1,8 +1,8 @@
 import { useSubmittableForm } from '@/composables/useSubmittableForm.ts'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { type AxiosResponse, isAxiosError } from 'axios'
 import type { ApiExceptionResponse } from '@/util/exception.ts'
-import { register, type UserRegistration } from '@/service/userService.ts'
+import { getCsrf, register, type UserRegistration } from '@/service/userService.ts'
 
 export function useRegistration() {
   const { submitting, success,
@@ -18,6 +18,10 @@ export function useRegistration() {
     middleName: null,
     lastName: null,
     birthDate: null
+  });
+
+  onMounted(async () => {
+    await getCsrf();
   });
 
   const submit = async () => {

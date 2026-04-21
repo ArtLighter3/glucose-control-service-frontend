@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import SideBar, { type SidebarItem } from '@/components/SlidingSidebar.vue'
-import { computed, reactive, ref, watch } from 'vue'
+import { reactive, watch } from 'vue'
 import { useAuthStore } from '@/stores/authStore.ts'
 import { storeToRefs } from 'pinia'
 import { useModal } from '@/composables/useModal.ts'
 import UserLoginForm from '@/components/UserLoginForm.vue'
 import BaseModal from '@/components/BaseModal.vue'
 import { useRefreshComponent } from '@/composables/useRefreshComponent.ts'
-import { useCsrfFetching } from '@/composables/fetching/useCsrfFetching.ts'
 import { useRedirectionToRolePanel } from '@/composables/useRedirectionToRolePanel.ts'
 
   const sidebarItems: SidebarItem[] = reactive([
@@ -35,8 +34,6 @@ import { useRedirectionToRolePanel } from '@/composables/useRedirectionToRolePan
 const { isOpen, openModal, closeModal } = useModal();
 
 const { componentKey: key, refresh } = useRefreshComponent();
-
-useCsrfFetching();
 
 const authStore = useAuthStore();
 const { userSession } = storeToRefs(authStore);

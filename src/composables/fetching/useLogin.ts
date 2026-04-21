@@ -1,5 +1,5 @@
-import { ref } from 'vue'
-import { login, logout, type UserLogin } from '@/service/userService.ts'
+import { onMounted, ref } from 'vue'
+import { getCsrf, login, logout, type UserLogin } from '@/service/userService.ts'
 import { useAuthStore } from '@/stores/authStore.ts'
 import { usePatientProfileStore } from '@/stores/patientProfileStore.ts'
 import { DefaultPatientProfile } from '@/service/patientProfileService.ts'
@@ -17,6 +17,10 @@ export function useLogin() {
     password: ''
   });
 
+  onMounted(async () => {
+    await getCsrf();
+  });
+
   const submitLogin = async () => {
     loading.value = true;
     successfulLogin.value = false;
@@ -26,6 +30,7 @@ export function useLogin() {
       const response = await login(userLogin.value);
       //await router.push({ name: "patient-home", params: { id: `${response.data.id}` } })
       authStore.setAuth(response.data);
+      await getCsrf();
       successfulLogin.value = true;
     } catch (err) {
       error.value = true;

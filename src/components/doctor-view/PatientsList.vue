@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import type { PatientInfo } from '@/service/doctorService.ts'
 import PatientInfoItem from '@/components/doctor-view/PatientInfoItem.vue'
-import { computed } from 'vue'
-import { format } from 'date-fns'
-import { ru } from 'date-fns/locale/ru'
 import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
 
 const props = defineProps<{

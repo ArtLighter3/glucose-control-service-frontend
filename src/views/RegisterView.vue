@@ -11,11 +11,8 @@
 
 <script setup lang="ts">
 import router from '@/router'
-import { useCsrfFetching } from '@/composables/fetching/useCsrfFetching.ts'
 import UserRegistrationForm from '@/components/UserRegistrationForm.vue'
 import {BCard} from 'bootstrap-vue-next';
-
-useCsrfFetching();
 
 const redirectToLogin = () => {
   router.push({ name: "login" });

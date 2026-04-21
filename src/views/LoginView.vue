@@ -10,10 +10,7 @@
 
 <script setup lang="ts">
 import UserLoginForm from '@/components/UserLoginForm.vue'
-import { useCsrfFetching } from '@/composables/fetching/useCsrfFetching.ts'
 import { useRedirectionToRolePanel } from '@/composables/useRedirectionToRolePanel.ts'
-
-useCsrfFetching();
 
 const { redirectToHome } = useRedirectionToRolePanel();
 

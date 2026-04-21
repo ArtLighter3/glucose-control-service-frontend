@@ -10,7 +10,9 @@ import LogoutView from '@/views/LogoutView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import DoctorMainView from '@/views/doctor/DoctorMainView.vue'
 import AttachedPatientsView from '@/views/doctor/AttachedPatientsView.vue'
-import DoctorSettingsView from '@/views/doctor/DoctorSettingsView.vue'
+import CommonSettingsView from '@/views/CommonSettingsView.vue'
+import AdminMainView from '@/views/admin/AdminMainView.vue'
+import UsersView from '@/views/admin/UsersView.vue'
 
 
 const router = createRouter({
@@ -76,7 +78,24 @@ const router = createRouter({
         {
           path: 'settings',
           name: 'doctor-settings',
-          component: DoctorSettingsView
+          component: CommonSettingsView
+        }
+      ]
+    },
+    {
+      path: '/admin/:id',
+      name: 'admin',
+      component: AdminMainView,
+      children: [
+        {
+          path: 'users',
+          name: 'users',
+          component: UsersView
+        },
+        {
+          path: 'settings',
+          name: 'admin-settings',
+          component: CommonSettingsView
         }
       ]
     }

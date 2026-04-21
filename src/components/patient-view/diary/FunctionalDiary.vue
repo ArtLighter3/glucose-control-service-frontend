@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import {
   DefaultGlucoseEntry,
   DiaryEntryType,
-  type DiaryEntryWithType,
-  getDiaryEntries
+  type DiaryEntryWithType
 } from '@/service/diaryService.ts'
-import { isAxiosError } from 'axios'
 import DiaryEntriesList from '@/components/patient-view/diary/DiaryEntriesList.vue'
 import AddEntryFormContent from '@/components/patient-view/diary/EntryFormContent.vue'
 import BaseModal from '@/components/BaseModal.vue'
@@ -153,8 +151,8 @@ const openEntryUpdateForm = (entryWithType: DiaryEntryWithType) => {
     padding: 3rem;
 
     @media (max-width: 768px) {
-      padding-left: 5rem;
-      padding-right: 2rem;
+      padding-left: 4rem;
+      padding-right: 1rem;
     }
   }
 }

@@ -2,6 +2,7 @@ import type { MeasurementType } from '@/service/diaryService.ts'
 import { DiaryEntryType, InsulinType } from '@/service/diaryService.ts'
 import type { CarbsUnit } from '@/service/patientProfileService.ts'
 import { GlucoseUnit } from '@/service/patientProfileService.ts'
+import type { Role } from '@/service/userService.ts'
 
 interface EnumStringRepresentation {
   [key: string]: string;
@@ -45,6 +46,12 @@ const carbsUnitToShortStringRepresentation: EnumStringRepresentation = {
   "BREAD_UNITS_15": "ХЕ"
 };
 
+const roleToRoleStringRepresentation: EnumStringRepresentation = {
+  "ROLE_PATIENT": "Больной",
+  "ROLE_DOCTOR": "Врач",
+  "ROLE_ADMIN": "Администратор"
+};
+
 function getOrEmptyString(mappedType: EnumStringRepresentation, key: string | null | undefined) {
   if (key === null || key === undefined) return "";
 
@@ -76,4 +83,8 @@ export function getCarbsUnitShortName(carbsUnit: CarbsUnit | null | undefined) {
 
 export function getGlucoseUnitName(glucoseUnit: GlucoseUnit | null | undefined) {
   return getOrEmptyString(glucoseUnitToStringRepresentation, glucoseUnit);
+}
+
+export function getRoleName(role: Role | null | undefined) {
+  return getOrEmptyString(roleToRoleStringRepresentation, role);
 }

@@ -13,9 +13,10 @@ export function useRedirectionToRolePanel() {
         case "ROLE_DOCTOR": isDoctor = true; break;
     }});
 
-    if (isAdmin) return;
+    if (isAdmin)
+      router.push({ name: "users", params: { id: `${authStore.getId()}` } });
     else if (isDoctor)
-      router.push({ name: "doctor", params: { id: `${authStore.getId()}` } });
+      router.push({ name: "attached-patients", params: { id: `${authStore.getId()}` } });
     else if (isPatient)
       router.push({ name: "patient-home", params: { id: `${authStore.getId()}` } });
   };

@@ -54,7 +54,9 @@ const redirectToRegistration = () => {
 
 const emit = defineEmits(['login:success']);
 watch(successfulLogin, (newValue) => {
-  if (newValue) emit('login:success');
+  if (newValue) {
+    emit('login:success');
+  }
 });
 
 </script>

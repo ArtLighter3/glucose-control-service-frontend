@@ -1,15 +1,10 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { type PatientInfo,
-  getAttachedPatients, searchAttachedPatients
+import { type PatientInfo
 } from '@/service/doctorService.ts'
 import PatientsList from '@/components/doctor-view/PatientsList.vue'
-import { isAxiosError } from 'axios'
-import BaseModal from '@/components/BaseModal.vue'
 import PatientSummaryWithTabs from '@/components/doctor-view/PatientSummaryWithTabs.vue'
-import { useModal } from '@/composables/useModal.ts'
 import { BSpinner, BButton, BPagination } from 'bootstrap-vue-next'
-import { usePagination } from '@/composables/usePagination'
 import { useAttachedPatientsFetching } from '@/composables/fetching/useAttachedPatientsFetching'
 import { watch } from 'vue'
 import SearchField from '@/components/SearchField.vue'
