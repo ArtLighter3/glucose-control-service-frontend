@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { BButton } from 'bootstrap-vue-next'
-import BaseModal from '@/components/BaseModal.vue'
 import { useModal } from '@/composables/useModal.ts'
 import ConfirmDialogModal from '@/components/ConfirmDialogModal.vue'
 
@@ -52,7 +51,7 @@ const confirmDeletion = () => {
     </b-button>
   </div>
   <confirm-dialog-modal :is-open="isOpen"
-                        title="Удаление записи"
+                        title="Удаление"
                         text="Вы уверены?"
                         @confirm="confirmDeletion"
                         @cancel="closeModal"
@@ -67,7 +66,7 @@ const confirmDeletion = () => {
   gap: 1rem;
 
   .button-row-item {
-    width: 40%;
+
   }
 }
 </style>

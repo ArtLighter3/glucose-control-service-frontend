@@ -49,7 +49,8 @@ const carbsUnitToShortStringRepresentation: EnumStringRepresentation = {
 const roleToRoleStringRepresentation: EnumStringRepresentation = {
   "ROLE_PATIENT": "Больной",
   "ROLE_DOCTOR": "Врач",
-  "ROLE_ADMIN": "Администратор"
+  "ROLE_ADMIN": "Администратор",
+  "ROLE_SUPERUSER": "Суперпользователь"
 };
 
 function getOrEmptyString(mappedType: EnumStringRepresentation, key: string | null | undefined) {

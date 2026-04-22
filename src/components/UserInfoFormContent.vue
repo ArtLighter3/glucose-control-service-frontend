@@ -7,6 +7,7 @@ import {
   BCard, BFormInvalidFeedback
 } from 'bootstrap-vue-next'
 import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
+import UpdateFormButtons from '@/components/UpdateFormButtons.vue'
 import {
   useUserInfoFetchingAndSubmitting
 } from '@/composables/fetching/useUserInfoFetchingAndSubmitting.ts'
@@ -15,6 +16,11 @@ import {
     userId: {
       type: String,
       required: true
+    },
+    showDeleteButton: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   });
 
@@ -28,7 +34,7 @@ import {
     <b-spinner v-if="loading" variant="success"/>
     <div class="user-info-form-wrapper" v-else>
       <h4 class="error-text" v-if="fetchingError">ОШИБКА ЗАГРУЗКИ ПРОФИЛЯ</h4>
-      <b-form class="user-info-form" v-else @submit.prevent="submit">
+      <b-form class="user-info-form" v-else @submit.prevent="">
         <h2>Аккаунт</h2>
           <b-card class="form-group-wrapper">
               <form-transition-group>
@@ -106,15 +112,12 @@ import {
                 </b-form-group>
               </form-transition-group>
           </b-card>
-        <b-button class="update-user-info-btn"
-                  variant="outline-success"
-                  type="submit"
-                  :loading="submitting"
-                  loading-fill
-                  squared
-                  size="lg">
-          Сохранить
-        </b-button>
+        <update-form-buttons
+          :show-delete-button="showDeleteButton"
+          :submitting="submitting"
+          @save="submit"
+          @delete=""
+        />
       </b-form>
     </div>
 </template>
@@ -153,6 +156,4 @@ h4 {
       }
     }
   }
-
-
 </style>

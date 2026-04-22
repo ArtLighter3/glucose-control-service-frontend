@@ -5,7 +5,8 @@ import type { Page } from '@/util/pagination.ts'
 export enum Role {
   ROLE_PATIENT = "ROLE_PATIENT",
   ROLE_DOCTOR = "ROLE_DOCTOR",
-  ROLE_ADMIN = "ROLE_ADMIN"
+  ROLE_ADMIN = "ROLE_ADMIN",
+  ROLE_SUPERUSER = "ROLE_SUPERUSER"
 }
 
 export interface UserSession {

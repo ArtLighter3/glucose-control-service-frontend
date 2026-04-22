@@ -36,7 +36,8 @@ const { loading, entries, refreshDiary }
     (filtered.value) ? to.value : undefined);
 
 const refresh = async () => {
-  await refreshDiary(from.value, to.value);
+  await refreshDiary((filtered.value) ? from.value : undefined,
+                     (filtered.value) ? to.value : undefined);
 };
 
 const entryToUpdate = ref<DiaryEntryWithType>({
@@ -116,7 +117,7 @@ const openEntryUpdateForm = (entryWithType: DiaryEntryWithType) => {
           :patient-id="props.patientId"
           :glucose-unit="glucoseUnit"
           :carbs-unit="carbsUnit"
-          @entries:updated="filtered = false; refresh(); closeEntryForm()"
+          @entries:updated="refresh(); closeEntryForm()"
         />
       </base-modal>
   </div>

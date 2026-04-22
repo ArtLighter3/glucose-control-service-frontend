@@ -10,7 +10,7 @@ import {
 } from 'bootstrap-vue-next'
 import { onMounted, ref } from 'vue'
 import { useFormattedDate } from '@/composables/useFormattedDate.ts'
-import EntryFormButtons from '@/components/patient-view/diary/EntryFormButtons.vue'
+import UpdateFormButtons from '@/components/UpdateFormButtons.vue'
 import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
 import type { FieldErrors } from '@/util/exception.ts'
 
@@ -149,10 +149,11 @@ const submit = () => {
         </span>
       </b-form-invalid-feedback>
     </b-form-group>
-    <entry-form-buttons :submitting="submitting"
+    <update-form-buttons :submitting="submitting"
                         :show-delete-button="showUpdateForm"
                         @save="submit"
-                        @delete="$emit('delete', commitedAtStr)"/>
+                        @delete="$emit('delete', commitedAtStr)"
+    />
     </form-transition-group>
   </b-form>
 </template>
