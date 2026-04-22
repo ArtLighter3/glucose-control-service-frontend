@@ -5,10 +5,13 @@ import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
 
 const props = defineProps<{
   patients: PatientInfo[],
+  showDetachButtons: boolean,
+  showAttachButtons: boolean
 }>();
 
 const emit = defineEmits<{
-  (e: 'patient:click', patientInfo: PatientInfo): void
+  (e: 'patient:click', patientInfo: PatientInfo): void,
+  (e: 'patient:detach', patientInfo: PatientInfo): void
 }>();
 </script>
 
@@ -19,7 +22,10 @@ const emit = defineEmits<{
                          v-for="(patient, index) in patients"
                          :key="index"
                          :patient-info="patient"
+                         :show-detach-button="showDetachButtons"
+                         :show-attach-button="showAttachButtons"
                          @click="$emit('patient:click', patient)"
+                         @detach:click="$emit('patient:detach', patient)"
       />
     </form-transition-group>
   </div>

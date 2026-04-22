@@ -8,9 +8,11 @@ import { BSpinner, BButton, BPagination } from 'bootstrap-vue-next'
 import { useAttachedPatientsFetching } from '@/composables/fetching/useAttachedPatientsFetching'
 import { watch } from 'vue'
 import SearchField from '@/components/SearchField.vue'
+import { usePatientsAttachDetach } from '@/composables/fetching/usePatientsAttachDetach'
 
 const props = defineProps<{
   doctorId: string,
+  adminView: boolean
 }>();
 
 onMounted(async () => {
@@ -20,7 +22,14 @@ onMounted(async () => {
 const { loading, patients, page, totalElements, pageSize, getPatients, searchPatients }
   = useAttachedPatientsFetching(props.doctorId);
 
+const { loading: attachDetachLoading, attach, detach, success: attachDetachSuccess }
+  = usePatientsAttachDetach(props.doctorId);
+
 const currentQuery = ref('');
+const search = async (newQuery: string) => {
+  currentQuery.value = newQuery;
+  await searchPatients(currentQuery.value);
+};
 
 watch((page), async (newPage) => {
   await searchPatients(currentQuery.value);
@@ -29,6 +38,8 @@ watch((page), async (newPage) => {
 const showPatientSummary = ref(false);
 const patientInfo = ref<PatientInfo | null>(null);
 const openPatientSummary = (clickedPatientInfo: PatientInfo) => {
+  if (props.adminView) return;
+
   patientInfo.value = clickedPatientInfo;
   showPatientSummary.value = true;
 };
@@ -36,6 +47,14 @@ const closePatientSummary = () => {
   showPatientSummary.value = false;
 };
 
+const detachPatient = async (patientId: string) => {
+  await detach(patientId);
+  await searchPatients(currentQuery.value);
+};
+
+const emit = defineEmits<{
+  (e: 'patient:detach', patientInfo: PatientInfo): void
+}>();
 </script>
 
 <template>
@@ -48,12 +67,15 @@ const closePatientSummary = () => {
     <search-field
       class="align-center"
       :loading="false"
-      @search="currentQuery = $event; searchPatients($event)"
+      @search="search($event)"
     />
     <b-spinner v-if="loading" variant="success" />
     <patients-list v-else
       @patient:click="openPatientSummary($event)"
       :patients="patients"
+      :show-detach-buttons="adminView"
+      :show-attach-buttons="false"
+      @patient:detach="detachPatient($event.patientId)"
     />
     <b-pagination v-if="totalElements > pageSize"
       class="pages-wrapper"
@@ -86,7 +108,6 @@ const closePatientSummary = () => {
     padding-left: 4.32rem;
     padding-right: 2rem;
   }
-
 }
 
 .patient-summary-outer-wrapper {

@@ -13,6 +13,20 @@ export interface PatientInfo {
   birthDate: string | null
 }
 
+export async function attachPatient(doctorId: string, patientId: string) {
+  return apiClient.post(getAttachedPatientsURL(doctorId), {
+    patientId: patientId
+  });
+}
+
+export async function detachPatient(doctorId: string, patientId: string) {
+  return apiClient.delete(getAttachedPatientsURL(doctorId), {
+    params: {
+      patientId: patientId
+    }
+  });
+}
+
 export async function getAttachedPatients(doctorId: string, page: number) {
   return apiClient.get<Page<PatientInfo>>(getAttachedPatientsURL(doctorId), {
     params: {

@@ -3,9 +3,12 @@ import { computed } from 'vue'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale/ru'
 import { type PatientInfo } from '@/service/doctorService.ts'
+import { BButton } from 'bootstrap-vue-next'
 
 const props = defineProps<{
   patientInfo: PatientInfo,
+  showDetachButton: boolean,
+  showAttachButton: boolean
 }>()
 
 const formattedBirthDate = computed(() => {
@@ -19,7 +22,9 @@ const formattedBirthDate = computed(() => {
 });
 
 const emit = defineEmits<{
-  (e: 'click', patientInfo: PatientInfo): void
+  (e: 'click', patientInfo: PatientInfo): void,
+  (e: 'detach:click', patientInfo: PatientInfo): void,
+  (e: 'attach:click', patientInfo: PatientInfo): void
 }>();
 </script>
 
@@ -37,6 +42,26 @@ const emit = defineEmits<{
     <div class="additional-info-wrapper">
       <div class="birthdate" v-if="formattedBirthDate !== null">{{ formattedBirthDate }}</div>
     </div>
+    <b-button
+      v-if="showDetachButton"
+      class="attach-detach-btn"
+      variant="outline-danger"
+      size="lg"
+      @click="$emit('detach:click', patientInfo)"
+      squared
+    >
+      Открепить
+    </b-button>
+    <b-button
+      v-if="showAttachButton"
+      class="attach-detach-btn"
+      variant="outline-danger"
+      size="lg"
+      @click="$emit('attach:click', patientInfo)"
+      squared
+    >
+      Прикрепить
+    </b-button>
   </div>
 </template>
 
@@ -72,6 +97,10 @@ const emit = defineEmits<{
     display: flex;
     align-items: center;
     opacity: 60%;
+  }
+
+  .attach-detach-btn {
+    margin-left: auto;
   }
 }
 </style>
