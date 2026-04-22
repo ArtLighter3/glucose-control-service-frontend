@@ -77,12 +77,16 @@ export async function searchUsers(query: string, page: number) {
   });
 }
 
-export async function getUserInfo(patientId: string) {
-  return apiClient.get<UserUpdatableInfo>(getUserURL(patientId));
+export async function deleteUser(userId: string) {
+  return apiClient.delete(getUserURL(userId));
 }
 
-export async function putUserInfo(patientId: string, userInfo: UserUpdatableInfo) {
-  return apiClient.put<UserUpdatableInfo>(getUserURL(patientId), userInfo);
+export async function getUserInfo(userId: string) {
+  return apiClient.get<UserUpdatableInfo>(getUserURL(userId));
+}
+
+export async function putUserInfo(userId: string, userInfo: UserUpdatableInfo) {
+  return apiClient.put<UserUpdatableInfo>(getUserURL(userId), userInfo);
 }
 
 export async function getCsrf() {
@@ -93,6 +97,6 @@ function getUsersSearchURL() {
   return `/users/search`;
 }
 
-function getUserURL(patientId: string) {
-  return `/users/${patientId}`;
+function getUserURL(userId: string) {
+  return `/users/${userId}`;
 }

@@ -2,10 +2,10 @@ import { onMounted, ref } from 'vue'
 import { type AxiosResponse, isAxiosError } from 'axios'
 import { useSubmittableForm } from '@/composables/useSubmittableForm.ts'
 import type { ApiExceptionResponse } from '@/util/exception.ts'
-import type { UserUpdatableInfo } from '@/service/userService.ts'
+import { deleteUser, type UserUpdatableInfo } from '@/service/userService.ts'
 import { getUserInfo, putUserInfo } from '@/service/userService.ts'
 
-export function useUserInfoFetchingAndSubmitting(patientId: string) {
+export function useUserInfoFetchingAndSubmitting(userId: string) {
   const userInfo = ref<UserUpdatableInfo>({
     email: null,
     firstName: "",
@@ -20,7 +20,7 @@ export function useUserInfoFetchingAndSubmitting(patientId: string) {
     loading.value = true;
     try {
       fetchingError.value = false
-      userInfo.value = (await getUserInfo(patientId)).data
+      userInfo.value = (await getUserInfo(userId)).data
     } catch (err) {
       if (isAxiosError(err) && err.response) {
         fetchingError.value = true
@@ -39,7 +39,7 @@ export function useUserInfoFetchingAndSubmitting(patientId: string) {
       fieldErrors.value = {}
       objectErrors.value = []
 
-      const response = await putUserInfo(patientId, userInfo.value)
+      const response = await putUserInfo(userId, userInfo.value)
       userInfo.value = response.data;
       success.value = true
     } catch (err) {
@@ -56,6 +56,21 @@ export function useUserInfoFetchingAndSubmitting(patientId: string) {
     submitting.value = false
   }
 
+const remove = async () => {
+    submitting.value = true;
+    success.value = false;
+    try {
+      await deleteUser(userId);
+      success.value = true;
+    } catch (err) {
+      success.value = false;
+      if (isAxiosError(err) && err.response) {
+        console.log(err);
+      }
+    }
+    submitting.value = false;
+  }
+
   return {
     userInfo,
     fetchingError,
@@ -65,6 +80,7 @@ export function useUserInfoFetchingAndSubmitting(patientId: string) {
     success,
     fieldErrors,
     objectErrors,
-    getValidationState
+    getValidationState,
+    remove
   }
 }

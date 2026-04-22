@@ -6,6 +6,7 @@ import SearchField from '@/components/SearchField.vue'
 import { useUsersFetching } from '@/composables/fetching/useUsersFetching.ts'
 import type { UserDetailedInfo } from '@/service/userService.ts'
 import UsersList from '@/components/admin-view/UsersList.vue'
+import UserSettingsWithTabs from '@/components/admin-view/UserSettingsWithTabs.vue'
 
 // const props = defineProps<{
 //   doctorId: string,
@@ -63,7 +64,11 @@ const closeUserInfo = () => {
     />
   </div>
   <div v-else class="user-info-outer-wrapper">
-
+    <user-settings-with-tabs
+      v-if="userDetailedInfo !== null"
+      :user-detailed-info="userDetailedInfo"
+      @user:deleted="closeUserInfo(); search(currentQuery)"
+    />
   </div>
 </template>
 

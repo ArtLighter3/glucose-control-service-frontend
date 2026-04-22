@@ -26,8 +26,10 @@ import {
 
 
   const { userInfo, fetchingError,
-    loading, submit, submitting, success, fieldErrors, objectErrors, getValidationState }
+    loading, submit, submitting, success, fieldErrors, objectErrors, getValidationState, remove }
     = useUserInfoFetchingAndSubmitting(props.userId);
+
+  const emit = defineEmits(['user:deleted']);
 </script>
 
 <template>
@@ -116,7 +118,7 @@ import {
           :show-delete-button="showDeleteButton"
           :submitting="submitting"
           @save="submit"
-          @delete=""
+          @delete="remove(); $emit('user:deleted')"
         />
       </b-form>
     </div>
