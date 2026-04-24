@@ -77,6 +77,17 @@ export async function searchUsers(query: string, page: number) {
   });
 }
 
+export async function searchUsersWithRole(query: string, role: Role, page: number) {
+  return apiClient.get<Page<UserDetailedInfo>>(getUsersSearchURL(), {
+    params: {
+      query: query,
+      role: role,
+      page: page,
+      size: pageSize
+    }
+  });
+}
+
 export async function deleteUser(userId: string) {
   return apiClient.delete(getUserURL(userId));
 }

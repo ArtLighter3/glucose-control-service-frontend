@@ -10,27 +10,36 @@ export function useAttachedPatientsFetching(doctorId: string) {
 
   const { page, pageIndex, totalElements, pageSize } = usePagination(1);
 
-  const searchPatients = async (query: string) => {
-    loading.value = true;
-      try {
-        const response = query === '' ?
-          await getAttachedPatients(doctorId, pageIndex.value) :
-          await searchAttachedPatients(doctorId, query, pageIndex.value);
-        patients.value = response.data.content;
-        pageSize.value = response.data.size;
-        if (response.data.totalElements !== undefined)
-          totalElements.value = response.data.totalElements;
-      } catch (err) {
-        if (isAxiosError(err)) {
-          console.log(err);
+  const fetch = async (query: string) => {
+      loading.value = true;
+        try {
+          const response = query === '' ?
+            await getAttachedPatients(doctorId, pageIndex.value) :
+            await searchAttachedPatients(doctorId, query, pageIndex.value);
+          patients.value = response.data.content;
+          pageSize.value = response.data.size;
+          if (response.data.totalElements !== undefined)
+            totalElements.value = response.data.totalElements;
+        } catch (err) {
+          if (isAxiosError(err)) {
+            console.log(err);
+          }
         }
-      }
-      loading.value = false;
+        loading.value = false;
+  };
+
+  const search = async (query: string) => {
+    page.value = 1;
+    await fetch(query);
+  };
+
+  const turnPage = async (query: string) => {
+    await fetch(query);
   };
 
   const getPatients = async () => {
-      await searchPatients('');
+    await fetch('');
   };
 
-  return { loading, patients, page, totalElements, pageSize, getPatients, searchPatients }
+  return { loading, patients, page, totalElements, pageSize, getPatients, search, turnPage }
 }

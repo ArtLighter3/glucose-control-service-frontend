@@ -6,6 +6,7 @@ import FunctionalUsersList from '@/components/admin-view/FunctionalUsersList.vue
 
 <template>
   <div class="users-view">
+    <h2>Пользователи системы</h2>
     <functional-users-list />
   </div>
 </template>
@@ -14,5 +15,10 @@ import FunctionalUsersList from '@/components/admin-view/FunctionalUsersList.vue
 .users-view {
   display: flex;
   flex-direction: column;
+  padding: 2rem;
+
+  h2 {
+    text-align: center;
+  }
 }
 </style>

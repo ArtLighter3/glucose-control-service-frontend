@@ -16,13 +16,13 @@ import UserSettingsWithTabs from '@/components/admin-view/UserSettingsWithTabs.v
 //   await getPatients();
 // });
 
-const { loading, users, page, totalElements, pageSize, search }
+const { loading, users, page, totalElements, pageSize, search, turnPage }
   = useUsersFetching();
 
 const currentQuery = ref('');
 
 watch((page), async (newPage) => {
-  await search(currentQuery.value);
+  await turnPage(currentQuery.value, newPage);
 });
 
 const showUserInfo = ref(false);
