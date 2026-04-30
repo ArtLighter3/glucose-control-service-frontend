@@ -95,7 +95,8 @@ watch(success, (newValue) => {
                         text="Запись на это время уже существует. Перезаписать?"
                         title="Обновление записи"
                         @confirm="submit(true)"
-                        @cancel="conflict = false"/>
+                        @cancel="conflict = false"
+  />
 </template>
 
 <style scoped>

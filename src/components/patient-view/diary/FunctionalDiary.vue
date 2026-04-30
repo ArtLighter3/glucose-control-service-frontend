@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, useTemplateRef, computed } from 'vue'
 import {
   DefaultGlucoseEntry,
   DiaryEntryType,
@@ -13,7 +13,7 @@ import { CarbsUnit, type GlucoseUnit } from '@/service/patientProfileService.ts'
 import { BSpinner, BCard, BForm, BFormGroup, BFormInput, BButton } from 'bootstrap-vue-next'
 import { useDiaryEntriesFetching } from '@/composables/fetching/useDiaryEntriesFetching'
 import { useDatePeriodFilter } from '@/composables/useDatePeriodFilter'
-import { computed } from 'vue'
+import { useInfiniteScroll } from '@vueuse/core'
 
 const props = defineProps<{
   patientId: string,
@@ -30,7 +30,7 @@ const to: Date = computed(() => {
   return new Date(toISOString.value);
 });
 
-const { loading, entries, refreshDiary }
+const { loading, entries, refreshDiary, loadMore }
   = useDiaryEntriesFetching(props.patientId,
     (filtered.value) ? from.value : undefined,
     (filtered.value) ? to.value : undefined);
@@ -39,6 +39,20 @@ const refresh = async () => {
   await refreshDiary((filtered.value) ? from.value : undefined,
                      (filtered.value) ? to.value : undefined);
 };
+
+const entryListElement = useTemplateRef('entry-list');
+const { reset } = useInfiniteScroll(
+  entryListElement,
+  () => {
+    loadMore();
+  },
+  {
+    distance: 10,
+    canLoadMore: () => {
+      return !filtered;
+    }
+  }
+);
 
 const entryToUpdate = ref<DiaryEntryWithType>({
   type: DiaryEntryType.GLUCOSE_ENTRY,
@@ -102,7 +116,7 @@ const openEntryUpdateForm = (entryWithType: DiaryEntryWithType) => {
             </b-button>
           </b-form>
     </b-card>
-    <div class="entries-list-wrapper">
+    <div class="entries-list-wrapper" ref="entry-list">
         <b-spinner v-if="loading" variant="success"/>
         <diary-entries-list v-else
           @entry:click="openEntryUpdateForm($event)"

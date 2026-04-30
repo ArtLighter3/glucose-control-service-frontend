@@ -13,12 +13,12 @@ export function useDiaryEntrySubmitting(patientId: string, entryType: DiaryEntry
   const { submitting, success, fieldErrors, objectErrors, getValidationState }
     = useSubmittableForm()
 
-  const conflict = ref(false)
-  const diaryEntry = ref<DiaryEntry | null>(null)
+  const conflict = ref(false);
+  const diaryEntry = ref<DiaryEntry | null>(null);
 
   const setAndSubmit = async (alreadyExists: boolean, diaryEntryToSend: DiaryEntry) => {
-    diaryEntry.value = diaryEntryToSend
-    await submit(alreadyExists)
+    diaryEntry.value = diaryEntryToSend;
+    await submit(alreadyExists);
   }
   const submit = async (alreadyExists: boolean) => {
     submitting.value = true;
