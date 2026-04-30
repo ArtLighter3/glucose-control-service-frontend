@@ -13,7 +13,7 @@ import { CarbsUnit, type GlucoseUnit } from '@/service/patientProfileService.ts'
 import { BSpinner, BCard, BForm, BFormGroup, BFormInput, BButton } from 'bootstrap-vue-next'
 import { useDiaryEntriesFetching } from '@/composables/fetching/useDiaryEntriesFetching'
 import { useDatePeriodFilter } from '@/composables/useDatePeriodFilter'
-import { useInfiniteScroll } from '@vueuse/core'
+//import { useInfiniteScroll } from '@vueuse/core'
 
 const props = defineProps<{
   patientId: string,
@@ -40,19 +40,19 @@ const refresh = async () => {
                      (filtered.value) ? to.value : undefined);
 };
 
-const entryListElement = useTemplateRef('entry-list');
-const { reset } = useInfiniteScroll(
-  entryListElement,
-  () => {
-    loadMore();
-  },
-  {
-    distance: 10,
-    canLoadMore: () => {
-      return !filtered;
-    }
-  }
-);
+// const entryListElement = useTemplateRef('entry-list');
+// const { reset } = useInfiniteScroll(
+//   entryListElement,
+//   () => {
+//     loadMore();
+//   },
+//   {
+//     distance: 10,
+//     canLoadMore: () => {
+//       return !filtered;
+//     }
+//   }
+// );
 
 const entryToUpdate = ref<DiaryEntryWithType>({
   type: DiaryEntryType.GLUCOSE_ENTRY,
@@ -116,7 +116,12 @@ const openEntryUpdateForm = (entryWithType: DiaryEntryWithType) => {
             </b-button>
           </b-form>
     </b-card>
-    <div class="entries-list-wrapper" ref="entry-list">
+    <div
+      class="entries-list-wrapper"
+      v-infinite-scroll="loadMore"
+      infinite-scroll-disabled="filtered"
+      infinite-scroll-distance="10"
+    >
         <b-spinner v-if="loading" variant="success"/>
         <diary-entries-list v-else
           @entry:click="openEntryUpdateForm($event)"

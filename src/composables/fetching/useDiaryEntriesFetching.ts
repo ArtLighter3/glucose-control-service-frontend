@@ -24,6 +24,7 @@ export function useDiaryEntriesFetching(patientId: string,
   };
 
   const loadMore = async () => {
+    console.log('load more');
     currentFrom.value.setDate(currentFrom.value.getDate() - 7);
     currentTo.value.setDate(currentTo.value.getDate() - 7);
 
