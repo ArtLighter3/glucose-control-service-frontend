@@ -13,6 +13,7 @@ import { CarbsUnit, type GlucoseUnit } from '@/service/patientProfileService.ts'
 import { BSpinner, BCard, BForm, BFormGroup, BFormInput, BButton } from 'bootstrap-vue-next'
 import { useDiaryEntriesFetching } from '@/composables/fetching/useDiaryEntriesFetching'
 import { useDatePeriodFilter } from '@/composables/useDatePeriodFilter'
+import DateFilterForm from '@/components/DateFilterForm.vue'
 //import { useInfiniteScroll } from '@vueuse/core'
 
 const props = defineProps<{
@@ -23,23 +24,28 @@ const props = defineProps<{
 
 const { fromISOString, fromFormatted, toISOString, toFormatted, filtered, saveFilterValues }
   = useDatePeriodFilter();
-const from: Date = computed(() => {
+const from = computed(() => {
   return new Date(fromISOString.value);
 });
-const to: Date = computed(() => {
+const to = computed(() => {
   return new Date(toISOString.value);
 });
 
 const { loading, entries, refreshDiary, loadMore }
-  = useDiaryEntriesFetching(props.patientId,
-    (filtered.value) ? from.value : undefined,
-    (filtered.value) ? to.value : undefined);
+  = useDiaryEntriesFetching(props.patientId);
 
 const refresh = async () => {
   await refreshDiary((filtered.value) ? from.value : undefined,
                      (filtered.value) ? to.value : undefined);
 };
 
+const applyFilter = async () => {
+  saveFilterValues();
+
+  filtered.value = true;
+
+  refresh();
+}
 // const entryListElement = useTemplateRef('entry-list');
 // const { reset } = useInfiniteScroll(
 //   entryListElement,
@@ -71,50 +77,11 @@ const openEntryUpdateForm = (entryWithType: DiaryEntryWithType) => {
 <template>
   <div class="diary-wrapper">
     <b-card class="filter-wrapper">
-          <b-form class="filter-form"
-                  @submit.prevent="saveFilterValues(); filtered = true; refresh()"
-          >
-            <div class="filter-first-row">
-              <b-form-group
-                class="filter-form-group"
-                key="from"
-                id="from"
-                label="C"
-                label-for="from-input"
-              >
-                <b-form-input
-                  class="squared-input-field"
-                  id="from-input"
-                  key="from-input"
-                  type="datetime-local"
-                  v-model="fromFormatted"
-                />
-              </b-form-group>
-              <b-form-group
-                class="filter-to-group"
-                key="to"
-                id="to"
-                label="по"
-                label-for="to-input"
-              >
-                <b-form-input
-                  class="squared-input-field"
-                  id="to-input"
-                  key="to-input"
-                  type="datetime-local"
-                  v-model="toFormatted"
-                />
-              </b-form-group>
-            </div>
-            <b-button class="filter-btn"
-                      variant="outline-success"
-                      type="submit"
-                      loading-fill
-                      squared
-                      size="lg">
-              Показать
-            </b-button>
-          </b-form>
+      <date-filter-form
+        v-model:from="fromFormatted"
+        v-model:to="toFormatted"
+        @apply="applyFilter"
+      />
     </b-card>
     <div
       class="entries-list-wrapper"
@@ -154,16 +121,6 @@ const openEntryUpdateForm = (entryWithType: DiaryEntryWithType) => {
 
       @media (max-width: 768px) {
         padding-left: 2rem;
-      }
-
-      .filter-form {
-        display: flex;
-        flex-direction: column;
-
-        .filter-first-row {
-          display: flex;
-          flex-direction: row;
-        }
       }
     }
 
