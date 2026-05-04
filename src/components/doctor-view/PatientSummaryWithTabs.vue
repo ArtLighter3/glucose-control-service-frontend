@@ -4,9 +4,12 @@ import { ref } from 'vue'
 import { BTabs, BTab, BSpinner } from 'bootstrap-vue-next'
 import RecentDiaryInfoPanel from '@/components/patient-view/RecentDiaryInfoPanel.vue'
 import DiaryEntriesList from '@/components/patient-view/diary/DiaryEntriesList.vue'
+import GlucoseDistributionChart from '@/components/patient-view/GlucoseDistributionChart.vue'
 import { useRecentActivityFetching } from '@/composables/fetching/useRecentActivityFetching.ts'
 import type { PatientInfo } from '@/service/doctorService'
 import { useDiaryEntriesFetching } from '@/composables/fetching/useDiaryEntriesFetching.ts'
+import { onMounted } from 'vue'
+import { useGlucoseDistributionFetching } from '@/composables/fetching/useGlucoseDistributionFetching'
 
 const props = defineProps<{
   patientInfo: PatientInfo
@@ -14,10 +17,21 @@ const props = defineProps<{
 
 //TODO убрать из fetching composables хуки onMounted, чтобы использующие их компоненты сами
 //выбирали, когда загрузить, иначе вот тут сразу два запроса делается, когда может быть нужен один.
-const { recentActivity, loading: activityLoading }
+const { recentActivity, fetchActivity, loading: activityLoading }
   = useRecentActivityFetching(props.patientInfo.patientId);
+const { distribution, fetchDistribution, loading: distributionLoading }
+  = useGlucoseDistributionFetching(props.patientInfo.patientId);
 const { loading: entriesLoading, entries, refreshDiary }
   = useDiaryEntriesFetching(props.patientInfo.patientId, undefined, undefined);
+
+onMounted(async () => {
+  await fetchActivity();
+
+  const today = new Date();
+  const lastWeek = new Date();
+  lastWeek.setDate(lastWeek.getDate() - 7);
+  await fetchDistribution(lastWeek, today);
+});
 </script>
 
 <template>
@@ -47,7 +61,7 @@ const { loading: entriesLoading, entries, refreshDiary }
       </div>
       </b-tab>
       <b-tab title="Визуализация измерений" lazy>
-
+        <glucose-distribution-chart :distribution="distribution"/>
       </b-tab>
     </b-tabs>
   </div>

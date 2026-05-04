@@ -8,11 +8,16 @@ import { usePatientProfileFetching } from '@/composables/fetching/usePatientProf
 import { useRecentActivityFetching } from '@/composables/fetching/useRecentActivityFetching.ts'
 import TimeChart from '@/components/patient-view/GlucoseTimeChart.vue'
 import {BSpinner, BCard} from 'bootstrap-vue-next'
+import { onMounted } from 'vue'
 
 const id = ref(useRoute().params.id as string);
 
 const { patientProfile } = usePatientProfileFetching(id.value);
-const { recentActivity, loading: activityLoading } = useRecentActivityFetching(id.value);
+
+const { recentActivity, fetchActivity, loading: activityLoading } = useRecentActivityFetching(id.value);
+onMounted(async () => {
+  await fetchActivity();
+});
 
 </script>
 

@@ -1,5 +1,5 @@
-import { onMounted, ref } from 'vue'
-import { getRecentActivity, type RecentActivity } from '@/service/insulinService.ts'
+import { ref } from 'vue'
+import { getRecentActivity, type RecentActivity } from '@/service/statisticsService.ts'
 
 export function useRecentActivityFetching(patientId: string) {
   const recentActivity = ref<RecentActivity>({
@@ -9,7 +9,8 @@ export function useRecentActivityFetching(patientId: string) {
   });
   const loading = ref(true);
 
-  onMounted(async () => {
+
+  const fetchActivity = async () => {
     loading.value = true;
     try {
       const response = await getRecentActivity(patientId);
@@ -18,7 +19,7 @@ export function useRecentActivityFetching(patientId: string) {
       console.log(err);
     }
     loading.value = false;
-  });
+  };
 
-  return { recentActivity, loading }
+  return { recentActivity, fetchActivity, loading }
 }

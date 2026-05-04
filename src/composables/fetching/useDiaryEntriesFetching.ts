@@ -2,9 +2,7 @@ import { getDiaryEntries, type DiaryEntryWithType } from "@/service/diaryService
 import { isAxiosError } from "axios";
 import { onMounted, ref } from "vue";
 
-export function useDiaryEntriesFetching(patientId: string,
-                                        from: Date | undefined,
-                                        to: Date | undefined) {
+export function useDiaryEntriesFetching(patientId: string) {
   const loading = ref(false);
   const entries = ref<DiaryEntryWithType[]>([]);
 
@@ -13,7 +11,7 @@ export function useDiaryEntriesFetching(patientId: string,
   currentFrom.value.setDate(currentFrom.value.getDate() - 7);
 
   onMounted(async () => {
-    await refreshDiary(from, to);
+    await refreshDiary(currentFrom.value, currentTo.value);
   });
   const refreshDiary = async (from: Date | undefined, to: Date | undefined) => {
     currentTo.value = (to === undefined) ? new Date() : to;
@@ -24,7 +22,7 @@ export function useDiaryEntriesFetching(patientId: string,
   };
 
   const loadMore = async () => {
-    console.log('load more');
+    //console.log('load more');
     currentFrom.value.setDate(currentFrom.value.getDate() - 7);
     currentTo.value.setDate(currentTo.value.getDate() - 7);
 
@@ -34,7 +32,7 @@ export function useDiaryEntriesFetching(patientId: string,
     loading.value = true;
 
     try {
-      const response = await getDiaryEntries(patientId, currentFrom.value, currentTo.value);
+      const response = await getDiaryEntries(patientId, from, to);
       if (!append) entries.value = response.data;
       else entries.value.push(...response.data);
     } catch (err) {

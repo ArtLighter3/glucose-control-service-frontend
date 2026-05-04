@@ -22,7 +22,7 @@ import { DateTime } from 'luxon'
 
 type TimeRange = 'day' | 'month' | 'week'
 
-ChartJS.register(TimeScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
+ChartJS.register(TimeScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const props = defineProps<{
   entries: DiaryEntryWithType[]
@@ -33,8 +33,8 @@ const props = defineProps<{
   hypoGlucose?: number
   timeRange: TimeRange
   // chartOptions: ChartOptions<'line'>;
-}>()
-const fontSize = ref(16)
+}>();
+const fontSize = ref(16);
 
 // const maxGlucose = computed(() => {
 //   return (props.hyperGlucose !== undefined && props.hyperGlucose !== null)
@@ -57,7 +57,7 @@ const xMin = computed(() => {
       return '1';
   }
   return '1';
-})
+});
 const xMax = computed(() => {
   switch (props.timeRange) {
     case 'day':
@@ -66,7 +66,7 @@ const xMax = computed(() => {
       return 'Sun';
   }
   return '31'
-})
+});
 const xFormat = computed(() => {
   switch (props.timeRange) {
     case 'day':
@@ -75,7 +75,7 @@ const xFormat = computed(() => {
       return 'ccc'
   }
   return 'd'
-})
+});
 const xUnit = computed(() => {
   switch (props.timeRange) {
     case 'day':
@@ -84,7 +84,7 @@ const xUnit = computed(() => {
       return 'week';
   }
   return 'month';
-})
+});
 
 const data = computed((): ChartData<'line'> => {
   return {
@@ -97,7 +97,7 @@ const data = computed((): ChartData<'line'> => {
       },
     ],
   }
-})
+});
 
 const options = computed((): ChartOptions<'line'> => {
   return {
@@ -235,7 +235,7 @@ const options = computed((): ChartOptions<'line'> => {
       },
     },
   }
-})
+});
 </script>
 
 <template>
