@@ -26,12 +26,13 @@ export function useDatePeriodFilter() {
   // watch(toISOString, (newValue) => {
   //   localStorage.setItem("diary-to", newValue);
   // });
-  const filtered = ref(false);
+
+ // const filtered = ref(false);
 
   return {
     fromISOString, fromFormatted,
     toISOString, toFormatted,
-    filtered,
+   // filtered,
     saveFilterValues
   };
 }

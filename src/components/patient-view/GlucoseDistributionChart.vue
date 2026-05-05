@@ -4,18 +4,13 @@ import {
   type ChartData,
   type ChartOptions,
   Legend,
-  LinearScale,
   ArcElement,
-  type Point,
-  PointElement,
   CategoryScale,
   Title,
   Tooltip,
 } from 'chart.js'
 import { Pie } from 'vue-chartjs'
 import { computed, ref } from 'vue'
-import { GlucoseUnit } from '@/service/patientProfileService.ts'
-import { getGlucoseUnitName } from '@/util/enumToStringLiterals.ts'
 import type { GlucoseDistribution } from '@/service/statisticsService'
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);

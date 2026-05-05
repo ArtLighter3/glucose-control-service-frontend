@@ -22,8 +22,9 @@ const props = defineProps<{
   carbsUnit?: CarbsUnit,
 }>();
 
-const { fromISOString, fromFormatted, toISOString, toFormatted, filtered, saveFilterValues }
+const { fromISOString, fromFormatted, toISOString, toFormatted, saveFilterValues }
   = useDatePeriodFilter();
+const dateFilterRef = ref(null);
 const from = computed(() => {
   return new Date(fromISOString.value);
 });
@@ -35,15 +36,12 @@ const { loading, entries, refreshDiary, loadMore }
   = useDiaryEntriesFetching(props.patientId);
 
 const refresh = async () => {
-  await refreshDiary((filtered.value) ? from.value : undefined,
-                     (filtered.value) ? to.value : undefined);
+  await refreshDiary((dateFilterRef.value.filtered) ? from.value : undefined,
+                     (dateFilterRef.value.filtered) ? to.value : undefined);
 };
 
 const applyFilter = async () => {
   saveFilterValues();
-
-  filtered.value = true;
-
   refresh();
 }
 // const entryListElement = useTemplateRef('entry-list');
@@ -77,10 +75,11 @@ const openEntryUpdateForm = (entryWithType: DiaryEntryWithType) => {
 <template>
   <div class="diary-wrapper">
     <b-card class="filter-wrapper">
-      <date-filter-form
+      <date-filter-form ref="dateFilterRef"
         v-model:from="fromFormatted"
         v-model:to="toFormatted"
         @apply="applyFilter"
+        @reset="refresh()"
       />
     </b-card>
     <div
