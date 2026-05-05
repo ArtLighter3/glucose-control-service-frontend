@@ -18,5 +18,7 @@ export function useFormattedDate(startDate: Date) {
     }
   });
 
-  return { dateISOString, formattedDate };
+  const date = computed(() => { return new Date(dateISOString.value) });
+
+  return { dateISOString, formattedDate, date };
 }

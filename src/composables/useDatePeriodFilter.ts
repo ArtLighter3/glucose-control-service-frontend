@@ -11,9 +11,9 @@ export function useDatePeriodFilter() {
   const defaultToString = localStorage.getItem("diary-to");
   const defaultTo = defaultToString !== null ? new Date(defaultToString) : new Date();
 
-  const { dateISOString: fromISOString, formattedDate: fromFormatted }
+  const { dateISOString: fromISOString, formattedDate: fromFormatted, date: from }
     = useFormattedDate(defaultFrom);
-  const { dateISOString: toISOString, formattedDate: toFormatted }
+  const { dateISOString: toISOString, formattedDate: toFormatted, date: to }
     = useFormattedDate(defaultTo);
 
   const saveFilterValues = () => {
@@ -29,9 +29,12 @@ export function useDatePeriodFilter() {
 
  // const filtered = ref(false);
 
+
+
   return {
     fromISOString, fromFormatted,
     toISOString, toFormatted,
+    from, to,
    // filtered,
     saveFilterValues
   };

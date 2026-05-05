@@ -22,15 +22,9 @@ const props = defineProps<{
   carbsUnit?: CarbsUnit,
 }>();
 
-const { fromISOString, fromFormatted, toISOString, toFormatted, saveFilterValues }
+const { fromFormatted, toFormatted, from, to, saveFilterValues }
   = useDatePeriodFilter();
 const dateFilterRef = ref(null);
-const from = computed(() => {
-  return new Date(fromISOString.value);
-});
-const to = computed(() => {
-  return new Date(toISOString.value);
-});
 
 const { loading, entries, refreshDiary, loadMore }
   = useDiaryEntriesFetching(props.patientId);

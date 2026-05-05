@@ -36,7 +36,7 @@ const data = computed((): ChartData<'pie'> => {
 
 const options = computed((): ChartOptions<'pie'> => {
   return {
-    responsive: true,
+    responsive: false,
     maintainAspectRatio: false,
     //borderColor: 'rgba(0, 0, 0, 0.25)',
   }

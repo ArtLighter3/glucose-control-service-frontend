@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { BTabs, BTab, BSpinner } from 'bootstrap-vue-next'
 import RecentDiaryInfoPanel from '@/components/patient-view/RecentDiaryInfoPanel.vue'
 import DiaryEntriesList from '@/components/patient-view/diary/DiaryEntriesList.vue'
 import GlucoseDistributionChart from '@/components/patient-view/GlucoseDistributionChart.vue'
+import DateFilterForm from '@/components/DateFilterForm.vue'
 import { useRecentActivityFetching } from '@/composables/fetching/useRecentActivityFetching.ts'
 import type { PatientInfo } from '@/service/doctorService'
 import { useDiaryEntriesFetching } from '@/composables/fetching/useDiaryEntriesFetching.ts'
 import { onMounted } from 'vue'
 import { useGlucoseDistributionFetching } from '@/composables/fetching/useGlucoseDistributionFetching'
+import { useDatePeriodFilter } from '@/composables/useDatePeriodFilter'
 
 const props = defineProps<{
   patientInfo: PatientInfo
@@ -22,7 +24,23 @@ const { recentActivity, fetchActivity, loading: activityLoading }
 const { distribution, fetchDistribution, loading: distributionLoading }
   = useGlucoseDistributionFetching(props.patientInfo.patientId);
 const { loading: entriesLoading, entries, refreshDiary }
-  = useDiaryEntriesFetching(props.patientInfo.patientId, undefined, undefined);
+  = useDiaryEntriesFetching(props.patientInfo.patientId);
+
+const { fromFormatted: diaryFromString, toFormatted: diaryToString, from: diaryFrom, to: diaryTo }
+  = useDatePeriodFilter();
+const diaryDateFilterRef = ref(null);
+const { fromFormatted: statsFromString, toFormatted: statsToString, from: statsFrom, to: statsTo }
+  = useDatePeriodFilter();
+const statsDateFilterRef = ref(null);
+
+const refreshPatientDiary = async () => {
+  await refreshDiary((diaryDateFilterRef.value.filtered) ? diaryFrom.value : undefined,
+                     (diaryDateFilterRef.value.filtered) ? diaryTo.value : undefined);
+};
+const refreshDistribution = async () => {
+  await fetchDistribution((statsDateFilterRef.value.filtered) ? statsFrom.value : undefined,
+                     (statsDateFilterRef.value.filtered) ? statsTo.value : undefined);
+};
 
 onMounted(async () => {
   await fetchActivity();
@@ -53,6 +71,12 @@ onMounted(async () => {
       </b-tab>
       <b-tab title="Дневник измерений" lazy>
       <div class="diary-wrapper">
+          <date-filter-form ref="diaryDateFilterRef"
+                  v-model:from="diaryFromString"
+                  v-model:to="diaryToString"
+                  @apply="refreshPatientDiary"
+                  @cancel="refreshPatientDiary"
+          />
           <b-spinner v-if="entriesLoading" variant="success"/>
           <diary-entries-list v-else
             @entry:click=""
@@ -61,7 +85,13 @@ onMounted(async () => {
       </div>
       </b-tab>
       <b-tab title="Визуализация измерений" lazy>
-        <glucose-distribution-chart :distribution="distribution"/>
+        <date-filter-form ref="statsDateFilterRef"
+                          v-model:from="statsFromString"
+                          v-model:to="statsToString"
+                          @apply="refreshDistribution"
+                          :show-cancel-button="false"
+        />
+        <glucose-distribution-chart :distribution="distribution" />
       </b-tab>
     </b-tabs>
   </div>

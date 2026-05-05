@@ -2,6 +2,13 @@
 import { ref } from 'vue'
 import { BForm, BFormGroup, BFormInput, BButton } from 'bootstrap-vue-next'
 type TimeRange = 'day' | 'week' | 'month' | 'three_months'
+const props = defineProps({
+  showCancelButton: {
+    type: Boolean,
+    required: false,
+    default: true
+  }
+});
 
 const from = defineModel<string>('from');
 const to = defineModel<string>('to');
@@ -96,7 +103,7 @@ const emits = defineEmits<{
       >
                   Применить
       </b-button>
-      <b-button class="filter-btn"
+      <b-button v-if="showCancelButton" class="filter-btn"
                               variant="outline-danger"
                               loading-fill
                               squared
