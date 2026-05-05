@@ -79,7 +79,7 @@ const openEntryUpdateForm = (entryWithType: DiaryEntryWithType) => {
         v-model:from="fromFormatted"
         v-model:to="toFormatted"
         @apply="applyFilter"
-        @reset="refresh()"
+        @cancel="refresh"
       />
     </b-card>
     <div

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { BForm, BFormGroup, BFormInput, BButton } from 'bootstrap-vue-next'
-const props = defineProps<{
-  from: string,
-  to: string
-}>();
+type TimeRange = 'day' | 'week' | 'month' | 'three_months'
+
+const from = defineModel<string>('from');
+const to = defineModel<string>('to');
 
 const filtered = ref(false);
 defineExpose({ filtered });
@@ -13,11 +13,35 @@ defineExpose({ filtered });
 // const fromInternal = ref(...props.from);
 // const toInternal = ref(...props.to);
 
+const applyPreset = (range: TimeRange) => {
+  const current = new Date();
+  const offset = current.getTimezoneOffset() * 60000;
+  const toDate = new Date(current.getTime() - offset);
+  const fromDate = new Date(current.getTime() - offset);
+  switch (range) {
+    case 'day':
+      fromDate.setHours(0, 0, 0, 0);
+      break;
+    case 'week':
+      fromDate.setDate(fromDate.getDate() - 7);
+      break;
+    case 'month':
+      fromDate.setDate(fromDate.getDate() - 30);
+      break;
+    case 'three_months':
+      fromDate.setDate(fromDate.getDate() - 90);
+      break;
+  }
+
+  to.value = toDate.toISOString().slice(0, 16);
+  from.value = fromDate.toISOString().slice(0, 16);
+};
+
 const emits = defineEmits<{
   (e: 'update:from', from: string): void,
   (e: 'update:to', to: string): void,
   (e: 'apply', from: string, to: string): void,
-  (e: 'reset'): void
+  (e: 'cancel'): void
 }>();
 </script>
 
@@ -38,8 +62,7 @@ const emits = defineEmits<{
                     id="from-input"
                     key="from-input"
                     type="datetime-local"
-                    :model-value="from"
-                    @update:model-value="$emit('update:from', $event)"
+                    v-model="from"
         />
       </b-form-group>
       <b-form-group
@@ -54,10 +77,15 @@ const emits = defineEmits<{
                     id="to-input"
                     key="to-input"
                     type="datetime-local"
-                    :model-value="to"
-                    @update:model-value="$emit('update:to', $event)"
+                    v-model="to"
         />
       </b-form-group>
+    </div>
+    <div class="filter-presets">
+      <span class="opaque-text clickable-text" @click="applyPreset('day')">Эти сутки</span>
+      <span class="opaque-text clickable-text" @click="applyPreset('week')">Неделя</span>
+      <span class="opaque-text clickable-text" @click="applyPreset('month')">Месяц</span>
+      <span class="opaque-text clickable-text" @click="applyPreset('three_months')">3 месяца</span>
     </div>
     <div class="buttons">
       <b-button class="filter-btn"
@@ -74,9 +102,9 @@ const emits = defineEmits<{
                               loading-fill
                               squared
                               size="lg"
-                              @click="filtered = false; $emit('reset')"
+                              @click="filtered = false; $emit('cancel')"
       >
-                      Сбросить
+                      Отменить
       </b-button>
     </div>
   </b-form>
@@ -86,11 +114,17 @@ const emits = defineEmits<{
       .filter-form {
         display: flex;
         flex-direction: column;
+        align-items: center;
+        gap: 1rem;
 
         .filter-first-row {
           display: flex;
           flex-direction: row;
-          margin-bottom: 1rem;
+        }
+
+        .filter-presets {
+          display: flex;
+          gap: 1rem;
         }
 
         .buttons {
@@ -98,4 +132,12 @@ const emits = defineEmits<{
           justify-content: space-evenly;
         }
       }
+
+    .opaque-text {
+      opacity: 0.5;
+    }
+
+    .clickable-text {
+      cursor: pointer;
+    }
 </style>
