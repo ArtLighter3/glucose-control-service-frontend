@@ -85,8 +85,8 @@ const openEntryUpdateForm = (entryWithType: DiaryEntryWithType) => {
     <div
       class="entries-list-wrapper"
       v-infinite-scroll="loadMore"
-      infinite-scroll-disabled="filtered"
-      infinite-scroll-distance="10"
+      :infinite-scroll-disabled="false"
+      :infinite-scroll-distance="10"
     >
         <b-spinner v-if="loading" variant="success"/>
         <diary-entries-list v-else
@@ -102,7 +102,7 @@ const openEntryUpdateForm = (entryWithType: DiaryEntryWithType) => {
           :patient-id="props.patientId"
           :glucose-unit="glucoseUnit"
           :carbs-unit="carbsUnit"
-          @entries:updated="refresh(); closeEntryForm()"
+          @entries:updated="closeEntryForm(); refresh()"
         />
       </base-modal>
   </div>

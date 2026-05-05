@@ -30,7 +30,7 @@ const emit = defineEmits(['entries:added']);
 </script>
 
 <template>
-  <b-button variant="success" class="circular-btn" size="lg" @click="openSelection"> + </b-button>
+  <b-button variant="success" class="circular-btn" size="lg" @click="openSelection">+</b-button>
   <base-modal :is-open="isSelectionOpen" @close="closeSelection" title="Тип новой записи">
     <div class="entry-type-select">
       <entry-type-item

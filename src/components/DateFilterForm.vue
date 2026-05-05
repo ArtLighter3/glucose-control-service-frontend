@@ -18,10 +18,8 @@ const applyPreset = (range: TimeRange) => {
   const offset = current.getTimezoneOffset() * 60000;
   const toDate = new Date(current.getTime() - offset);
   const fromDate = new Date(current.getTime() - offset);
+
   switch (range) {
-    case 'day':
-      fromDate.setHours(0, 0, 0, 0);
-      break;
     case 'week':
       fromDate.setDate(fromDate.getDate() - 7);
       break;
@@ -32,6 +30,7 @@ const applyPreset = (range: TimeRange) => {
       fromDate.setDate(fromDate.getDate() - 90);
       break;
   }
+  fromDate.setUTCHours(0, 0, 0, 0);
 
   to.value = toDate.toISOString().slice(0, 16);
   from.value = fromDate.toISOString().slice(0, 16);
