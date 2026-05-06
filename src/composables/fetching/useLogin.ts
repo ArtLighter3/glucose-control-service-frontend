@@ -3,10 +3,13 @@ import { getCsrf, login, logout, type UserLogin } from '@/service/userService.ts
 import { useAuthStore } from '@/stores/authStore.ts'
 import { usePatientProfileStore } from '@/stores/patientProfileStore.ts'
 import { DefaultPatientProfile } from '@/service/patientProfileService.ts'
+import { isAxiosError, type AxiosResponse } from 'axios'
+import type { ApiExceptionResponse } from '@/util/exception'
 
 export function useLogin() {
   const loading = ref(false);
-  const error = ref(false);
+  const invalidCredentials = ref(false);
+  const serverError = ref(false);
   const successfulLogin = ref(false);
 
   const authStore = useAuthStore();
@@ -24,7 +27,8 @@ export function useLogin() {
   const submitLogin = async () => {
     loading.value = true;
     successfulLogin.value = false;
-    error.value = false;
+    invalidCredentials.value = false;
+    serverError.value = false;
 
     try {
       const response = await login(userLogin.value);
@@ -33,10 +37,19 @@ export function useLogin() {
       await getCsrf();
       successfulLogin.value = true;
     } catch (err) {
-      error.value = true;
-      console.log(err);
+      if (isAxiosError(err) && err.response) {
+        if (err.response.status === 400) {
+          invalidCredentials.value = true;
+          userLogin.value.password = ''
+        } else {
+          serverError.value = true;
+          console.log(err);
+        }
+      } else {
+        serverError.value = true;
+        console.log(err);
+      }
     }
-    userLogin.value.password = ''
     loading.value = false;
   }
 
@@ -55,7 +68,8 @@ export function useLogin() {
     loading,
     userLogin,
     submitLogin,
-    error,
+    invalidCredentials,
+    serverError,
     successfulLogin,
     submitLogout
   }

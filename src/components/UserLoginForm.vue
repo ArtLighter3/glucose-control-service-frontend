@@ -1,8 +1,11 @@
 <template>
   <b-form class="form" @submit.prevent="submitLogin">
     <form-transition-group>
-      <div v-if="error" class="error-text" key="err">
+      <div v-if="invalidCredentials" class="error-text" key="err">
         Неверное имя пользователя или пароль!
+      </div>
+      <div v-else-if="serverError" class="error-text" key="servErr">
+        Ошибка сервера
       </div>
       <b-form-group class="b-form-group" id="login-form" key="login"
                     label="Логин" label-for="login-input">
@@ -46,7 +49,8 @@ import { useLogin } from '@/composables/fetching/useLogin.ts'
 import { watch } from 'vue'
 import router from '@/router'
 
-const { loading, userLogin, submitLogin, error, successfulLogin } = useLogin();
+const { loading, userLogin, submitLogin, invalidCredentials, serverError, successfulLogin }
+  = useLogin();
 
 const redirectToRegistration = () => {
   router.push({name: "register"});

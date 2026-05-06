@@ -30,8 +30,8 @@ const { loading, entries, refreshDiary, loadMore }
   = useDiaryEntriesFetching(props.patientId);
 
 const refresh = async () => {
-  await refreshDiary((dateFilterRef.value.filtered) ? from.value : undefined,
-                     (dateFilterRef.value.filtered) ? to.value : undefined);
+  const filtered = dateFilterRef.value !== null ? dateFilterRef.value.filtered : false;
+  await refreshDiary(filtered ? from.value : undefined, filtered ? to.value : undefined);
 };
 
 const applyFilter = async () => {
@@ -63,19 +63,18 @@ const openEntryUpdateForm = (entryWithType: DiaryEntryWithType) => {
   openEntryForm();
 };
 
-//defineExpose(refreshDiary, loading);
 </script>
 
 <template>
   <div class="diary-wrapper">
-    <b-card class="filter-wrapper">
+    <div class="filter-wrapper">
       <date-filter-form ref="dateFilterRef"
         v-model:from="fromFormatted"
         v-model:to="toFormatted"
         @apply="applyFilter"
         @cancel="refresh"
       />
-    </b-card>
+    </div>
     <div
       class="entries-list-wrapper"
       v-infinite-scroll="loadMore"
@@ -110,7 +109,6 @@ const openEntryUpdateForm = (entryWithType: DiaryEntryWithType) => {
   .filter-wrapper {
       display: flex;
       align-self: center;
-      background-color: white;
 
       @media (max-width: 768px) {
         padding-left: 2rem;

@@ -34,12 +34,14 @@ const { fromFormatted: statsFromString, toFormatted: statsToString, from: statsF
 const statsDateFilterRef = ref(null);
 
 const refreshPatientDiary = async () => {
-  await refreshDiary((diaryDateFilterRef.value.filtered) ? diaryFrom.value : undefined,
-                     (diaryDateFilterRef.value.filtered) ? diaryTo.value : undefined);
+  const filtered = diaryDateFilterRef.value !== null ? diaryDateFilterRef.value.filtered : false;
+  await refreshDiary(filtered ? diaryFrom.value : undefined,
+                     filtered ? diaryTo.value : undefined);
 };
 const refreshDistribution = async () => {
-  await fetchDistribution((statsDateFilterRef.value.filtered) ? statsFrom.value : undefined,
-                     (statsDateFilterRef.value.filtered) ? statsTo.value : undefined);
+  const filtered = statsDateFilterRef.value !== null ? statsDateFilterRef.value.filtered : false;
+  await fetchDistribution(filtered ? statsFrom.value : undefined,
+                          filtered ? statsTo.value : undefined);
 };
 
 onMounted(async () => {
