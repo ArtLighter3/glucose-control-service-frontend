@@ -17,9 +17,9 @@ export function useAttachedPatientsFetching(doctorId: string) {
             await getAttachedPatients(doctorId, pageIndex.value) :
             await searchAttachedPatients(doctorId, query, pageIndex.value);
           patients.value = response.data.content;
-          pageSize.value = response.data.size;
-          if (response.data.totalElements !== undefined)
-            totalElements.value = response.data.totalElements;
+          pageSize.value = response.data.page.size;
+          if (response.data.page.totalElements !== undefined)
+            totalElements.value = response.data.page.totalElements;
         } catch (err) {
           if (isAxiosError(err)) {
             console.log(err);

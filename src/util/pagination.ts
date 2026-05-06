@@ -1,10 +1,11 @@
 export interface Page<T> {
   content: T[],
-  last: boolean,
-  first: boolean,
-  number: number,
-  numberOfElements: number,
+  page: PageInfo,
+}
+
+export interface PageInfo {
   size: number,
+  number: number,
   totalElements?: number,
   totalPages?: number
 }
