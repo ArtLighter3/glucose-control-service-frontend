@@ -14,7 +14,7 @@ import { BSpinner, BCard, BForm, BFormGroup, BFormInput, BButton } from 'bootstr
 import { useDiaryEntriesFetching } from '@/composables/fetching/useDiaryEntriesFetching'
 import { useDatePeriodFilter } from '@/composables/useDatePeriodFilter'
 import DateFilterForm from '@/components/DateFilterForm.vue'
-//import { useInfiniteScroll } from '@vueuse/core'
+import { useInfiniteScroll } from '@vueuse/core'
 
 const props = defineProps<{
   patientId: string,
@@ -38,19 +38,19 @@ const applyFilter = async () => {
   saveFilterValues();
   refresh();
 }
-// const entryListElement = useTemplateRef('entry-list');
-// const { reset } = useInfiniteScroll(
-//   entryListElement,
-//   () => {
-//     loadMore();
-//   },
-//   {
-//     distance: 10,
-//     canLoadMore: () => {
-//       return !filtered;
-//     }
-//   }
-// );
+const entryListRef = ref(null);
+const { reset } = useInfiniteScroll(
+  entryListRef,
+  () => {
+    loadMore();
+  },
+  {
+    distance: 10,
+    canLoadMore: () => {
+      return !dateFilterRef.value.filtered;
+    }
+  }
+);
 
 const entryToUpdate = ref<DiaryEntryWithType>({
   type: DiaryEntryType.GLUCOSE_ENTRY,
@@ -77,17 +77,15 @@ const openEntryUpdateForm = (entryWithType: DiaryEntryWithType) => {
     </div>
     <div
       class="entries-list-wrapper"
-      v-infinite-scroll="loadMore"
-      :infinite-scroll-disabled="false"
-      :infinite-scroll-distance="10"
+      ref="entryListRef"
     >
         <b-spinner v-if="loading" variant="success"/>
         <diary-entries-list v-else
           @entry:click="openEntryUpdateForm($event)"
           :entries="entries"
         />
-      </div>
-      <base-modal :is-open="isEntryFormOpen" @close="closeEntryForm" title="">
+    </div>
+    <base-modal :is-open="isEntryFormOpen" @close="closeEntryForm" title="">
         <add-entry-form-content
           :entry-type="entryToUpdate.type"
           :show-update-form="true"
@@ -97,7 +95,7 @@ const openEntryUpdateForm = (entryWithType: DiaryEntryWithType) => {
           :carbs-unit="carbsUnit"
           @entries:updated="closeEntryForm(); refresh()"
         />
-      </base-modal>
+    </base-modal>
   </div>
 </template>
 
@@ -117,6 +115,8 @@ const openEntryUpdateForm = (entryWithType: DiaryEntryWithType) => {
 
   .entries-list-wrapper {
     padding: 3rem;
+    height: 80vh;
+    overflow-y: auto;
 
     @media (max-width: 768px) {
       padding-left: 4rem;

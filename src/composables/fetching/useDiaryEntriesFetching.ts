@@ -5,6 +5,7 @@ import { onMounted, ref } from "vue";
 export function useDiaryEntriesFetching(patientId: string) {
   const loading = ref(false);
   const entries = ref<DiaryEntryWithType[]>([]);
+  const noMoreEntries = ref(false);
 
   const currentTo = ref(new Date());
   const currentFrom = ref(new Date());
@@ -18,7 +19,7 @@ export function useDiaryEntriesFetching(patientId: string) {
     currentFrom.value = (from === undefined) ? new Date() : from;
     if (from === undefined) currentFrom.value.setDate(currentFrom.value.getDate() - 7);
 
-    await load(currentFrom.value, currentTo.value, false);
+    await load(currentFrom.value, currentTo.value, false, true);
   };
 
   const loadMore = async () => {
@@ -26,10 +27,10 @@ export function useDiaryEntriesFetching(patientId: string) {
     currentFrom.value.setDate(currentFrom.value.getDate() - 7);
     currentTo.value.setDate(currentTo.value.getDate() - 7);
 
-    await load(currentFrom.value, currentTo.value, true);
+    await load(currentFrom.value, currentTo.value, true, false);
   };
-  const load = async (from: Date, to: Date, append: boolean) => {
-    loading.value = true;
+  const load = async (from: Date, to: Date, append: boolean, setLoadingFlag: boolean) => {
+    if (setLoadingFlag) loading.value = true;
 
     try {
       const response = await getDiaryEntries(patientId, from, to);

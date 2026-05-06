@@ -8,7 +8,7 @@ import router from './router'
 import VueAxios from 'vue-axios'
 import axios from 'axios'
 import { createBootstrap } from 'bootstrap-vue-next'
-import infiniteScroll from 'vue-infinite-scroll'
+//import infiniteScroll from 'vue-infinite-scroll'
 
 import { Chart, registerables } from 'chart.js';
 import ChartAnnotation from 'chartjs-plugin-annotation';
@@ -23,6 +23,6 @@ app.use(router);
 app.use(axios);
 app.provide('axios', app.config.globalProperties.axios);
 
-app.use(infiniteScroll);
+//app.use(infiniteScroll);
 
 app.mount('#app');
