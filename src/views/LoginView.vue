@@ -24,13 +24,15 @@ const { redirectToHome } = useRedirectionToRolePanel();
   height: 100vh;
 
   .login-text {
-    margin: 3rem;
+    margin-bottom: 2rem;
   }
 
   .login-form-wrapper {
     display: flex;
-    width: 30rem;
-    height: 30rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
     flex-direction: column;
     align-items: center;
     border-width: 1px;
