@@ -5,6 +5,7 @@ import {
 import apiClient from '@/service/apiClient.ts'
 import { getUtcOffsetString } from '@/util/utc.ts'
 import { getDiaryEntryTypeURLCodename } from '@/util/enumToStringLiterals.ts'
+import {type Page, type Slice} from '@/util/pagination.ts'
 
 export enum MeasurementType {
   AFTER_MEAL = "AFTER_MEAL",
@@ -82,7 +83,7 @@ export interface DiaryEntryWithType {
   entryInfo: DiaryEntry
 }
 
-
+const pageSize = import.meta.env.VITE_DEFAULT_FETCH_PAGE_SIZE;
 //
 // export function isGlucoseEntry(obj: any): obj is GlucoseEntry {
 //   return (
@@ -116,12 +117,24 @@ export async function deleteDiaryEntry(patientId: string, type: DiaryEntryType, 
   });
 }
 
-export async function getDiaryEntries(patientId: string, from: Date, to: Date) {
-  return apiClient.get<DiaryEntryWithType[]>(getEntryFetchingURL(patientId), {
+export async function getDiaryEntries(patientId: string, from: Date, to: Date, page: number) {
+  return apiClient.get<Slice<DiaryEntryWithType>>(getEntryFetchingURL(patientId), {
     params: {
       outputZoneOffset: getUtcOffsetString(new Date()),
       from: from.toISOString(),
-      to: to.toISOString()
+      to: to.toISOString(),
+      page: page,
+      size: pageSize
+    }
+  });
+}
+
+export async function getAllDiaryEntries(patientId: string, page: number) {
+  return apiClient.get<Slice<DiaryEntryWithType>>(getEntryFetchingURL(patientId), {
+    params: {
+      outputZoneOffset: getUtcOffsetString(new Date()),
+      page: page,
+      size: pageSize
     }
   });
 }

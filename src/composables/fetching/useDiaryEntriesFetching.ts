@@ -1,47 +1,73 @@
-import { getDiaryEntries, type DiaryEntryWithType } from "@/service/diaryService";
+import { getDiaryEntries, getAllDiaryEntries, type DiaryEntryWithType }
+  from "@/service/diaryService";
 import { isAxiosError } from "axios";
 import { onMounted, ref } from "vue";
+import { usePagination } from "@/composables/usePagination";
 
 export function useDiaryEntriesFetching(patientId: string) {
   const loading = ref(false);
   const entries = ref<DiaryEntryWithType[]>([]);
 
-  const currentTo = ref(new Date());
-  const currentFrom = ref(new Date());
-  currentFrom.value.setDate(currentFrom.value.getDate() - 7);
+  const filtered = ref(false);
+  const to = ref(new Date());
+  const from = ref(new Date());
+  from.value.setDate(from.value.getDate() - 7);
+
+  const { pageIndex, pageSize } = usePagination(1);
+  const hasNext = ref(true);
 
   onMounted(async () => {
-    await refreshDiary(currentFrom.value, currentTo.value);
+    await fetchAll();
   });
-  const refreshDiary = async (from: Date | undefined, to: Date | undefined) => {
-    currentTo.value = (to === undefined) ? new Date() : to;
-    currentFrom.value = (from === undefined) ? new Date() : from;
-    if (from === undefined) currentFrom.value.setDate(currentFrom.value.getDate() - 7);
 
-    await load(currentFrom.value, currentTo.value, false);
+  const fetchAll = async () => {
+    filtered.value = false;
+    pageIndex.value = 1;
+    //hasNext.value = true;
+
+    await load(false);
+  }
+  const reloadWithFilter = async (newFrom: Date, newTo: Date) => {
+    filtered.value = true;
+    pageIndex.value = 1;
+    //hasNext.value = true;
+
+    to.value = newTo;
+    from.value = newFrom;
+
+    await load(false);
   };
 
   const loadMore = async () => {
+    if (loading.value) return;
     //console.log('load more');
-    currentFrom.value.setDate(currentFrom.value.getDate() - 7);
-    currentTo.value.setDate(currentTo.value.getDate() - 7);
+//     currentFrom.value.setDate(currentFrom.value.getDate() - 7);
+//     currentTo.value.setDate(currentTo.value.getDate() - 7);
+    pageIndex.value = pageIndex.value + 2;
 
-    await load(currentFrom.value, currentTo.value, true);
+    await load(true);
   };
-  const load = async (from: Date, to: Date, append: boolean) => {
+  const load = async (append: boolean) => {
     loading.value = true;
 
     try {
-      const response = await getDiaryEntries(patientId, from, to);
-      if (!append) entries.value = response.data;
-      else entries.value.push(...response.data);
+      const response =  !filtered.value ?
+                        await getAllDiaryEntries(patientId, pageIndex.value):
+                        await getDiaryEntries(patientId, from.value, to.value, pageIndex.value);
+
+      pageSize.value = response.data.page.size;
+      hasNext.value = response.data.page.hasNext;
+
+      if (!append) entries.value = response.data.content;
+      else entries.value.push(...response.data.content);
     } catch (err) {
       if (isAxiosError(err)) {
         console.log(err);
       }
     }
+
     loading.value = false;
   };
 
-  return { loading, entries, refreshDiary, loadMore };
+  return { loading, entries, fetchAll, hasNext, reloadWithFilter, loadMore };
 }
