@@ -6,6 +6,7 @@ import { usePagination } from "@/composables/usePagination";
 
 export function useDiaryEntriesFetching(patientId: string) {
   const loading = ref(false);
+  const loadError = ref(false);
   const entries = ref<DiaryEntryWithType[]>([]);
 
   const filtered = ref(false);
@@ -39,7 +40,7 @@ export function useDiaryEntriesFetching(patientId: string) {
   };
 
   const loadMore = async () => {
-    if (loading.value) return;
+    if (loading.value || loadError.value) return;
     //console.log('load more');
 //     currentFrom.value.setDate(currentFrom.value.getDate() - 7);
 //     currentTo.value.setDate(currentTo.value.getDate() - 7);
@@ -49,6 +50,7 @@ export function useDiaryEntriesFetching(patientId: string) {
   };
   const load = async (append: boolean) => {
     loading.value = true;
+    loadError.value = false;
 
     try {
       const response =  !filtered.value ?
@@ -62,6 +64,7 @@ export function useDiaryEntriesFetching(patientId: string) {
       else entries.value.push(...response.data.content);
     } catch (err) {
       if (isAxiosError(err)) {
+        loadError.value = true;
         console.log(err);
       }
     }
