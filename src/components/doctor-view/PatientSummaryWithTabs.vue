@@ -12,6 +12,7 @@ import { useDiaryEntriesFetching } from '@/composables/fetching/useDiaryEntriesF
 import { onMounted } from 'vue'
 import { useGlucoseDistributionFetching } from '@/composables/fetching/useGlucoseDistributionFetching'
 import { useDatePeriodFilter } from '@/composables/useDatePeriodFilter'
+import { useInfiniteScroll } from '@vueuse/core'
 
 const props = defineProps<{
   patientInfo: PatientInfo
@@ -23,7 +24,7 @@ const { recentActivity, fetchActivity, loading: activityLoading }
   = useRecentActivityFetching(props.patientInfo.patientId);
 const { distribution, fetchDistribution, loading: distributionLoading }
   = useGlucoseDistributionFetching(props.patientInfo.patientId);
-const { loading: entriesLoading, entries, refreshDiary }
+const { loading: entriesLoading, entries, reloadWithFilter, loadMore, fetchAll, hasNext }
   = useDiaryEntriesFetching(props.patientInfo.patientId);
 
 const { fromFormatted: diaryFromString, toFormatted: diaryToString, from: diaryFrom, to: diaryTo }
@@ -35,9 +36,23 @@ const statsDateFilterRef = ref(null);
 
 const refreshPatientDiary = async () => {
   const filtered = diaryDateFilterRef.value !== null ? diaryDateFilterRef.value.filtered : false;
-  await refreshDiary(filtered ? diaryFrom.value : undefined,
-                     filtered ? diaryTo.value : undefined);
+    if (filtered) await reloadWithFilter(diaryFrom.value, diaryTo.value);
+    else await fetchAll();
 };
+const entryListRef = ref(null);
+const { reset } = useInfiniteScroll(
+  entryListRef,
+  () => {
+    loadMore();
+  },
+  {
+    distance: 10,
+    canLoadMore: () => {
+      return hasNext.value;
+    }
+  }
+);
+
 const refreshDistribution = async () => {
   const filtered = statsDateFilterRef.value !== null ? statsDateFilterRef.value.filtered : false;
   await fetchDistribution(filtered ? statsFrom.value : undefined,
@@ -79,11 +94,13 @@ onMounted(async () => {
                   @apply="refreshPatientDiary"
                   @cancel="refreshPatientDiary"
           />
-          <b-spinner v-if="entriesLoading" variant="success"/>
-          <diary-entries-list v-else
-            @entry:click=""
-            :entries="entries"
-          />
+          <div class="entry-list-wrapper" ref="entryListRef">
+            <diary-entries-list
+                        @entry:click=""
+                        :entries="entries"
+            />
+            <b-spinner v-if="entriesLoading" variant="success"/>
+          </div>
       </div>
       </b-tab>
       <b-tab title="Визуализация измерений" lazy>
@@ -116,6 +133,11 @@ onMounted(async () => {
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+
+    .entry-list-wrapper {
+      height: 60vh;
+      overflow-y: auto;
     }
   }
 
