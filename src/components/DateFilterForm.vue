@@ -44,9 +44,9 @@ const applyPreset = (range: TimeRange) => {
 };
 
 const emits = defineEmits<{
-  (e: 'update:from', from: string): void,
-  (e: 'update:to', to: string): void,
-  (e: 'apply', from: string, to: string): void,
+  (e: 'update:from', from: string | undefined): void,
+  (e: 'update:to', to: string | undefined): void,
+  (e: 'apply', from: string | undefined, to: string | undefined): void,
   (e: 'cancel'): void
 }>();
 </script>

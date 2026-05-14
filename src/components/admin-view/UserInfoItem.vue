@@ -39,7 +39,7 @@ const emit = defineEmits<{
       <div class="id">{{ userDetailedInfo.id }}</div>
       <div class="roles">
         <div v-for="(role, index) in userDetailedInfo.roles" :key="role" class="role">
-          {{ getRoleName(role) }}{{ index < userDetailedInfo.roles.size - 1 ? ", " : "" }}
+          {{ getRoleName(role) }}{{ index < userDetailedInfo.roles.length - 1 ? ", " : "" }}
         </div>
       </div>
       <div class="birthdate" v-if="formattedBirthDate !== null">{{ formattedBirthDate }}</div>

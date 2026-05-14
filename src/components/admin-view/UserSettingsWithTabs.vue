@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { BTabs, BTab, BSpinner } from 'bootstrap-vue-next'
-import RecentDiaryInfoPanel from '@/components/patient-view/RecentDiaryInfoPanel.vue'
+import { BTabs, BTab } from 'bootstrap-vue-next'
 import FunctionalPatientsList from '@/components/doctor-view/FunctionalPatientsList.vue'
-import DiaryEntriesList from '@/components/patient-view/diary/DiaryEntriesList.vue'
 import { type UserDetailedInfo, Role } from '@/service/userService.ts'
 import UserInfoFormContent from '@/components/UserInfoFormContent.vue'
 

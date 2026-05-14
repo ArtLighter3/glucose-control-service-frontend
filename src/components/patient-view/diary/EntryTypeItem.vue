@@ -17,7 +17,7 @@ const emit = defineEmits<{
 
 <template>
   <button @click="$emit('click')" class="entry-type-item">
-    <img :src="`/src/${props.iconPath}`"/>
+    <img :src="`/${props.iconPath}`"/>
     <span>{{ name }}</span>
   </button>
 </template>

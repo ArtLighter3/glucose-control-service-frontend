@@ -64,7 +64,7 @@ const emit = defineEmits<{
 
 <template>
   <div class="item-wrapper" @click="$emit('click', entry)">
-    <img v-if="iconPath !== null" :src="`/src/${iconPath}`" alt="" class="entry-icon" />
+    <img v-if="iconPath !== null" :src="`/${iconPath}`" alt="" class="entry-icon" />
     <div class="main-info-wrapper">
       <div class="value-info-wrapper">
         <div class="value">{{ entry.entryInfo.value }}</div>
@@ -83,7 +83,7 @@ const emit = defineEmits<{
     </div>
     <div class="additional-info-wrapper">
       <img v-if="entry.entryInfo.notes !== null"
-           :src="`/src/assets/icons/note.svg`"
+           :src="`/assets/icons/note.svg`"
            alt="" class="note-icon" />
     </div>
   </div>

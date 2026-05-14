@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { BTabs, BTab, BSpinner } from 'bootstrap-vue-next'
 import RecentDiaryInfoPanel from '@/components/patient-view/RecentDiaryInfoPanel.vue'
 import DiaryEntriesList from '@/components/patient-view/diary/DiaryEntriesList.vue'
@@ -29,10 +28,10 @@ const { loading: entriesLoading, entries, reloadWithFilter, loadMore, fetchAll, 
 
 const { fromFormatted: diaryFromString, toFormatted: diaryToString, from: diaryFrom, to: diaryTo }
   = useDatePeriodFilter();
-const diaryDateFilterRef = ref(null);
+const diaryDateFilterRef = ref<InstanceType<typeof DateFilterForm> | null>(null);
 const { fromFormatted: statsFromString, toFormatted: statsToString, from: statsFrom, to: statsTo }
   = useDatePeriodFilter();
-const statsDateFilterRef = ref(null);
+const statsDateFilterRef = ref<InstanceType<typeof DateFilterForm> | null>(null);
 
 const refreshPatientDiary = async () => {
   const filtered = diaryDateFilterRef.value !== null ? diaryDateFilterRef.value.filtered : false;
@@ -54,9 +53,8 @@ const { reset } = useInfiniteScroll(
 );
 
 const refreshDistribution = async () => {
-  const filtered = statsDateFilterRef.value !== null ? statsDateFilterRef.value.filtered : false;
-  await fetchDistribution(filtered ? statsFrom.value : undefined,
-                          filtered ? statsTo.value : undefined);
+  //const filtered = statsDateFilterRef.value !== null ? statsDateFilterRef.value.filtered : false;
+  await fetchDistribution(statsFrom.value, statsTo.value);
 };
 
 onMounted(async () => {
@@ -96,7 +94,6 @@ onMounted(async () => {
           />
           <div class="entry-list-wrapper" ref="entryListRef">
             <diary-entries-list
-                        @entry:click=""
                         :entries="entries"
             />
             <b-spinner v-if="entriesLoading" variant="success"/>

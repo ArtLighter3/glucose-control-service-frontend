@@ -18,7 +18,6 @@ import { computed, ref } from 'vue'
 import 'chartjs-adapter-luxon'
 import { GlucoseUnit } from '@/service/patientProfileService.ts'
 import { getGlucoseUnitName } from '@/util/enumToStringLiterals.ts'
-import { DateTime } from 'luxon'
 
 type TimeRange = 'day' | 'month' | 'week'
 
@@ -93,7 +92,12 @@ const data = computed((): ChartData<'line'> => {
         backgroundColor: '#000',
         data: props.entries
           .filter((item) => item.type === DiaryEntryType.GLUCOSE_ENTRY)
-          .map((item): Point => ({ x: item.entryInfo.commitedAt, y: item.entryInfo.value })),
+          .map((item): Point => ({
+            // @ts-expect-error по каким-то причинам ts не понимает,
+            // что у графика тип оси - временной, и он может принимать строки
+            x: new Date(item.entryInfo.commitedAt),
+            y: item.entryInfo.value
+          })),
       },
     ],
   }

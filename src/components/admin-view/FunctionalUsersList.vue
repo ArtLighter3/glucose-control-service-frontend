@@ -17,12 +17,12 @@ import UserSettingsWithTabs from '@/components/admin-view/UserSettingsWithTabs.v
 // });
 
 const { loading, users, page, totalElements, pageSize, search, turnPage }
-  = useUsersFetching();
+  = useUsersFetching(undefined);
 
 const currentQuery = ref('');
 
 watch((page), async (newPage) => {
-  await turnPage(currentQuery.value, newPage);
+  await turnPage(currentQuery.value);
 });
 
 const showUserInfo = ref(false);
@@ -40,7 +40,7 @@ const closeUserInfo = () => {
 <template>
   <div v-if="showUserInfo" class="back-nav-link">
     <b-button variant="success" class="circular-btn" size="lg" @click="closeUserInfo">
-      <img src="@/assets/icons/back-arrow.svg" alt="Назад" />
+      <img src="/assets/icons/back-arrow.svg" alt="Назад" />
     </b-button>
   </div>
   <div v-if="!showUserInfo" class="users-list-wrapper">

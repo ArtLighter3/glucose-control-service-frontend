@@ -88,7 +88,7 @@ const emit = defineEmits<{
 <template>
   <div v-if="showPatientSummary" class="back-nav-link">
     <b-button variant="success" class="circular-btn" size="lg" @click="closePatientSummary">
-      <img src="@/assets/icons/back-arrow.svg" alt="Назад" />
+      <img src="/assets/icons/back-arrow.svg" alt="Назад" />
     </b-button>
   </div>
   <div v-if="!showPatientSummary" class="patients-list-wrapper">

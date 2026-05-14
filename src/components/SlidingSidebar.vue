@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { h, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 export interface SidebarItem {
   iconPath: string,
@@ -35,7 +35,7 @@ defineExpose({isExpanded});
    <div class="toggle-sidebar-wrapper" @click="toggleSideBar">
      <button class="toggle-sidebar-button">
        <img class="toggle-sidebar-icon"
-            src="@/assets/icons/double-arrow.svg" alt="Toggle full sidebar"/>
+            src="/assets/icons/double-arrow.svg" alt="Toggle full sidebar"/>
      </button>
    </div>
 
@@ -43,14 +43,14 @@ defineExpose({isExpanded});
      <slot></slot>
      <router-link class="sidebar-item" v-for="(item, index) in items"
                   :key="index" :to="{name:item.routeName}">
-       <img class="sidebar-item-icon" :src="`/src/${item.iconPath}`" alt="">
+       <img class="sidebar-item-icon" :src="`/${item.iconPath}`" alt="">
        <span class="sidebar-item-text">{{ item.text }}</span>
      </router-link>
      <router-link class="sidebar-item logout-item"
                   :to="{name:'logout'}"
                   key="logout"
      >
-       <img class="sidebar-item-icon" :src="`/src/assets/icons/logout.svg`" alt="">
+       <img class="sidebar-item-icon" :src="`/assets/icons/logout.svg`" alt="">
        <span class="sidebar-item-text">Выйти из аккаунта</span>
      </router-link>
    </div>

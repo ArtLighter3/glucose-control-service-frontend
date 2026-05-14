@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, useTemplateRef, computed } from 'vue'
+import { ref } from 'vue'
 import {
   DefaultGlucoseEntry,
   DiaryEntryType,
@@ -24,7 +24,7 @@ const props = defineProps<{
 
 const { fromFormatted, toFormatted, from, to, saveFilterValues }
   = useDatePeriodFilter();
-const dateFilterRef = ref(null);
+const dateFilterRef = ref<InstanceType<typeof DateFilterForm> | null>(null);
 
 const { loading, entries, reloadWithFilter, fetchAll, loadMore, hasNext }
   = useDiaryEntriesFetching(props.patientId);

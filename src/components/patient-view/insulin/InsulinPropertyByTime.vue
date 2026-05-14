@@ -94,9 +94,9 @@ const value = defineModel<number>('value')
 const startTime = ref("00:00");
 
 const emit = defineEmits<{
-  (e: 'update:time', time: string): void
-  (e: 'update:value', value: number): void
-  (e: 'delete', time: string): void
+  (e: 'update:time', time: string | undefined): void
+  (e: 'update:value', value: number | undefined): void
+  (e: 'delete', time: string | undefined): void
 }>();
 
 </script>

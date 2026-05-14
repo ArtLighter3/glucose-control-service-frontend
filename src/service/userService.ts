@@ -46,7 +46,7 @@ export interface UserDetailedInfo {
   middleName: string | null,
   lastName: string,
   birthDate: string | null,
-  roles: Set<Role>
+  roles: Role[]
 }
 
 const pageSize = import.meta.env.VITE_DEFAULT_FETCH_PAGE_SIZE;
