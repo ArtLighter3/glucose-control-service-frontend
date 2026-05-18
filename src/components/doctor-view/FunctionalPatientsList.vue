@@ -97,14 +97,16 @@ const emit = defineEmits<{
       :loading="false"
       @search="searchAttached($event)"
     />
-    <b-spinner v-if="attachedPatientsLoading" variant="success" />
-    <patients-list v-else
-      @patient:click="openPatientSummary($event)"
-      :patients="attachedPatients"
-      :show-detach-buttons="adminView"
-      :show-attach-buttons="false"
-      @patient:detach="detachPatient($event.patientId)"
-    />
+    <div class="scrollable-list">
+      <b-spinner v-if="attachedPatientsLoading" variant="success" />
+      <patients-list v-else
+        @patient:click="openPatientSummary($event)"
+        :patients="attachedPatients"
+        :show-detach-buttons="adminView"
+        :show-attach-buttons="false"
+        @patient:detach="detachPatient($event.patientId)"
+      />
+    </div>
     <b-button
       v-if="adminView"
       class="attach-btn"
@@ -130,17 +132,19 @@ const emit = defineEmits<{
                 :loading="false"
                 @search="searchPatientUsers($event)"
         />
-        <b-spinner v-if="usersLoading" variant="success" />
-        <users-list v-else
-                    @user:click="attachPatient($event.id)"
-                    :users="users"
-        />
+        <div class="scrollable-list">
+          <b-spinner v-if="usersLoading" variant="success" />
+          <users-list v-else
+                      @user:click="attachPatient($event.id)"
+                      :users="users"
+          />
+        </div>
         <b-pagination v-if="totalUsers > usersPageSize"
                     class="pages-wrapper"
                     v-model="usersPage"
                     :total-rows="totalUsers"
                     :per-page="usersPageSize"
-                    size="lg"
+                    size="md"
                     align="center"
         />
       </div>
@@ -198,5 +202,10 @@ const emit = defineEmits<{
     right: 50px;
     bottom: 100px;
   }
+}
+
+.scrollable-list {
+  height: 40vh;
+  overflow-y: auto;
 }
 </style>

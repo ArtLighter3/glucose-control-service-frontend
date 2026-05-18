@@ -49,11 +49,13 @@ const closeUserInfo = () => {
       :loading="false"
       @search="currentQuery = $event; search($event)"
     />
-    <b-spinner v-if="loading" variant="success" />
-    <users-list v-else
-      @user:click="openUserInfo($event)"
-      :users="users"
-    />
+    <div class="scrollable-list">
+      <b-spinner v-if="loading" variant="success" />
+      <users-list v-else
+        @user:click="openUserInfo($event)"
+        :users="users"
+      />
+    </div>
     <b-pagination v-if="totalElements > pageSize"
       class="pages-wrapper"
       v-model="page"
@@ -113,5 +115,10 @@ const closeUserInfo = () => {
     right: 50px;
     bottom: 100px;
   }
+}
+
+.scrollable-list {
+  height: 60vh;
+  overflow-y: auto;
 }
 </style>

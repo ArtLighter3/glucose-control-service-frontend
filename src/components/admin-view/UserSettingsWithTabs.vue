@@ -33,8 +33,8 @@ const emit = defineEmits(['user:deleted']);
         lazy
       >
         <functional-patients-list
-          :admin-view="true"
-          :doctor-id="userDetailedInfo.id"
+            :admin-view="true"
+            :doctor-id="userDetailedInfo.id"
         />
       </b-tab>
     </b-tabs>
