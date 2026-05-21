@@ -7,6 +7,7 @@ import { useUsersFetching } from '@/composables/fetching/useUsersFetching.ts'
 import type { UserDetailedInfo } from '@/service/userService.ts'
 import UsersList from '@/components/admin-view/UsersList.vue'
 import UserSettingsWithTabs from '@/components/admin-view/UserSettingsWithTabs.vue'
+import AddUserFunctionalButton from '@/components/admin-view/AddUserFunctionalButton.vue'
 
 // const props = defineProps<{
 //   doctorId: string,
@@ -64,6 +65,9 @@ const closeUserInfo = () => {
       size="lg"
       align="center"
     />
+    <div class="add-button-wrapper">
+      <add-user-functional-button />
+    </div>
   </div>
   <div v-else class="user-info-outer-wrapper">
     <user-settings-with-tabs
@@ -120,5 +124,17 @@ const closeUserInfo = () => {
 .scrollable-list {
   height: 60vh;
   overflow-y: auto;
+}
+
+.add-button-wrapper {
+  position: fixed;
+  bottom: 100px;
+  right: 100px;
+  z-index: 999;
+
+  @media (max-width: 768px) {
+    right: 50px;
+    bottom: 100px;
+  }
 }
 </style>

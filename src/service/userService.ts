@@ -31,6 +31,17 @@ export interface UserRegistration {
   birthDate: string | null
 }
 
+export interface UserCreation {
+  username: string,
+  password: string,
+  email: string | null,
+  firstName: string,
+  middleName: string | null,
+  lastName: string,
+  birthDate: string | null,
+  roles: Role[]
+}
+
 export interface UserUpdatableInfo {
   email: string | null,
   firstName: string,
@@ -94,6 +105,10 @@ export async function deleteUser(userId: string) {
 
 export async function getUserInfo(userId: string) {
   return apiClient.get<UserUpdatableInfo>(getUserURL(userId));
+}
+
+export async function postUser(userCreation: UserCreation) {
+  return apiClient.post<UserUpdatableInfo>("/users", userCreation);
 }
 
 export async function putUserInfo(userId: string, userInfo: UserUpdatableInfo) {

@@ -40,8 +40,10 @@ import {
         <h2>Аккаунт</h2>
           <b-card class="form-group-wrapper">
               <form-transition-group>
-                <span v-for="(objectError, index) in objectErrors" :key="`error-${index}`"
-                  class="error-text">{{ objectError }}</span>
+                <span v-for="(objectError, index) in objectErrors"
+                      :key="`error-${index}`"
+                      class="error-text">{{ objectError }}
+                </span>
                 <b-form-group key="email" id="email"
                               class="form-group-inner"
                               label="Электронная почта"
