@@ -30,11 +30,11 @@ const formattedDate = computed((): string | null => {
 
 <template>
   <div class="panel-wrapper">
-    <info-panel-value class="panel-item carbs-item"
-                      name="Углеводы за день"
-                      :value="overallDayCarbs"
-                      :units="carbsUnit ? getCarbsUnitShortName(carbsUnit) : null"
-    />
+<!--    <info-panel-value class="panel-item carbs-item"-->
+<!--                      name="Углеводы за день"-->
+<!--                      :value="overallDayCarbs"-->
+<!--                      :units="carbsUnit ? getCarbsUnitShortName(carbsUnit) : null"-->
+<!--    />-->
     <info-panel-value class="panel-item glucose-item"
                       :name="formattedDate"
                       :value="recentGlucose?.value"
