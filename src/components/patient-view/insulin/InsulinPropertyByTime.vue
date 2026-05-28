@@ -150,7 +150,7 @@ const emit = defineEmits<{
     margin-left: 1rem;
     margin-right: 1rem;
 
-    @media (max-width: 768px) {
+    @media (max-width: 1080px) {
       margin-left: 0.2rem;
       margin-right: 0.2rem;
     }

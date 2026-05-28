@@ -60,7 +60,7 @@ const emit = defineEmits(['close']);
   width: 100%;
   z-index: 1001;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1080px) {
     width: 80%;
     padding: 15px;
   }

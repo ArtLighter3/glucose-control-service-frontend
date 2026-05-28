@@ -41,7 +41,7 @@ const { componentKey, refresh } = useRefreshComponent();
     align-self: center;
     background-color: white;
 
-    @media (max-width: 768px) {
+    @media (max-width: 1080px) {
       padding-left: 2rem;
     }
 
@@ -62,7 +62,7 @@ const { componentKey, refresh } = useRefreshComponent();
     right: 100px;
     z-index: 999;
 
-    @media (max-width: 768px) {
+    @media (max-width: 1080px) {
       right: 50px;
       bottom: 100px;
     }

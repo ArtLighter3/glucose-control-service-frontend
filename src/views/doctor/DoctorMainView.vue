@@ -56,7 +56,7 @@ const { redirectToHome } = useRedirectionToRolePanel();
     flex: 1 1 0;
     padding: 2rem;
 
-    @media (max-width: 768px) {
+    @media (max-width: 1080px) {
       padding-left: 6rem;
     }
   }

@@ -109,7 +109,7 @@ const openEntryUpdateForm = (entryWithType: DiaryEntryWithType) => {
       display: flex;
       align-self: center;
 
-      @media (max-width: 768px) {
+      @media (max-width: 1080px) {
         padding-left: 2rem;
       }
     }
@@ -119,7 +119,7 @@ const openEntryUpdateForm = (entryWithType: DiaryEntryWithType) => {
     height: 80vh;
     overflow-y: auto;
 
-    @media (max-width: 768px) {
+    @media (max-width: 1080px) {
       padding-left: 4rem;
       padding-right: 1rem;
     }

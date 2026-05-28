@@ -150,7 +150,7 @@ h4 {
         width: 50%;
         flex-basis: 250px;
 
-        @media(max-width: 768px) {
+        @media(max-width: 1080px) {
           width: 90%;
         }
 

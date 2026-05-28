@@ -40,7 +40,7 @@ const id = ref(useRoute().params.id as string);
     flex-grow: 1;
   }
 
-  @media(max-width: 768px) {
+  @media(max-width: 1080px) {
     padding-left: 4rem;
     padding-right: 1rem;
   }

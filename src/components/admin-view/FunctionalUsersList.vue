@@ -91,7 +91,7 @@ const closeUserInfo = () => {
     border-color: var(--color-background-alt);
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 1080px) {
     padding-left: 4.32rem;
     padding-right: 2rem;
   }
@@ -104,7 +104,7 @@ const closeUserInfo = () => {
   flex-direction: column;
   align-items: center;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1080px) {
       padding-left: 4rem;
   }
 }
@@ -115,7 +115,7 @@ const closeUserInfo = () => {
   right: 100px;
   z-index: 999;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1080px) {
     right: 50px;
     bottom: 100px;
   }
@@ -132,7 +132,7 @@ const closeUserInfo = () => {
   right: 100px;
   z-index: 999;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1080px) {
     right: 50px;
     bottom: 100px;
   }

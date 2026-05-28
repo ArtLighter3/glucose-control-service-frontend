@@ -163,7 +163,7 @@ const emit = defineEmits<{
   align-items: stretch;
   gap: 1rem;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1080px) {
     padding-left: 4.32rem;
     padding-right: 2rem;
   }
@@ -175,7 +175,7 @@ const emit = defineEmits<{
   flex-direction: column;
   align-items: center;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1080px) {
       padding-left: 4rem;
   }
 }
@@ -198,7 +198,7 @@ const emit = defineEmits<{
   right: 100px;
   z-index: 999;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1080px) {
     right: 50px;
     bottom: 100px;
   }

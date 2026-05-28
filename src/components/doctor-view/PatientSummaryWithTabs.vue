@@ -143,7 +143,7 @@ onMounted(async () => {
     margin-bottom: 1rem;
   }
 
-  @media(max-width: 768px) {
+  @media(max-width: 1080px) {
     padding-right: 1rem;
   }
 }

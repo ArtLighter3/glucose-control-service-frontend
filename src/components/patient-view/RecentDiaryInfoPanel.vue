@@ -77,7 +77,7 @@ const formattedDate = computed((): string | null => {
 }
 
 
-@media (max-width: 768px) {
+@media (max-width: 1080px) {
   .panel-wrapper {
     flex-direction: column;
     align-items: center;

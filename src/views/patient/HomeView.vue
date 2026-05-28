@@ -65,7 +65,7 @@ onMounted(async () => {
     width: 70%;
     flex-grow: 1;
 
-    @media (max-width: 768px) {
+    @media (max-width: 1080px) {
       width: 85%;
     }
   }
@@ -76,7 +76,7 @@ onMounted(async () => {
     right: 100px;
     z-index: 999;
 
-    @media (max-width: 768px) {
+    @media (max-width: 1080px) {
       right: 50px;
       bottom: 100px;
     }

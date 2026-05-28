@@ -139,7 +139,7 @@ aside {
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 1080px) {
     position: fixed;
     z-index: 99;
   }

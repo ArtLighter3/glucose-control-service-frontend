@@ -38,7 +38,7 @@ const { patientProfile } = usePatientProfileFetching(id.value);
   right: 100px;
   z-index: 999;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1080px) {
     right: 50px;
     bottom: 100px;
   }

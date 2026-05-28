@@ -202,7 +202,7 @@ watch((calculationData.value), () => {
     .result-value {
       font-size: 3rem;
 
-      @media (max-width: 768px) {
+      @media (max-width: 1080px) {
         font-size: 2rem;
       }
     }

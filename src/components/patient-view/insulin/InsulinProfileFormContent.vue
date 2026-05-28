@@ -291,12 +291,12 @@ h4 {
         }
       }
 
-      @media (max-width: 768px) {
+      @media (max-width: 1080px) {
         width: 100%;
       }
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 1080px) {
       padding-left: 2rem;
     }
   }
