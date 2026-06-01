@@ -18,7 +18,7 @@ const emit = defineEmits(['user:deleted']);
       {{ userDetailedInfo.middleName !== null ? userDetailedInfo.middleName : "" }}
     </h2>
     <b-tabs pills class="tabs-wrapper" justified>
-      <b-tab title="Настройки аккаунта" lazy>
+      <b-tab title="Настройки аккаунта">
         <div class="account-wrapper">
             <user-info-form-content
               :user-id="userDetailedInfo.id"

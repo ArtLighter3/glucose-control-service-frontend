@@ -3,6 +3,7 @@ import { DiaryEntryType, InsulinType } from '@/service/diaryService.ts'
 import type { CarbsUnit } from '@/service/patientProfileService.ts'
 import { GlucoseUnit } from '@/service/patientProfileService.ts'
 import type { Role } from '@/service/userService.ts'
+import { TemplateType } from '@/service/templateService.ts'
 
 interface EnumStringRepresentation {
   [key: string]: string;
@@ -53,6 +54,11 @@ const roleToRoleStringRepresentation: EnumStringRepresentation = {
   "ROLE_SUPERUSER": "Суперпользователь"
 };
 
+const templateTypeToURL: EnumStringRepresentation = {
+  "MEAL": "meals",
+  "MEDICATION": "medications",
+};
+
 function getOrEmptyString(mappedType: EnumStringRepresentation, key: string | null | undefined) {
   if (key === null || key === undefined) return "";
 
@@ -88,4 +94,8 @@ export function getGlucoseUnitName(glucoseUnit: GlucoseUnit | null | undefined) 
 
 export function getRoleName(role: Role | null | undefined) {
   return getOrEmptyString(roleToRoleStringRepresentation, role);
+}
+
+export function getTemplateTypeURLCodename(templateType: TemplateType | null | undefined) {
+  return getOrEmptyString(templateTypeToURL, templateType);
 }

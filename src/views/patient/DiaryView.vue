@@ -36,26 +36,6 @@ const { componentKey, refresh } = useRefreshComponent();
   display: flex;
   flex-direction: column;
 
-  .filter-wrapper {
-    display: flex;
-    align-self: center;
-    background-color: white;
-
-    @media (max-width: 1080px) {
-      padding-left: 2rem;
-    }
-
-    .filter-form {
-      display: flex;
-      flex-direction: column;
-
-      .filter-first-row {
-        display: flex;
-        flex-direction: row;
-      }
-    }
-  }
-
   .add-button-wrapper {
     position: fixed;
     bottom: 100px;

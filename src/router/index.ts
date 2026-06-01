@@ -13,6 +13,7 @@ import AttachedPatientsView from '@/views/doctor/AttachedPatientsView.vue'
 import CommonSettingsView from '@/views/CommonSettingsView.vue'
 import AdminMainView from '@/views/admin/AdminMainView.vue'
 import UsersView from '@/views/admin/UsersView.vue'
+import TemplatesView from '@/views/patient/TemplatesView.vue'
 
 
 const router = createRouter({
@@ -62,6 +63,11 @@ const router = createRouter({
           path: "home",
           name: "patient-home",
           component: HomeView
+        },
+        {
+          path: "templates",
+          name: "templates",
+          component: TemplatesView
         }
       ]
     },

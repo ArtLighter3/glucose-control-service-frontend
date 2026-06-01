@@ -26,10 +26,16 @@ import { useRedirectionToRolePanel } from '@/composables/useRedirectionToRolePan
       routeName: "insulin"
     },
     {
+      iconPath: "assets/icons/templates.svg",
+      text: "Еда и препараты",
+      routeName: "templates"
+    },
+    {
       iconPath: "assets/icons/settings.svg",
       text: "Настройки профиля",
       routeName: "patient-settings"
-    }]);
+    },
+  ]);
 
 const { isOpen, openModal, closeModal } = useModal();
 
