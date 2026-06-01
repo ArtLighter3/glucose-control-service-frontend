@@ -11,6 +11,7 @@ import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
 import {
   useIntegrationProfileFetchingAndSubmitting
 } from '@/composables/fetching/useIntegrationProfileFetchingAndSubmitting.ts'
+import { computed, onMounted, ref, watch } from 'vue'
 
   const props = defineProps({
     patientId: {
@@ -20,16 +21,57 @@ import {
   });
 
 
-  const { integrationProfile, fetchingError,
+  const { integrationProfile, fetch, fetchingError,
     loading, submit, submitting, success, fieldErrors, objectErrors, getValidationState }
     = useIntegrationProfileFetchingAndSubmitting(props.patientId);
+
+  const isEnabledConstant = ref(false);
+  const apiSecretConstant = ref<string | null>(null);
+  onMounted(async () => {
+    await fetch();
+    isEnabledConstant.value = integrationProfile.value.isNightscoutEnabled;
+    apiSecretConstant.value = integrationProfile.value.nightscoutApiSecret;
+  });
+  const submitAndShowHelpIfEnabled = async() => {
+    await submit();
+    if (success.value) {
+      isEnabledConstant.value = integrationProfile.value.isNightscoutEnabled;
+      apiSecretConstant.value = integrationProfile.value.nightscoutApiSecret;
+    }
+  }
+
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  const generalNightscoutUrl = computed(() => {
+    return `${baseUrl}/nightscout/${props.patientId}/api/v1`;
+  });
+  const xDripUrl = computed(() => {
+    const url = new URL(baseUrl);
+    return `${url.protocol}//${apiSecretConstant.value}@${url.host}/nightscout/${props.patientId}/api/v1`;
+  });
+
+  const isCopied = ref(false);
+  const copyToClipboard = async (textToCopy: string | null) => {
+    if (textToCopy === null) return;
+
+    try {
+      await navigator.clipboard.writeText(textToCopy);
+
+      isCopied.value = true;
+      setTimeout(() => {
+        isCopied.value = false
+      }, 2000);
+    } catch (error) {
+      console.error('Copy failed: ', error);
+    }
+  }
+
 </script>
 
 <template>
     <b-spinner v-if="loading" variant="success"/>
     <div class="integration-profile-form-wrapper" v-else>
       <h4 class="error-text" v-if="fetchingError">ОШИБКА ЗАГРУЗКИ ПРОФИЛЯ</h4>
-      <b-form class="integration-profile-form" v-else @submit.prevent="submit">
+      <b-form class="integration-profile-form" v-else @submit.prevent="submitAndShowHelpIfEnabled">
         <h2>Интеграция с другими приложениями</h2>
           <b-card class="form-group-wrapper">
               <form-transition-group>
@@ -66,6 +108,22 @@ import {
                     </span>
                   </b-form-invalid-feedback>
                 </b-form-group>
+                <div v-if="isEnabledConstant" class="help-text">
+                  <div class="app-urls">
+                    <h5>xDrip</h5>
+                    <span class="app-urls-item" @click="copyToClipboard(xDripUrl)">
+                      URL: {{ xDripUrl }}
+                    </span>
+                    <h5>AndroidAPS</h5>
+                    <span class="app-urls-item" @click="copyToClipboard(generalNightscoutUrl)">
+                      URL: {{ generalNightscoutUrl }}
+                    </span>
+                    <span class="app-urls-item"
+                          @click="copyToClipboard(apiSecretConstant)">
+                      Секретный ключ: {{ apiSecretConstant }}
+                    </span>
+                  </div>
+                </div>
               </form-transition-group>
           </b-card>
         <b-button class="update-integration-profile-btn"
@@ -111,6 +169,22 @@ h4 {
 
         .form-group-inner {
           margin-top: 1.1rem;
+        }
+      }
+
+      .help-text {
+        margin-top: 1.2rem;
+        display: flex;
+        flex-direction: column;
+
+        .app-urls {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+
+          .app-urls-item {
+            cursor: pointer;
+          }
         }
       }
     }

@@ -1,4 +1,4 @@
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { type AxiosResponse, isAxiosError } from 'axios'
 import { useSubmittableForm } from '@/composables/useSubmittableForm.ts'
 import type { ApiExceptionResponse } from '@/util/exception.ts'
@@ -17,7 +17,8 @@ export function useIntegrationProfileFetchingAndSubmitting(patientId: string) {
   const fetchingError = ref(false)
   const loading = ref(true)
   const integrationProfileDoesNotExist = ref(false)
-  onMounted(async () => {
+
+  const fetch = async () => {
     loading.value = true;
     try {
       fetchingError.value = false
@@ -29,7 +30,7 @@ export function useIntegrationProfileFetchingAndSubmitting(patientId: string) {
       }
     }
     loading.value = false
-  })
+  }
 
   const { submitting, success,
     fieldErrors, objectErrors, getValidationState}
@@ -63,6 +64,7 @@ export function useIntegrationProfileFetchingAndSubmitting(patientId: string) {
 
   return {
     integrationProfile,
+    fetch,
     fetchingError,
     loading,
     submit,
