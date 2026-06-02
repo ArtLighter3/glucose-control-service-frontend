@@ -1,6 +1,7 @@
 import apiClient from '@/service/apiClient.ts'
 import {type Page} from '@/util/pagination.ts'
 import { getTemplateTypeURLCodename } from '@/util/enumToStringLiterals.ts'
+import type { PortionType } from '@/service/diaryService.ts'
 
 export enum TemplateType {
   MEAL = 'MEAL',
@@ -16,8 +17,9 @@ export interface Meal extends Template {
 }
 
 export interface Medication extends Template {
-  milligramsInPortion: number,
-  defaultPortions: number
+  milligramsInPortion: number | null,
+  defaultPortions: number,
+  portionType: PortionType
 }
 
 const pageSize = import.meta.env.VITE_DEFAULT_FETCH_PAGE_SIZE;

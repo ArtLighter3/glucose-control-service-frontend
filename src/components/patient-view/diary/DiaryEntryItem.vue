@@ -11,7 +11,7 @@ import { ru } from 'date-fns/locale/ru'
 import {
   getCarbsUnitShortName,
   getGlucoseUnitName,
-  getInsulinTypeName, getMeasurementTypeName
+  getInsulinTypeName, getMeasurementTypeName, getPortionTypeShortName
 } from '@/util/enumToStringLiterals.ts'
 
 const props = defineProps<{
@@ -43,7 +43,7 @@ const unit = computed(() => {
       if (glucoseUnit !== null) return getGlucoseUnitName(glucoseUnit)
       return "";
     case DiaryEntryType.MEDICATION_ENTRY:
-      return ''
+      return getPortionTypeShortName((props.entry.entryInfo as MedicationEntry).portionType);
     case DiaryEntryType.INSULIN_ENTRY:
       return 'ед'
   }
@@ -74,6 +74,10 @@ const emit = defineEmits<{
         </div>
         <div v-else-if="entry.type === DiaryEntryType.MEDICATION_ENTRY" class="detail">
           {{ (entry.entryInfo as MedicationEntry).name }}
+          <div v-if="(entry.entryInfo as MedicationEntry).milligramsInPortion !== null">
+            ({{ (entry.entryInfo as MedicationEntry).milligramsInPortion * entry.entryInfo.value }}
+            мг)
+          </div>
         </div>
         <div v-else-if="entry.type === DiaryEntryType.GLUCOSE_ENTRY" class="detail">
           {{ getMeasurementTypeName((entry.entryInfo as GlucoseEntry).category) }}

@@ -16,6 +16,7 @@ import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
 import type { FieldErrors } from '@/util/exception.ts'
 import type { CarbsUnit } from '@/service/patientProfileService.ts'
 import { getCarbsUnitShortName } from '@/util/enumToStringLiterals.ts'
+import { useModal } from '@/composables/useModal.ts'
 
 const props = defineProps<{
   success: boolean,

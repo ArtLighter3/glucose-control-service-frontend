@@ -3,132 +3,150 @@ import {
   BForm,
   BFormGroup,
   BFormInput,
-  BFormInvalidFeedback
+  BFormInvalidFeedback, BFormSelect,
+  BFormSelectOption
 } from 'bootstrap-vue-next'
 import { onMounted, ref } from 'vue'
 import UpdateFormButtons from '@/components/UpdateFormButtons.vue'
 import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
 import type { FieldErrors } from '@/util/exception.ts'
 import type { Medication } from '@/service/templateService.ts'
+import { PortionType } from '@/service/diaryService.ts'
+import { getPortionTypeShortName } from '@/util/enumToStringLiterals.ts'
 
 const props = defineProps<{
-  success: boolean,
-  objectErrors: string[],
-  fieldErrors: FieldErrors,
-  submitting: boolean,
-  showUpdateForm: boolean,
+  success: boolean
+  objectErrors: string[]
+  fieldErrors: FieldErrors
+  submitting: boolean
+  showUpdateForm: boolean
   templateToUpdate?: Medication
 }>()
 
 const getValidationState = (fieldName: string) => {
-  if (props.success) return true;
-  if (props.fieldErrors[fieldName] && props.fieldErrors[fieldName].length > 0)
-    return false;
+  if (props.success) return true
+  if (props.fieldErrors[fieldName] && props.fieldErrors[fieldName].length > 0) return false
 
-  return null;
-};
+  return null
+}
 
 const medication = ref<Medication>({
-  name: "",
-  milligramsInPortion: 0.0,
+  name: '',
+  milligramsInPortion: null,
   defaultPortions: 1,
-});
+  portionType: PortionType.PILLS,
+})
 
 onMounted(() => {
   if (props.showUpdateForm && props.templateToUpdate !== undefined) {
-    medication.value = {...props.templateToUpdate};
+    medication.value = { ...props.templateToUpdate }
   }
-});
+})
 
 const emit = defineEmits<{
   (e: 'add', template: Medication): void
   (e: 'update', template: Medication): void
   (e: 'delete', name: string): void
-}>();
+}>()
 
 const submit = () => {
-  if (props.showUpdateForm) emit('update', medication.value);
-  else emit('add', medication.value);
-};
+  if (props.showUpdateForm) emit('update', medication.value)
+  else emit('add', medication.value)
+}
 </script>
 
 <template>
   <b-form class="entry-form" @submit.prevent="submit">
     <form-transition-group>
-    <h4 key="header">Препарат</h4>
-    <span
-      v-for="(objectError, index) in objectErrors"
-      :key="`error-${index}`"
-      class="error-text">{{ objectError }}
-    </span>
-    <b-form-group
+      <h4 key="header">Препарат</h4>
+      <span v-for="(objectError, index) in objectErrors" :key="`error-${index}`" class="error-text"
+        >{{ objectError }}
+      </span>
+      <b-form-group
         class="entry-form-group"
         key="name"
         id="name"
         label="Наименование"
         label-for="name-input"
         :state="getValidationState('name')"
-    >
-      <b-form-input
+      >
+        <b-form-input
           class="squared-input-field"
           id="name-input"
           key="name-input"
           type="text"
           v-model="medication.name"
-      />
-      <b-form-invalid-feedback>
-        <span v-for="(message, index) in fieldErrors.name" :key="index">
+        />
+        <b-form-invalid-feedback>
+          <span v-for="(message, index) in fieldErrors.name" :key="index">
             {{ message }}
-        </span>
-      </b-form-invalid-feedback>
-    </b-form-group>
-    <b-form-group
-      class="entry-form-group"
-      key="milligrams"
-      id="milligrams"
-      :label="`Вещества на порцию [миллиграмм]`"
-      label-for="milligrams-input"
-      :state="getValidationState('milligramsInPortion')"
-    >
-      <b-form-input
-        class="squared-input-field"
-        key="milligrams-input"
-        id="milligrams-input"
-        type="number"
-        v-model="medication.milligramsInPortion"
-      />
-      <b-form-invalid-feedback>
-        <span v-for="(message, index) in fieldErrors.milligramsInPortion" :key="index">
-          {{ message }}
-        </span>
-      </b-form-invalid-feedback>
-    </b-form-group>
-    <b-form-group
+          </span>
+        </b-form-invalid-feedback>
+      </b-form-group>
+      <b-form-group
         class="entry-form-group"
         key="default-portions"
         id="default-portions"
-        :label="`Стандартное количество порций`"
+        :label="`Стандартное количество`"
         label-for="default-portions-input"
         :state="getValidationState('defaultPortions')"
-    >
-        <b-form-input
-          class="squared-input-field"
-          key="default-portions-input"
-          id="default-portions-input"
-          type="number"
-          v-model="medication.defaultPortions"
-        />
-        <b-form-invalid-feedback>
+      >
+        <div class="d-flex">
+          <b-form-input
+            class="squared-input-field"
+            key="default-portions-input"
+            id="default-portions-input"
+            type="number"
+            v-model="medication.defaultPortions"
+          />
+          <b-form-select
+            class="squared-input-field"
+            id="portion-type-selector"
+            key="portion-type-selector"
+            v-model="medication.portionType"
+          >
+            <b-form-select-option
+              v-for="type in Object.entries(PortionType)"
+              :key="type[0]"
+              :value="type[0]"
+            >
+              {{ getPortionTypeShortName(type[1]) }}
+            </b-form-select-option>
+          </b-form-select>
+        </div>
+        <b-form-invalid-feedback class="d-flex">
           <span v-for="(message, index) in fieldErrors.defaultPortions" :key="index">
             {{ message }}
           </span>
         </b-form-invalid-feedback>
-    </b-form-group>
-    <update-form-buttons :submitting="submitting"
-                        :show-delete-button="showUpdateForm"
-                        @save="submit"
-                        @delete="$emit('delete', medication.name)"
-    />
+      </b-form-group>
+      <b-form-group
+        class="entry-form-group"
+        key="milligrams"
+        id="milligrams"
+        :label="`Вещества на шт. [миллиграмм]`"
+        label-for="milligrams-input"
+        :state="getValidationState('milligramsInPortion')"
+      >
+        <b-form-input
+          class="squared-input-field"
+          key="milligrams-input"
+          id="milligrams-input"
+          type="number"
+          v-model="medication.milligramsInPortion"
+        />
+        <b-form-invalid-feedback>
+          <span v-for="(message, index) in fieldErrors.milligramsInPortion" :key="index">
+            {{ message }}
+          </span>
+        </b-form-invalid-feedback>
+      </b-form-group>
+      <update-form-buttons
+        :submitting="submitting"
+        :show-delete-button="showUpdateForm"
+        @save="submit"
+        @delete="$emit('delete', medication.name)"
+      />
     </form-transition-group>
   </b-form>
 </template>

@@ -12,6 +12,17 @@ export enum MeasurementType {
   BEFORE_MEAL = "BEFORE_MEAL"
 }
 
+export enum PortionType {
+  PILLS = "PILLS",
+  DROPS = "DROPS",
+  INJECTIONS = "INJECTIONS",
+  UNITS = "UNITS",
+  DOSES = "DOSES",
+  MILLILITERS = "MILLILITERS",
+  TEASPOONS = "TEASPOONS",
+  TABLESPOONS = "TABLESPOONS"
+}
+
 export enum InsulinType {
   LONG = "LONG",
   SHORT_CARBS = "SHORT_CARBS",
@@ -57,7 +68,9 @@ export class DefaultInsulinEntry implements InsulinEntry {
 }
 
 export interface MedicationEntry extends DiaryEntry {
-  name: string
+  name: string,
+  portionType: PortionType,
+  milligramsInPortion: number | null
 }
 
 export class DefaultMedicationEntry implements MedicationEntry {
@@ -65,6 +78,8 @@ export class DefaultMedicationEntry implements MedicationEntry {
   notes = null;
   value = 0.0;
   name = "";
+  portionType = PortionType.UNITS;
+  milligramsInPortion = null;
 }
 
 export interface CarbsEntry extends DiaryEntry {

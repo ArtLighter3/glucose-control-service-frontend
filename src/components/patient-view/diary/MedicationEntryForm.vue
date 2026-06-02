@@ -1,18 +1,28 @@
 <script setup lang="ts">
 import {
-  DefaultMedicationEntry, type MedicationEntry
+  DefaultMedicationEntry,
+  type MedicationEntry, PortionType
 } from '@/service/diaryService.ts'
 import {
+  BButton,
   BForm,
   BFormGroup,
   BFormInput,
-  BFormInvalidFeedback
+  BFormInvalidFeedback,
+  BFormSelect,
+  BFormSelectOption
 } from 'bootstrap-vue-next'
 import { onMounted, ref } from 'vue'
 import { useFormattedDate } from '@/composables/useFormattedDate.ts'
 import UpdateFormButtons from '@/components/UpdateFormButtons.vue'
 import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
 import type { FieldErrors } from '@/util/exception.ts'
+import { useModal } from '@/composables/useModal.ts'
+import BaseModal from '@/components/BaseModal.vue'
+import { type Medication, TemplateType } from '@/service/templateService.ts'
+import { useRoute } from 'vue-router'
+import TemplateChooser from '@/components/patient-view/templates/TemplateChooser.vue'
+import { getPortionTypeShortName } from '@/util/enumToStringLiterals.ts'
 
 const props = defineProps<{
   success: boolean,
@@ -42,7 +52,6 @@ onMounted(() => {
   }
 });
 
-
 const emit = defineEmits<{
   (e: 'add', entry: MedicationEntry): void
   (e: 'update', entry: MedicationEntry): void
@@ -54,6 +63,17 @@ const submit = () => {
   if (props.showUpdateForm) emit('update', medicationEntry.value);
   else emit('add', medicationEntry.value);
 };
+
+const id = ref(useRoute().params.id as string);
+const { isOpen: isChooserOpen, closeModal: closeChooser, openModal: openChooser } = useModal();
+const medicationChosen = (chosen: Medication) => {
+  medicationEntry.value.value = chosen.defaultPortions;
+  medicationEntry.value.name = chosen.name;
+  medicationEntry.value.milligramsInPortion = chosen.milligramsInPortion;
+  medicationEntry.value.portionType = chosen.portionType;
+  closeChooser();
+}
+
 </script>
 
 <template>
@@ -72,36 +92,85 @@ const submit = () => {
         label-for="name-input"
         :state="getValidationState('name')"
       >
-        <b-form-input
-          class="squared-input-field"
-          id="name-input"
-          key="name-input"
-          type="text"
-          v-model="medicationEntry.name"
-        />
-        <b-form-invalid-feedback>
-        <span v-for="(message, index) in fieldErrors.name" :key="index">
-          {{ message }}
-        </span>
+        <div class="d-flex">
+          <b-form-input
+            class="squared-input-field"
+            id="name-input"
+            key="name-input"
+            type="text"
+            v-model="medicationEntry.name"
+          />
+          <b-button
+            variant="outline-success"
+            squared
+            @click="openChooser"
+          >
+            Препараты
+          </b-button>
+        </div>
+        <b-form-invalid-feedback class="d-flex">
+          <span v-for="(message, index) in fieldErrors.name" :key="index">
+            {{ message }}
+          </span>
         </b-form-invalid-feedback>
       </b-form-group>
     <b-form-group
       class="entry-form-group"
       key="value"
       id="value"
-      label="Дозировка [миллиграмм]"
+      label="Количество"
       label-for="value-input"
       :state="getValidationState('value')"
     >
+      <div class="d-flex">
+        <b-form-input
+          class="squared-input-field"
+          key="value-input"
+          id="value-input"
+          type="number"
+          v-model="medicationEntry.value"
+        />
+        <b-form-select
+          class="squared-input-field"
+          id="portion-type-selector"
+          key="portion-type-selector"
+          v-model="medicationEntry.portionType"
+        >
+          <b-form-select-option
+            v-for="type in Object.entries(PortionType)"
+            :key="type[0]"
+            :value="type[0]"
+          >
+            {{ getPortionTypeShortName(type[1]) }}
+          </b-form-select-option>
+        </b-form-select>
+      </div>
+      <b-form-invalid-feedback class="d-flex">
+        <span v-for="(message, index) in fieldErrors.value" :key="index">
+          {{ message }}
+        </span>
+        <span v-for="(message, index) in fieldErrors.portionType" :key="`${index}-type`">
+          {{ message }}
+        </span>
+      </b-form-invalid-feedback>
+    </b-form-group>
+    <b-form-group
+        class="entry-form-group"
+        key="milligrams"
+        id="milligrams"
+        label="Вещества в шт. [миллиграмм]"
+        label-for="milligrams-input"
+        :state="getValidationState('milligramsInPortion')"
+    >
       <b-form-input
         class="squared-input-field"
-        key="value-input"
-        id="value-input"
+        key="milligrams-input"
+        id="milligrams-input"
         type="number"
-        v-model="medicationEntry.value"
+        v-model="medicationEntry.milligramsInPortion"
       />
       <b-form-invalid-feedback>
-        <span v-for="(message, index) in fieldErrors.value" :key="index">
+        <span v-for="(message, index) in fieldErrors.milligramsInPortion" :key="index">
           {{ message }}
         </span>
       </b-form-invalid-feedback>
@@ -156,6 +225,13 @@ const submit = () => {
     />
     </form-transition-group>
   </b-form>
+  <base-modal :is-open="isChooserOpen" @close="closeChooser" title="Препараты">
+    <template-chooser
+      :patient-id="id"
+      :type="TemplateType.MEDICATION"
+      @choose="medicationChosen($event as Medication)"
+    />
+  </base-modal>
 </template>
 
 <style scoped>

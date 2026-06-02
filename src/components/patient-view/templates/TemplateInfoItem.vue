@@ -5,11 +5,12 @@ import {
   type Template,
   TemplateType
 } from '@/service/templateService.ts'
+import { getPortionTypeShortName } from '../../../util/enumToStringLiterals.ts'
 
 const props = defineProps<{
   template: Template,
   type: TemplateType,
-  showAddButton?: boolean
+  showAddButton?: boolean,
 }>()
 
 const emit = defineEmits<{
@@ -25,10 +26,16 @@ const emit = defineEmits<{
         <div v-if="type === TemplateType.MEAL" class="carbs detail">
           Углеводы: {{ (template as Meal).carbsPer100Grams }} г
         </div>
-        <div v-else-if="type === TemplateType.MEDICATION" class="milligrams detail">
-          {{ (template as Medication).milligramsInPortion }} мг в порции
+        <div v-else-if="type === TemplateType.MEDICATION" class="detail">
+          <div class="d-flex g-1">
+            <span>{{ (template as Medication).defaultPortions }}
+              {{getPortionTypeShortName((template as Medication).portionType)}}
+            </span>
+            <span>, {{ (template as Medication).milligramsInPortion }} мг в шт.</span>
+          </div>
         </div>
     </div>
+
   </div>
 </template>
 

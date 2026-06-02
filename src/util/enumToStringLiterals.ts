@@ -1,5 +1,5 @@
 import type { MeasurementType } from '@/service/diaryService.ts'
-import { DiaryEntryType, InsulinType } from '@/service/diaryService.ts'
+import { DiaryEntryType, InsulinType, PortionType } from '@/service/diaryService.ts'
 import type { CarbsUnit } from '@/service/patientProfileService.ts'
 import { GlucoseUnit } from '@/service/patientProfileService.ts'
 import type { Role } from '@/service/userService.ts'
@@ -59,6 +59,17 @@ const templateTypeToURL: EnumStringRepresentation = {
   "MEDICATION": "medications",
 };
 
+const portionTypeToShortStringRepresentation: EnumStringRepresentation = {
+  "PILLS": "табл.",
+  "DROPS": "капли",
+  "INJECTIONS": "впрыски",
+  "UNITS": "ед.",
+  "DOSES": "дозы",
+  "MILLILITERS": "мл",
+  "TEASPOONS": "чайные ложки",
+  "TABLESPOONS": "ст. ложки"
+}
+
 function getOrEmptyString(mappedType: EnumStringRepresentation, key: string | null | undefined) {
   if (key === null || key === undefined) return "";
 
@@ -98,4 +109,8 @@ export function getRoleName(role: Role | null | undefined) {
 
 export function getTemplateTypeURLCodename(templateType: TemplateType | null | undefined) {
   return getOrEmptyString(templateTypeToURL, templateType);
+}
+
+export function getPortionTypeShortName(portionType: PortionType | null | undefined) {
+  return getOrEmptyString(portionTypeToShortStringRepresentation, portionType);
 }

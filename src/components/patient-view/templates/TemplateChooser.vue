@@ -1,59 +1,46 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import BaseModal from '@/components/BaseModal.vue'
-import { BSpinner, BPagination } from 'bootstrap-vue-next'
-import { watch } from 'vue'
+import { BButton, BPagination, BSpinner } from 'bootstrap-vue-next'
 import SearchField from '@/components/SearchField.vue'
 import { useModal } from '@/composables/useModal'
 import { useTemplatesFetching } from '@/composables/fetching/useTemplatesFetching.ts'
-import type { Template, TemplateType } from '@/service/templateService.ts'
+import { type Template, TemplateType } from '@/service/templateService.ts'
 import TemplateInfoList from '@/components/patient-view/templates/TemplateInfoList.vue'
 import TemplateFormContent from '@/components/patient-view/templates/TemplateFormContent.vue'
 
 const props = defineProps<{
   patientId: string,
-  type: TemplateType,
-}>();
+  type: TemplateType
+}>()
 
-const { loading, templates, page, totalElements,
-  pageSize, fetchAll, search, turnPage }
-  = useTemplatesFetching(props.patientId, props.type);
+const { loading, templates, page, totalElements, pageSize, fetchAll, search, turnPage } =
+  useTemplatesFetching(props.patientId, props.type)
 
 onMounted(async () => {
-  await fetchAll();
-});
+  await fetchAll()
+})
 
-const currentQuery = ref('');
+const currentQuery = ref('')
 const searchTemplates = async (newQuery: string) => {
-  currentQuery.value = newQuery;
-  await search(currentQuery.value);
-};
-
-watch((page), async (newPage) => {
-  await turnPage(currentQuery.value);
-});
+  currentQuery.value = newQuery
+  await search(currentQuery.value)
+}
 
 const { isOpen, openModal, closeModal } = useModal();
-const templateToUpdate = ref<Template>({
-  name: ""
-});
-const openTemplateUpdateForm = (template: Template) => {
-  templateToUpdate.value = template;
-  openModal();
-};
 
-// const emit = defineEmits<{
-//   (e: 'patient:detach', patientInfo: PatientInfo): void
-// }>();
+watch(page, async (newPage) => {
+  await turnPage(currentQuery.value)
+})
+
+const emit = defineEmits<{
+  (e: 'choose', template: Template): void
+}>();
 </script>
 
 <template>
   <div class="template-list-wrapper">
-    <search-field
-      class="align-center"
-      :loading="false"
-      @search="searchTemplates($event)"
-    />
+    <search-field class="align-center" :loading="false" @search="searchTemplates($event)" />
     <div class="scrollable-list">
       <b-spinner v-if="loading" variant="success" />
       <template-info-list
@@ -61,24 +48,27 @@ const openTemplateUpdateForm = (template: Template) => {
         :show-add-button="false"
         :type="type"
         :templates="templates"
-        @template:click="openTemplateUpdateForm($event)"
+        @template:click="$emit('choose', $event)"
       />
     </div>
-    <b-pagination v-if="totalElements > pageSize"
+    <b-pagination
+      v-if="totalElements > pageSize"
       class="pages-wrapper"
       v-model="page"
       :total-rows="totalElements"
       :per-page="pageSize"
-      size="lg"
+      size="md"
       align="center"
     />
+    <b-button variant="outline-success" class="add-btn" squared size="lg" @click="openModal">
+      Добавить нов.
+    </b-button>
     <base-modal :is-open="isOpen" @close="closeModal" title="">
       <template-form-content
         :patient-id="patientId"
         :template-type="type"
-        :show-update-form="true"
-        :template-to-update="templateToUpdate"
-        @templates:updated="turnPage(currentQuery)"
+        :show-update-form="false"
+        @templates:updated="closeModal(); turnPage(currentQuery)"
       />
     </base-modal>
   </div>
@@ -99,12 +89,12 @@ const openTemplateUpdateForm = (template: Template) => {
 }
 
 .align-center {
-    align-self: center;
-    border-color: var(--color-background-alt);
+  align-self: center;
+  border-color: var(--color-background-alt);
 }
 
 .scrollable-list {
-  height: 60vh;
+  height: 50vh;
   overflow-y: auto;
 }
 </style>
