@@ -2,6 +2,7 @@ import apiClient from '@/service/apiClient.ts'
 import {type Page} from '@/util/pagination.ts'
 import { getTemplateTypeURLCodename } from '@/util/enumToStringLiterals.ts'
 import type { PortionType } from '@/service/diaryService.ts'
+import type { CarbsUnit } from '@/service/patientProfileService.ts'
 
 export enum TemplateType {
   MEAL = 'MEAL',
@@ -22,10 +23,23 @@ export interface Medication extends Template {
   portionType: PortionType
 }
 
+export interface MealWeights {
+  [key: string]: number
+}
+
+export interface CarbsResult {
+  overallCarbs: number,
+  carbsUnit: CarbsUnit
+}
+
 const pageSize = import.meta.env.VITE_DEFAULT_FETCH_PAGE_SIZE;
 
 export async function postTemplate(patientId: string, template: Template, type: TemplateType) {
   return apiClient.post<Template>(getTemplateURL(patientId, type), template);
+}
+
+export async function calculateCarbs(patientId: string, mealWeights: MealWeights) {
+  return apiClient.post<CarbsResult>(getTemplateCalcURL(patientId, TemplateType.MEAL), mealWeights);
 }
 
 export async function putTemplate(patientId: string, template: Template, type: TemplateType) {
@@ -66,6 +80,10 @@ function getTemplateURL(patientId: string, templateType: TemplateType) {
 
 function getTemplateSearchURL(patientId: string, templateType: TemplateType) {
   return `/patients/${patientId}/templates/${getTemplateTypeURLCodename(templateType)}/search`;
+}
+
+function getTemplateCalcURL(patientId: string, templateType: TemplateType) {
+  return `/patients/${patientId}/templates/${getTemplateTypeURLCodename(templateType)}/calculate`;
 }
 
 

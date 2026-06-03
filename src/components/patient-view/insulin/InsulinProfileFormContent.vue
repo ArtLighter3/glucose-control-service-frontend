@@ -46,27 +46,27 @@ const updateTimeSlot = (oldTimeValue: string, newTimeValue: string | undefined,
                         map: {[key: string]: number}) => {
   if (newTimeValue === undefined) return;
   const propertyValue = map[oldTimeValue]
-  if (propertyValue === undefined) return
+  if (propertyValue === undefined) return;
 
-  delete map[oldTimeValue]
-  map[newTimeValue] = propertyValue
+  delete map[oldTimeValue];
+  map[newTimeValue] = propertyValue;
 };
 const updateMapValue = (timeSlot: string, newValue: number | undefined,
                         map: {[key: string]: number}) => {
   if (newValue === undefined) return;
-  map[timeSlot] = newValue
+  map[timeSlot] = newValue;
 };
 const handleRatiosTimeSlotUpdate = (oldTimeValue: string, newTimeValue: string | undefined) => {
-  updateTimeSlot(oldTimeValue, newTimeValue, insulinProfile.value.ratiosByTime)
+  updateTimeSlot(oldTimeValue, newTimeValue, insulinProfile.value.ratiosByTime);
 };
 const handleRatiosValueUpdate = (timeSlot: string, newValue: number | undefined) => {
-  updateMapValue(timeSlot, newValue, insulinProfile.value.ratiosByTime)
+  updateMapValue(timeSlot, newValue, insulinProfile.value.ratiosByTime);
 };
 const handleFactorsTimeSlotUpdate = (oldTimeValue: string, newTimeValue: string | undefined) => {
-  updateTimeSlot(oldTimeValue, newTimeValue, insulinProfile.value.factorsByTime)
+  updateTimeSlot(oldTimeValue, newTimeValue, insulinProfile.value.factorsByTime);
 };
 const handleFactorsValueUpdate = (timeSlot: string, newValue: number | undefined) => {
-  updateMapValue(timeSlot, newValue, insulinProfile.value.factorsByTime)
+  updateMapValue(timeSlot, newValue, insulinProfile.value.factorsByTime);
 };
 
 const deleteRatioByTime = (timeSlot: string) => {

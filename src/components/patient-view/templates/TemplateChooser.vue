@@ -28,6 +28,19 @@ const searchTemplates = async (newQuery: string) => {
 }
 
 const { isOpen, openModal, closeModal } = useModal();
+const showUpdateForm = ref(false);
+const templateToUpdate = ref<Template>({
+  name: ""
+});
+const openAddForm = () => {
+  showUpdateForm.value = false;
+  openModal();
+};
+const openUpdateForm = (clickedTemplate: Template) => {
+  templateToUpdate.value = {... clickedTemplate};
+  showUpdateForm.value = true;
+  openModal();
+};
 
 watch(page, async (newPage) => {
   await turnPage(currentQuery.value)
@@ -43,12 +56,12 @@ const emit = defineEmits<{
     <search-field class="align-center" :loading="false" @search="searchTemplates($event)" />
     <div class="scrollable-list">
       <b-spinner v-if="loading" variant="success" />
-      <template-info-list
-        v-else
-        :show-add-button="false"
+      <template-info-list v-else
+        :show-choose-button="true"
         :type="type"
         :templates="templates"
-        @template:click="$emit('choose', $event)"
+        @template:click="openUpdateForm($event)"
+        @template:choose:click="$emit('choose', $event)"
       />
     </div>
     <b-pagination
@@ -60,14 +73,15 @@ const emit = defineEmits<{
       size="md"
       align="center"
     />
-    <b-button variant="outline-success" class="add-btn" squared size="lg" @click="openModal">
+    <b-button variant="outline-success" class="add-btn" squared size="lg" @click="openAddForm">
       Добавить нов.
     </b-button>
     <base-modal :is-open="isOpen" @close="closeModal" title="">
       <template-form-content
         :patient-id="patientId"
         :template-type="type"
-        :show-update-form="false"
+        :show-update-form="showUpdateForm"
+        :template-to-update="templateToUpdate"
         @templates:updated="closeModal(); turnPage(currentQuery)"
       />
     </base-modal>

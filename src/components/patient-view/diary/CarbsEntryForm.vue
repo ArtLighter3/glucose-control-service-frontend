@@ -4,6 +4,7 @@ import {
   DefaultCarbsEntry
 } from '@/service/diaryService.ts'
 import {
+  BButton,
   BForm,
   BFormGroup,
   BFormInput,
@@ -17,6 +18,16 @@ import type { FieldErrors } from '@/util/exception.ts'
 import type { CarbsUnit } from '@/service/patientProfileService.ts'
 import { getCarbsUnitShortName } from '@/util/enumToStringLiterals.ts'
 import { useModal } from '@/composables/useModal.ts'
+import {
+  calculateCarbs,
+  type Meal,
+  type MealWeights,
+  TemplateType
+} from '@/service/templateService.ts'
+import TemplateChooser from '@/components/patient-view/templates/TemplateChooser.vue'
+import BaseModal from '@/components/BaseModal.vue'
+import { useRoute } from 'vue-router'
+import MealWeightsList from '@/components/patient-view/templates/MealWeightsList.vue'
 
 const props = defineProps<{
   success: boolean,
@@ -58,6 +69,34 @@ const submit = () => {
   if (props.showUpdateForm) emit('update', carbsEntry.value);
   else emit('add', carbsEntry.value);
 };
+
+const { isOpen: isChooserOpen, closeModal: closeChooser, openModal: openChooser } = useModal();
+const id = ref(useRoute().params.id as string);
+const chosenMeals = ref<Meal[]>([]);
+const mealChosen = (chosen: Meal) => {
+  chosenMeals.value.push(chosen);
+};
+
+const calcLoading = ref(false);
+const setFromMeals = async (mealWeights: MealWeights) => {
+  // let carbs = 0;
+  // for (const weightedMeal in weightedMeals) {
+  //   carbs += weightedMeal.weight / weightedMeal.mealInfo.carbsPer100Grams;
+  // }
+  //
+  // carbsEntry.value.value = carbs;
+  try {
+    calcLoading.value = true;
+    const response = await calculateCarbs(id.value, mealWeights);
+    calcLoading.value = false;
+
+    carbsEntry.value.value = response.data.overallCarbs;
+    closeChooser();
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 </script>
 
 <template>
@@ -76,13 +115,22 @@ const submit = () => {
       label-for="value-input"
       :state="getValidationState('value')"
     >
-      <b-form-input
-        class="squared-input-field"
-        key="value-input"
-        id="value-input"
-        type="number"
-        v-model="carbsEntry.value"
-      />
+      <div class="d-flex">
+        <b-form-input
+          class="squared-input-field"
+          key="value-input"
+          id="value-input"
+          type="number"
+          v-model="carbsEntry.value"
+        />
+        <b-button
+          variant="outline-success"
+          squared
+          @click="openChooser"
+        >
+          Еда
+        </b-button>
+      </div>
       <b-form-invalid-feedback>
         <span v-for="(message, index) in fieldErrors.value" :key="index">
           {{ message }}
@@ -139,6 +187,25 @@ const submit = () => {
     />
     </form-transition-group>
   </b-form>
+  <base-modal :is-open="isChooserOpen" @close="closeChooser" title="">
+    <div class="text-center d-flex flex-column gap-2">
+      <h6>Доступная еда</h6>
+      <div class="scrollable-area">
+        <template-chooser
+          :patient-id="id"
+          :type="TemplateType.MEAL"
+          @choose="mealChosen($event as Meal)"
+        />
+      </div>
+      <h6>Настройка веса</h6>
+      <div class="scrollable-area">
+        <meal-weights-list :meals="chosenMeals"
+                           @delete="chosenMeals.splice($event, 1)"
+                           @calculate="setFromMeals($event)"
+        />
+      </div>
+    </div>
+  </base-modal>
 </template>
 
 <style scoped>
@@ -150,5 +217,13 @@ const submit = () => {
   h4 {
     text-align: center;
   }
+}
+
+.scrollable-area {
+  height: 40vh;
+  overflow-y: auto;
+  border-style: solid;
+  border-width: 1px;
+  border-color: var(--color-background-alt)
 }
 </style>

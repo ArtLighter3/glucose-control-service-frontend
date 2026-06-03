@@ -78,7 +78,7 @@ export class DefaultMedicationEntry implements MedicationEntry {
   notes = null;
   value = 0.0;
   name = "";
-  portionType = PortionType.UNITS;
+  portionType = PortionType.PILLS;
   milligramsInPortion = null;
 }
 

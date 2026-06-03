@@ -6,12 +6,12 @@ import TemplateInfoItem from '@/components/patient-view/templates/TemplateInfoIt
 const props = defineProps<{
   templates: Template[],
   type: TemplateType,
-  showAddButton: boolean
+  showChooseButton: boolean
 }>();
 
 const emit = defineEmits<{
   (e: 'template:click', template: Template): void,
-  (e: 'template:add', template: Template): void
+  (e: 'template:choose:click', template: Template): void
 }>();
 </script>
 
@@ -24,8 +24,8 @@ const emit = defineEmits<{
                           :template="template"
                           :type="type"
                           @click="$emit('template:click', template)"
-                          @add:click="$emit('template:add', template)"
-                          :show-add-button="showAddButton"
+                          @choose:click="$emit('template:choose:click', template)"
+                          :show-choose-button="showChooseButton"
       />
     </form-transition-group>
   </div>
