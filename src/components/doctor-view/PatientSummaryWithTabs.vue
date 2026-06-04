@@ -3,15 +3,14 @@ import { ref } from 'vue'
 import { BTabs, BTab, BSpinner } from 'bootstrap-vue-next'
 import RecentDiaryInfoPanel from '@/components/patient-view/RecentDiaryInfoPanel.vue'
 import DiaryEntriesList from '@/components/patient-view/diary/DiaryEntriesList.vue'
-import GlucoseDistributionChart from '@/components/patient-view/GlucoseDistributionChart.vue'
 import DateFilterForm from '@/components/DateFilterForm.vue'
 import { useRecentActivityFetching } from '@/composables/fetching/useRecentActivityFetching.ts'
 import type { PatientInfo } from '@/service/doctorService'
 import { useDiaryEntriesFetching } from '@/composables/fetching/useDiaryEntriesFetching.ts'
 import { onMounted } from 'vue'
-import { useGlucoseDistributionFetching } from '@/composables/fetching/useGlucoseDistributionFetching'
 import { useDatePeriodFilter } from '@/composables/useDatePeriodFilter'
 import { useInfiniteScroll } from '@vueuse/core'
+import SelectableAnalytics from '@/components/patient-view/SelectableAnalytics.vue'
 
 const props = defineProps<{
   patientInfo: PatientInfo
@@ -21,22 +20,21 @@ const props = defineProps<{
 //выбирали, когда загрузить, иначе вот тут сразу два запроса делается, когда может быть нужен один.
 const { recentActivity, fetchActivity, loading: activityLoading }
   = useRecentActivityFetching(props.patientInfo.patientId);
-const { distribution, fetchDistribution, loading: distributionLoading }
-  = useGlucoseDistributionFetching(props.patientInfo.patientId);
 const { loading: entriesLoading, entries, reloadWithFilter, loadMore, fetchAll, hasNext }
   = useDiaryEntriesFetching(props.patientInfo.patientId);
 
-const { fromFormatted: diaryFromString, toFormatted: diaryToString, from: diaryFrom, to: diaryTo }
-  = useDatePeriodFilter();
+const { fromFormatted: diaryFromString, toFormatted: diaryToString, from: diaryFrom, to: diaryTo,
+  saveFilterValues: saveDiaryFilterValues }
+  = useDatePeriodFilter("diary-from", "diary-to");
 const diaryDateFilterRef = ref<InstanceType<typeof DateFilterForm> | null>(null);
-const { fromFormatted: statsFromString, toFormatted: statsToString, from: statsFrom, to: statsTo }
-  = useDatePeriodFilter();
-const statsDateFilterRef = ref<InstanceType<typeof DateFilterForm> | null>(null);
 
 const refreshPatientDiary = async () => {
   const filtered = diaryDateFilterRef.value !== null ? diaryDateFilterRef.value.filtered : false;
-    if (filtered) await reloadWithFilter(diaryFrom.value, diaryTo.value);
-    else await fetchAll();
+  if (filtered) {
+    await reloadWithFilter(diaryFrom.value, diaryTo.value);
+    saveDiaryFilterValues();
+  }
+  else await fetchAll();
 };
 const entryListRef = ref(null);
 const { reset } = useInfiniteScroll(
@@ -52,18 +50,9 @@ const { reset } = useInfiniteScroll(
   }
 );
 
-const refreshDistribution = async () => {
-  //const filtered = statsDateFilterRef.value !== null ? statsDateFilterRef.value.filtered : false;
-  await fetchDistribution(statsFrom.value, statsTo.value);
-};
-
 onMounted(async () => {
   await fetchActivity();
-
-  const today = new Date();
-  const lastWeek = new Date();
-  lastWeek.setDate(lastWeek.getDate() - 7);
-  await fetchDistribution(lastWeek, today);
+  await refreshPatientDiary();
 });
 </script>
 
@@ -84,7 +73,7 @@ onMounted(async () => {
           />
         </div>
       </b-tab>
-      <b-tab title="Дневник измерений" lazy>
+      <b-tab title="Дневник" lazy>
       <div class="diary-wrapper">
           <date-filter-form ref="diaryDateFilterRef"
                   v-model:from="diaryFromString"
@@ -100,14 +89,8 @@ onMounted(async () => {
           </div>
       </div>
       </b-tab>
-      <b-tab title="Визуализация измерений" lazy>
-        <date-filter-form ref="statsDateFilterRef"
-                          v-model:from="statsFromString"
-                          v-model:to="statsToString"
-                          @apply="refreshDistribution"
-                          :show-cancel-button="false"
-        />
-        <glucose-distribution-chart :distribution="distribution" />
+      <b-tab title="Визуализация" lazy>
+        <selectable-analytics :patient-id="patientInfo.patientId"/>
       </b-tab>
     </b-tabs>
   </div>

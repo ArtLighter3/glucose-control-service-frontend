@@ -14,6 +14,7 @@ import CommonSettingsView from '@/views/CommonSettingsView.vue'
 import AdminMainView from '@/views/admin/AdminMainView.vue'
 import UsersView from '@/views/admin/UsersView.vue'
 import TemplatesView from '@/views/patient/TemplatesView.vue'
+import AnalyticsView from '@/views/patient/AnalyticsView.vue'
 
 
 const router = createRouter({
@@ -68,6 +69,11 @@ const router = createRouter({
           path: "templates",
           name: "templates",
           component: TemplatesView
+        },
+        {
+          path: "analytics",
+          name: "analytics",
+          component: AnalyticsView
         }
       ]
     },

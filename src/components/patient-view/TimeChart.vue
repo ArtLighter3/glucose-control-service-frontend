@@ -19,8 +19,6 @@ import 'chartjs-adapter-luxon'
 import { GlucoseUnit } from '@/service/patientProfileService.ts'
 import { getGlucoseUnitName } from '@/util/enumToStringLiterals.ts'
 
-type TimeRange = 'day' | 'month' | 'week'
-
 ChartJS.register(TimeScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const props = defineProps<{
@@ -30,60 +28,8 @@ const props = defineProps<{
   highGlucose?: number
   lowGlucose?: number
   hypoGlucose?: number
-  timeRange: TimeRange
-  // chartOptions: ChartOptions<'line'>;
 }>();
 const fontSize = ref(16);
-
-// const maxGlucose = computed(() => {
-//   return (props.hyperGlucose !== undefined && props.hyperGlucose !== null)
-//     ? props.hyperGlucose + 2 : 40;
-// });
-const xMin = computed(() => {
-  switch (props.timeRange) {
-    case 'day':
-      return '00:00'
-    case 'week':
-//       const dayWeekAgo = new Date();
-//       dayWeekAgo.setDate(dayWeekAgo.getDate() - 7);
-//     //return format(dayWeekAgo, 'yyyy-MM-dd HH:mm:ss');
-    //       return DateTime.fromISO(dayWeekAgo.toISOString());
-      return 'Mon'
-    case 'month':
-//       const dayMonthAgo = new Date();
-//       dayMonthAgo.setDate(dayMonthAgo.getDate() - 30);
-    //       return DateTime.fromISO(dayMonthAgo.toISOString());
-      return '1';
-  }
-  return '1';
-});
-const xMax = computed(() => {
-  switch (props.timeRange) {
-    case 'day':
-      return '23:59';
-    case 'week':
-      return 'Sun';
-  }
-  return '31';
-});
-const xFormat = computed(() => {
-  switch (props.timeRange) {
-    case 'day':
-      return 'HH:mm';
-    case 'week':
-      return 'ccc';
-  }
-  return 'd';
-});
-const xUnit = computed(() => {
-  switch (props.timeRange) {
-    case 'day':
-      return 'hour';
-    case 'week':
-      return 'week';
-  }
-  return 'month';
-});
 
 const data = computed((): ChartData<'line'> => {
   return {
@@ -112,15 +58,15 @@ const options = computed((): ChartOptions<'line'> => {
       x: {
         type: 'time',
         time: {
-          unit: xUnit.value,
-          isoWeekday: true,
-          displayFormats: {
-            hour: xFormat.value,
-          },
+          unit: 'day',
+        //   isoWeekday: true,
+        //   displayFormats: {
+        //     hour: xFormat.value,
+        //   },
         },
         title: {
           display: true,
-          text: 'Время',
+          text: 'День',
           color: '#000',
           font: {
             size: fontSize.value,
@@ -132,8 +78,8 @@ const options = computed((): ChartOptions<'line'> => {
             size: fontSize.value,
           },
         },
-        min: xMin.value,
-        max: xMax.value,
+        // min: xMin.value,
+        // max: xMax.value,
       },
       y: {
         type: 'linear',
@@ -202,24 +148,6 @@ const options = computed((): ChartOptions<'line'> => {
               color: 'rgba(0, 0, 0, 0.5)',
             },
           },
-          // highGlucose: {
-          //   type: 'line',
-          //   scaleID: 'y',
-          //   value: props.highGlucose,
-          //   borderColor: 'black',
-          //   borderWidth: 1,
-          //   label: {
-          //     content: 'Целевой диапазон',
-          //     position: 'end',
-          //   },
-          // },
-          // lowGlucose: {
-          //   type: 'line',
-          //   scaleID: 'y',
-          //   value: props.lowGlucose,
-          //   borderColor: 'black',
-          //   borderWidth: 1,
-          // },
           hypoGlucose: {
             type: 'line',
             scaleID: 'y',

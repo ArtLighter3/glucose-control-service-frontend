@@ -14,7 +14,8 @@ const id = ref(useRoute().params.id as string);
 
 const { patientProfile } = usePatientProfileFetching(id.value);
 
-const { recentActivity, fetchActivity, loading: activityLoading } = useRecentActivityFetching(id.value);
+const { recentActivity, fetchActivity, loading: activityLoading }
+  = useRecentActivityFetching(id.value);
 onMounted(async () => {
   await fetchActivity();
 });
@@ -61,12 +62,19 @@ onMounted(async () => {
   padding: 1rem;
   gap: 3rem;
 
+  @media (max-width: 1080px) {
+    padding-left: 3.5rem;
+  }
+
   .chart-wrapper {
     width: 70%;
+    position: relative;
+    overflow-x: auto;
     flex-grow: 1;
 
     @media (max-width: 1080px) {
-      width: 85%;
+      width: 90vw;
+      height: 100vh;
     }
   }
 

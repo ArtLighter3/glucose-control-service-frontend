@@ -1,14 +1,13 @@
 import { useFormattedDate } from '@/composables/useFormattedDate.ts'
-import { ref, watch } from 'vue'
 
-export function useDatePeriodFilter() {
-  const defaultFromString = localStorage.getItem("diary-from");
+export function useDatePeriodFilter(fromStorageVarName: string, toStorageVarName: string) {
+  const defaultFromString = localStorage.getItem(fromStorageVarName);
   const defaultFrom = defaultFromString !== null ? new Date(defaultFromString) : new Date();
   if (defaultFromString === null) {
     defaultFrom.setDate(defaultFrom.getDate() - 7);
   }
 
-  const defaultToString = localStorage.getItem("diary-to");
+  const defaultToString = localStorage.getItem(toStorageVarName);
   const defaultTo = defaultToString !== null ? new Date(defaultToString) : new Date();
 
   const { dateISOString: fromISOString, formattedDate: fromFormatted, date: from }
@@ -17,8 +16,8 @@ export function useDatePeriodFilter() {
     = useFormattedDate(defaultTo);
 
   const saveFilterValues = () => {
-    localStorage.setItem("diary-from", fromISOString.value);
-    localStorage.setItem("diary-to", toISOString.value);
+    localStorage.setItem(fromStorageVarName, fromISOString.value);
+    localStorage.setItem(toStorageVarName, toISOString.value);
   };
   // watch(fromISOString, (newValue) => {
   //   localStorage.setItem("diary-from", newValue);

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import {
   DefaultGlucoseEntry,
   DiaryEntryType,
@@ -10,7 +10,7 @@ import AddEntryFormContent from '@/components/patient-view/diary/EntryFormConten
 import BaseModal from '@/components/BaseModal.vue'
 import { useModal } from '@/composables/useModal.ts'
 import { CarbsUnit, type GlucoseUnit } from '@/service/patientProfileService.ts'
-import { BSpinner, BCard, BForm, BFormGroup, BFormInput, BButton } from 'bootstrap-vue-next'
+import { BSpinner } from 'bootstrap-vue-next'
 import { useDiaryEntriesFetching } from '@/composables/fetching/useDiaryEntriesFetching'
 import { useDatePeriodFilter } from '@/composables/useDatePeriodFilter'
 import DateFilterForm from '@/components/DateFilterForm.vue'
@@ -23,7 +23,7 @@ const props = defineProps<{
 }>();
 
 const { fromFormatted, toFormatted, from, to, saveFilterValues }
-  = useDatePeriodFilter();
+  = useDatePeriodFilter("diary-from", "diary-to");
 const dateFilterRef = ref<InstanceType<typeof DateFilterForm> | null>(null);
 
 const { loading, entries, reloadWithFilter, fetchAll, loadMore, hasNext }
@@ -34,6 +34,9 @@ const refresh = async () => {
   if (filtered) await reloadWithFilter(from.value, to.value);
   else await fetchAll();
 };
+onMounted(async () => {
+  await refresh();
+});
 
 const applyFilter = async () => {
   saveFilterValues();

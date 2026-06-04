@@ -26,6 +26,11 @@ import { useRedirectionToRolePanel } from '@/composables/useRedirectionToRolePan
       routeName: "insulin"
     },
     {
+      iconPath: "assets/icons/analytics.svg",
+      text: "Графики и диаграммы",
+      routeName: "analytics"
+    },
+    {
       iconPath: "assets/icons/templates.svg",
       text: "Еда и препараты",
       routeName: "templates"

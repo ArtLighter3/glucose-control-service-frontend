@@ -1,7 +1,7 @@
 import { getDiaryEntries, getAllDiaryEntries, type DiaryEntryWithType }
   from "@/service/diaryService";
 import { isAxiosError } from "axios";
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import { usePagination } from "@/composables/usePagination";
 
 export function useDiaryEntriesFetching(patientId: string) {
@@ -16,10 +16,6 @@ export function useDiaryEntriesFetching(patientId: string) {
 
   const { pageIndex, pageSize } = usePagination(1);
   const hasNext = ref(true);
-
-  onMounted(async () => {
-    await fetchAll();
-  });
 
   const fetchAll = async () => {
     filtered.value = false;
@@ -72,5 +68,24 @@ export function useDiaryEntriesFetching(patientId: string) {
     loading.value = false;
   };
 
-  return { loading, entries, fetchAll, hasNext, reloadWithFilter, loadMore };
+  const loadAndAppendAllWithFilter = async (from: Date, to: Date) => {
+    await reloadWithFilter(from, to);
+    if (loadError.value) return;
+
+    if (hasNext.value) {
+      while (hasNext.value && !loadError.value) {
+        await loadMore();
+      }
+    }
+  };
+
+  return {
+    loading,
+    entries,
+    fetchAll,
+    hasNext,
+    reloadWithFilter,
+    loadMore,
+    loadAndAppendAllWithFilter
+  };
 }
