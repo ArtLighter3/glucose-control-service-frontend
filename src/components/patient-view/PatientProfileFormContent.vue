@@ -12,7 +12,7 @@ import {
 } from 'bootstrap-vue-next'
 import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
 import { usePatientProfileFetching } from '@/composables/fetching/usePatientProfileFetching.ts'
-import { getCarbsUnitName, getGlucoseUnitName } from '../../util/enumToStringLiterals.ts'
+import { getCarbsUnitName, getGlucoseUnitName } from '@/util/enumToStringLiterals.ts'
 import { onMounted } from 'vue'
 // import { watch } from 'vue'
 // import { useAuthStore } from '@/stores/authStore.ts'

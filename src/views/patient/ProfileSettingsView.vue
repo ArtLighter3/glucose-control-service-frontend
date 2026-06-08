@@ -7,6 +7,7 @@ import { BTabs, BTab } from 'bootstrap-vue-next'
 import UserInfoFormContent from '@/components/UserInfoFormContent.vue'
 import IntegrationProfileFormContent
   from '@/components/patient-view/IntegrationProfileFormContent.vue'
+import FunctionalDoctorsList from '@/components/patient-view/FunctionalDoctorsList.vue'
 
 const id = ref(useRoute().params.id as string);
 
@@ -23,6 +24,9 @@ const id = ref(useRoute().params.id as string);
       </b-tab>
       <b-tab title="Интеграция" lazy>
         <integration-profile-form-content :patient-id="id"/>
+      </b-tab>
+      <b-tab title="Мои врачи" lazy>
+        <functional-doctors-list :patient-id="id"/>
       </b-tab>
     </b-tabs>
 

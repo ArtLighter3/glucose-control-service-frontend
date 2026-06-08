@@ -1,6 +1,6 @@
 import { usePatientProfileStore } from '@/stores/patientProfileStore.ts'
 import { storeToRefs } from 'pinia'
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { type PatientProfile, putPatientProfile } from '@/service/patientProfileService.ts'
 import { DefaultPatientProfile, getPatientProfile } from '@/service/patientProfileService.ts'
 import { type AxiosResponse, isAxiosError } from 'axios'

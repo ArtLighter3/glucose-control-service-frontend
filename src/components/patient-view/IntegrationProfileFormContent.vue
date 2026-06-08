@@ -11,7 +11,7 @@ import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
 import {
   useIntegrationProfileFetchingAndSubmitting
 } from '@/composables/fetching/useIntegrationProfileFetchingAndSubmitting.ts'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useCopyToClipboard } from '@/composables/useCopyToClipboard.ts'
 
   const props = defineProps({

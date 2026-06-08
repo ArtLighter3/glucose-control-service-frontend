@@ -34,6 +34,9 @@ const { isCopied, copyToClipboard } = useCopyToClipboard();
           >
             {{ doctorProfile?.personalCode }}
           </div>
+          <div class="description-text">
+            Код используется пользователями для самостоятельного прикрепления и обмена данными
+          </div>
         </base-modal>
       </b-tab>
     </b-tabs>
@@ -73,6 +76,11 @@ const { isCopied, copyToClipboard } = useCopyToClipboard();
   font-size: 3rem;
   text-align: center;
   letter-spacing: 6px;
+  margin-bottom: 2rem;
+}
+
+.description-text {
+  text-align: center;
 }
 
 :deep(.nav-link) {

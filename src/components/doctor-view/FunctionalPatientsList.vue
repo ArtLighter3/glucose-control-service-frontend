@@ -107,6 +107,14 @@ const emit = defineEmits<{
         @patient:detach="detachPatient($event.patientId)"
       />
     </div>
+    <b-pagination v-if="totalAttached > attachedPageSize"
+                  class="pages-wrapper"
+                  v-model="attachedPage"
+                  :total-rows="totalAttached"
+                  :per-page="attachedPageSize"
+                  size="lg"
+                  align="center"
+    />
     <b-button
       v-if="adminView"
       class="attach-btn"
@@ -117,14 +125,6 @@ const emit = defineEmits<{
     >
       Добавить пользователя
     </b-button>
-    <b-pagination v-if="totalAttached > attachedPageSize"
-      class="pages-wrapper"
-      v-model="attachedPage"
-      :total-rows="totalAttached"
-      :per-page="attachedPageSize"
-      size="lg"
-      align="center"
-    />
     <base-modal :is-open="isOpen" @close="closeModal" title="Прикрепление пользователя">
       <div class="all-patients-search-wrapper">
         <search-field
