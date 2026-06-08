@@ -12,11 +12,13 @@ import { onMounted } from 'vue'
 
 const id = ref(useRoute().params.id as string);
 
-const { patientProfile } = usePatientProfileFetching(id.value);
+const { patientProfile, fetch: fetchPatientProfile }
+  = usePatientProfileFetching(id.value, true);
 
 const { recentActivity, fetchActivity, loading: activityLoading }
   = useRecentActivityFetching(id.value);
 onMounted(async () => {
+  await fetchPatientProfile();
   await fetchActivity();
 });
 

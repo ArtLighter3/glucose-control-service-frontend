@@ -13,6 +13,7 @@ import {
 import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
 import { usePatientProfileFetching } from '@/composables/fetching/usePatientProfileFetching.ts'
 import { getCarbsUnitName, getGlucoseUnitName } from '../../util/enumToStringLiterals.ts'
+import { onMounted } from 'vue'
 // import { watch } from 'vue'
 // import { useAuthStore } from '@/stores/authStore.ts'
 // import { storeToRefs } from 'pinia'
@@ -44,10 +45,13 @@ import { getCarbsUnitName, getGlucoseUnitName } from '../../util/enumToStringLit
   });
 
 
-  const { patientProfile, fetchingError,
+  const { patientProfile, fetch, fetchingError,
     loading, submit, submitting, success, fieldErrors, objectErrors, getValidationState }
-    = usePatientProfileFetching(props.patientId);
+    = usePatientProfileFetching(props.patientId, true);
 
+  onMounted(async () => {
+    await fetch();
+  });
   // const authStore = useAuthStore();
   // const { userSession } = storeToRefs(authStore);
   // const emit = defineEmits(['unauthorized:refresh', 'unauthorized:keep']);

@@ -8,10 +8,13 @@ export function useAttachedPatientsFetching(doctorId: string) {
   const loading = ref(false);
   const patients = ref<PatientInfo[]>([]);
 
+  const fetchingError = ref(false);
+
   const { page, pageIndex, totalElements, pageSize } = usePagination(1);
 
   const fetch = async (query: string) => {
       loading.value = true;
+      fetchingError.value = false;
         try {
           const response = query === '' ?
             await getAttachedPatients(doctorId, pageIndex.value) :
@@ -21,6 +24,7 @@ export function useAttachedPatientsFetching(doctorId: string) {
           if (response.data.page.totalElements !== undefined)
             totalElements.value = response.data.page.totalElements;
         } catch (err) {
+          fetchingError.value = true;
           if (isAxiosError(err)) {
             console.log(err);
           }
@@ -41,5 +45,15 @@ export function useAttachedPatientsFetching(doctorId: string) {
     await fetch('');
   };
 
-  return { loading, patients, page, totalElements, pageSize, getPatients, search, turnPage }
+  return {
+    loading,
+    fetchingError,
+    patients,
+    page,
+    totalElements,
+    pageSize,
+    getPatients,
+    search,
+    turnPage
+  }
 }

@@ -1,16 +1,22 @@
 import "axios"
 import apiClient from '@/service/apiClient.ts'
 import type { Page } from "@/util/pagination";
+import type { UserFullName } from '@/service/userService.ts'
 
 const pageSize = import.meta.env.VITE_DEFAULT_FETCH_PAGE_SIZE;
 
-export interface PatientInfo {
-  lastName: string,
-  firstName: string,
-  middleName: string | null,
+export interface PatientInfo extends UserFullName {
   patientId: string,
   email: string | null,
   birthDate: string | null
+}
+
+export interface DoctorInfo {
+  personalCode: string
+}
+
+export async function getDoctorProfile(doctorId: string) {
+  return apiClient.get<DoctorInfo>(getDoctorProfileURL(doctorId));
 }
 
 export async function attachPatient(doctorId: string, patientId: string) {
@@ -44,6 +50,10 @@ export async function searchAttachedPatients(doctorId: string, query: string, pa
       size: pageSize
     }
   });
+}
+
+function getDoctorProfileURL(doctorId: string) {
+  return `/doctors/${doctorId}/doctor-profile`;
 }
 
 function getAttachedPatientsURL(doctorId: string) {

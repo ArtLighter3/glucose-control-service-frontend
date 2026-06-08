@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import { useRoute } from 'vue-router'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import InsulinProfileFormContent from '@/components/patient-view/insulin/InsulinProfileFormContent.vue'
 import { usePatientProfileFetching } from '@/composables/fetching/usePatientProfileFetching.ts'
 import CalculateInsulinFunctionalButton
@@ -9,7 +9,10 @@ import CalculateInsulinFunctionalButton
 
 const id = ref(useRoute().params.id as string);
 
-const { patientProfile } = usePatientProfileFetching(id.value);
+const { patientProfile, fetch } = usePatientProfileFetching(id.value, true);
+onMounted(async () => {
+  await fetch();
+})
 </script>
 
 <template>

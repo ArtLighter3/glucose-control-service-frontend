@@ -9,6 +9,12 @@ export enum Role {
   ROLE_SUPERUSER = "ROLE_SUPERUSER"
 }
 
+export interface UserFullName {
+  firstName: string,
+  middleName: string | null,
+  lastName: string
+}
+
 export interface UserSession {
   id: number,
   username: string,
@@ -31,31 +37,22 @@ export interface UserRegistration {
   birthDate: string | null
 }
 
-export interface UserCreation {
+export interface UserCreation extends UserFullName {
   username: string,
   password: string,
   email: string | null,
-  firstName: string,
-  middleName: string | null,
-  lastName: string,
   birthDate: string | null,
   roles: Role[]
 }
 
-export interface UserUpdatableInfo {
+export interface UserUpdatableInfo extends UserFullName {
   email: string | null,
-  firstName: string,
-  middleName: string | null,
-  lastName: string,
   birthDate: string | null
 }
 
-export interface UserDetailedInfo {
+export interface UserDetailedInfo extends UserFullName {
   id: string,
   email: string | null,
-  firstName: string,
-  middleName: string | null,
-  lastName: string,
   birthDate: string | null,
   roles: Role[]
 }

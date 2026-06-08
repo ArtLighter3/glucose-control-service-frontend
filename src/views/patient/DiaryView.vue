@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import FunctionalDiary from '@/components/patient-view/diary/FunctionalDiary.vue'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import AddEntryButton from '@/components/patient-view/diary/AddEntryFunctionalButton.vue'
 import { useRefreshComponent } from '@/composables/useRefreshComponent.ts'
@@ -9,7 +9,11 @@ import { usePatientProfileFetching } from '@/composables/fetching/usePatientProf
 
 const id = ref(useRoute().params.id as string);
 
-const { patientProfile } = usePatientProfileFetching(id.value);
+const { patientProfile, fetch } = usePatientProfileFetching(id.value, true);
+onMounted(async () => {
+  await fetch();
+});
+
 const { componentKey, refresh } = useRefreshComponent();
 
 </script>

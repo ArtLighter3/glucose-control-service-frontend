@@ -12,6 +12,7 @@ import {
   useIntegrationProfileFetchingAndSubmitting
 } from '@/composables/fetching/useIntegrationProfileFetchingAndSubmitting.ts'
 import { computed, onMounted, ref, watch } from 'vue'
+import { useCopyToClipboard } from '@/composables/useCopyToClipboard.ts'
 
   const props = defineProps({
     patientId: {
@@ -49,21 +50,7 @@ import { computed, onMounted, ref, watch } from 'vue'
     return `${url.protocol}//${apiSecretConstant.value}@${url.host}/nightscout/${props.patientId}/api/v1`;
   });
 
-  const isCopied = ref(false);
-  const copyToClipboard = async (textToCopy: string | null) => {
-    if (textToCopy === null) return;
-
-    try {
-      await navigator.clipboard.writeText(textToCopy);
-
-      isCopied.value = true;
-      setTimeout(() => {
-        isCopied.value = false
-      }, 2000);
-    } catch (error) {
-      console.error('Copy failed: ', error);
-    }
-  }
+  const { isCopied, copyToClipboard } = useCopyToClipboard();
 
 </script>
 

@@ -15,6 +15,7 @@ import AdminMainView from '@/views/admin/AdminMainView.vue'
 import UsersView from '@/views/admin/UsersView.vue'
 import TemplatesView from '@/views/patient/TemplatesView.vue'
 import AnalyticsView from '@/views/patient/AnalyticsView.vue'
+import DoctorSettingsView from '@/views/doctor/DoctorSettingsView.vue'
 
 
 const router = createRouter({
@@ -90,7 +91,7 @@ const router = createRouter({
         {
           path: 'settings',
           name: 'doctor-settings',
-          component: CommonSettingsView
+          component: DoctorSettingsView
         }
       ]
     },

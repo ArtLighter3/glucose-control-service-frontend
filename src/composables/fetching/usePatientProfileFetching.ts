@@ -7,7 +7,7 @@ import { type AxiosResponse, isAxiosError } from 'axios'
 import { useSubmittableForm } from '@/composables/useSubmittableForm.ts'
 import type { ApiExceptionResponse } from '@/util/exception.ts'
 
-export function usePatientProfileFetching(patientId: string) {
+export function usePatientProfileFetching(patientId: string, useCaching: boolean) {
   const patientProfileStore = usePatientProfileStore();
   const { isFetched, cachedPatientProfile }
     = storeToRefs(patientProfileStore);
@@ -16,9 +16,9 @@ export function usePatientProfileFetching(patientId: string) {
   const fetchingError = ref<boolean>(false);
   const loading = ref(true);
 
-  onMounted(async () => {
+  const fetch = async () => {
     fetchingError.value = false;
-    if (patientProfileStore.isUpToDate) {
+    if (useCaching && patientProfileStore.isUpToDate) {
       patientProfile.value = {...cachedPatientProfile.value};
     } else {
       try {
@@ -26,13 +26,14 @@ export function usePatientProfileFetching(patientId: string) {
         cachedPatientProfile.value = {...patientProfile.value};
         isFetched.value = true;
       } catch (err) {
+        fetchingError.value = true;
         if (isAxiosError(err) && err.response) {
-          fetchingError.value = true;
+          console.log(err);
         }
       }
     }
     loading.value = false;
-  });
+  }
 
   const { submitting, success,
     fieldErrors, objectErrors, getValidationState}
@@ -69,6 +70,7 @@ export function usePatientProfileFetching(patientId: string) {
 
   return {
     patientProfile,
+    fetch,
     fetchingError,
     loading,
     submit,

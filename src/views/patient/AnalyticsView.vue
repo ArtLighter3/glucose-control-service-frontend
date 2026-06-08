@@ -8,7 +8,7 @@ const id = ref(useRoute().params.id as string);
 
 <template>
   <div class="analytics-view-wrapper">
-    <selectable-analytics :patient-id="id"/>
+    <selectable-analytics :patient-id="id" :patient-view="true"/>
   </div>
 </template>
 

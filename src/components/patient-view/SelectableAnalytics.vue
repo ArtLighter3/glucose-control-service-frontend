@@ -17,18 +17,19 @@ enum AnalyticsType {
 }
 
 const props = defineProps<{
-  patientId: string
+  patientId: string,
+  patientView?: boolean
 }>()
 
 const getAnalyticsTypeName = (type: AnalyticsType) => {
   switch (type) {
     case AnalyticsType.TIME_CHART:
-      return 'Временной график'
+      return 'Временной график';
     case AnalyticsType.GLUCOSE_DISTRIBUTION:
-      return 'Распределение глюкозы по диапазонам'
+      return 'Распределение глюкозы по диапазонам';
   }
 
-  return 'Отсутствует'
+  return 'Отсутствует';
 }
 
 const { fromFormatted, toFormatted, from, to, saveFilterValues } = useDatePeriodFilter(
@@ -51,7 +52,9 @@ const {
   loadAndAppendAllWithFilter: fetchEntries,
   loadMore: loadMoreEntries,
 } = useDiaryEntriesFetching(props.patientId)
-const { patientProfile } = usePatientProfileFetching(props.patientId);
+const { patientProfile, fetch: fetchPatientProfile }
+  = usePatientProfileFetching(props.patientId,
+                    props.patientView !== undefined ? props.patientView : false);
 
 const analyticsType = ref<AnalyticsType>(
   AnalyticsType[
@@ -75,8 +78,9 @@ const refreshGraphics = async () => {
   constantTo.value = new Date(to.value)
 }
 
-onMounted(() => {
-  refreshGraphics()
+onMounted(async () => {
+  await fetchPatientProfile();
+  await refreshGraphics();
 })
 watch(analyticsType, (newType) => {
   localStorage.setItem('selected-analytics', analyticsType.value)
