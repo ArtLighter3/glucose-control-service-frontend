@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import BaseModal from '@/components/BaseModal.vue'
-import { useModal } from '@/composables/useModal.ts'
 import { BButton } from 'bootstrap-vue-next'
 
 const props = defineProps({
@@ -16,6 +15,11 @@ const props = defineProps({
   isOpen: {
     type: Boolean,
     required: true,
+    default: false
+  },
+  loading: {
+    type: Boolean,
+    required: false,
     default: false
   }
 });
@@ -33,6 +37,8 @@ const emit = defineEmits(['confirm', 'cancel']);
         squared
         size="lg"
         @click="$emit('confirm')"
+        :loading="loading"
+        loading-fill
       >
         Да
       </b-button>
