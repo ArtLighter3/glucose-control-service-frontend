@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { BFormInput, BFormGroup, BForm, BButton, BFormInvalidFeedback } from 'bootstrap-vue-next'
+import { BFormInput, BFormGroup, BForm, BButton, BFormInvalidFeedback, BFormCheckbox }
+  from 'bootstrap-vue-next'
 import FormTransitionGroup from '@/components/FormTransitionGroup.vue'
 import { watch } from 'vue'
 import { useRegistration } from '@/composables/fetching/useRegistration.ts'
@@ -150,6 +151,22 @@ watch(success, (newValue) => {
         />
         <b-form-invalid-feedback>
                     <span v-for="(message, index) in fieldErrors.birthDate" :key="index">
+                      {{ message }}
+                    </span>
+        </b-form-invalid-feedback>
+      </b-form-group>
+      <b-form-group key="is-doctor" id="is-doctor"
+                    class="form-group-inner"
+                    :state="getValidationState('isDoctor')"
+      >
+        <b-form-checkbox class="squared-input-field"
+                         id="is-doctor-checkbox"
+                         v-model="userRegistration.isDoctor"
+        >
+          Регистрируюсь в качестве врача
+        </b-form-checkbox>
+        <b-form-invalid-feedback>
+                    <span v-for="(message, index) in fieldErrors.isDoctor" :key="index">
                       {{ message }}
                     </span>
         </b-form-invalid-feedback>

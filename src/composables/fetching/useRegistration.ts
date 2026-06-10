@@ -17,7 +17,8 @@ export function useRegistration() {
     firstName: null,
     middleName: null,
     lastName: null,
-    birthDate: null
+    birthDate: null,
+    isDoctor: false
   });
 
   onMounted(async () => {

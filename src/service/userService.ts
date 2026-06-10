@@ -34,7 +34,8 @@ export interface UserRegistration {
   firstName: string | null,
   middleName: string | null,
   lastName: string | null,
-  birthDate: string | null
+  birthDate: string | null,
+  isDoctor: boolean
 }
 
 export interface UserCreation extends UserFullName {
