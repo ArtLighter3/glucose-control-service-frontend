@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import { DefaultInsulinEntry, type InsulinEntry, InsulinType } from '@/service/diaryService.ts'
+import {
+  DefaultInsulinEntry,
+  type InsulinEntry,
+  InsulinType
+} from '@/service/diaryService.ts'
 import {
   BForm,
   BFormGroup,
@@ -100,11 +104,12 @@ const submit = () => {
           key="category-selector"
           v-model="insulinEntry.insulinType"
         >
-          <b-form-select-option key="LONG" value="LONG">
-            {{ getInsulinTypeName(InsulinType.LONG) }}
-          </b-form-select-option>
-          <b-form-select-option key="SHORT" value="SHORT">
-            {{ getInsulinTypeName(InsulinType.SHORT) }}
+          <b-form-select-option
+            v-for="type in Object.entries(InsulinType)"
+            :key="type[0]"
+            :value="type[0]"
+          >
+            {{ getInsulinTypeName(type[1]) }}
           </b-form-select-option>
         </b-form-select>
         <b-form-invalid-feedback>

@@ -50,10 +50,12 @@ watch((calculationData.value), () => {
                     :label="`Принимаемые углеводы [${getCarbsUnitShortName(carbsUnit)}]`"
                     label-for="carbs-input"
                     :disabled="unchangeableCarbs !== undefined"
-                    :state="getValidationState('carbs')">
+                    :state="getValidationState('carbs')"
+      >
         <b-form-input class="squared-input-field"
                       id="carbs-input" type="number"
-                      v-model="calculationData.carbs"/>
+                      v-model="calculationData.carbs"
+        />
         <b-form-invalid-feedback>
                     <span v-for="(message, index) in fieldErrors.carbs" :key="index">
                       {{ message }}
@@ -62,12 +64,14 @@ watch((calculationData.value), () => {
       </b-form-group>
       <b-form-group key="correction" id="correction"
                     class="form-group-inner"
-                    label="Коррекция [ед]"
+                    label="Коррекция [%] (например, -50%, +50%)"
                     label-for="correction-input"
-                    :state="getValidationState('correction')">
+                    :state="getValidationState('correction')"
+      >
         <b-form-input class="squared-input-field"
                       id="correction-input" type="number"
-                      v-model="calculationData.correction"/>
+                      v-model="calculationData.correction"
+        />
         <b-form-invalid-feedback>
                     <span v-for="(message, index) in fieldErrors.correction" :key="index">
                       {{ message }}
@@ -76,9 +80,9 @@ watch((calculationData.value), () => {
       </b-form-group>
         <b-form-group key="correct-glucose-level" id="correct-glucose-level"
                       class="form-group-inner"
-                      :state="getValidationState('correctGlucoseLevel')">
+                      :state="getValidationState('correctGlucoseLevel')"
+        >
           <b-form-checkbox id="correct-glucose-level-checkbox"
-                           value="true" unchecked-value="false"
                            v-model="calculationData.correctGlucoseLevel"
           >
             Понизить уровень глюкозы до целевого диапазона
@@ -94,40 +98,44 @@ watch((calculationData.value), () => {
                     :label="`Текущий уровень глюкозы [${getGlucoseUnitName(glucoseUnit)}]`"
                     label-for="glucose-input"
                     :disabled="!calculationData.correctGlucoseLevel"
-                    :state="getValidationState('glucose')">
+                    :state="getValidationState('glucose')"
+      >
           <b-form-input class="squared-input-field"
                         id="glucose-input" type="number"
                         key="glucose-input"
-                        v-model="calculationData.glucose"/>
+                        v-model="calculationData.glucose"
+          />
           <b-form-invalid-feedback>
                       <span v-for="(message, index) in fieldErrors.glucose" :key="index">
                         {{ message }}
                       </span>
           </b-form-invalid-feedback>
       </b-form-group>
-      <b-form-group key="consider-active-insulin" id="consider-active-insulin"
-                    class="form-group-inner"
-                    :state="getValidationState('considerActiveInsulin')">
-        <b-form-checkbox id="consider-active-insulin-checkbox"
-                         value="true" unchecked-value="false"
-                         v-model="calculationData.considerActiveInsulin"
-        >
-          Учитывать ранее введенный инсулин (по записям ввода инсулина)
-        </b-form-checkbox>
-        <b-form-invalid-feedback>
-                    <span v-for="(message, index) in fieldErrors.considerActiveInsulin"
-                          :key="index">
-                      {{ message }}
-                    </span>
-        </b-form-invalid-feedback>
-      </b-form-group>
+<!--      <b-form-group key="consider-active-insulin" id="consider-active-insulin"-->
+<!--                    class="form-group-inner"-->
+<!--                    :state="getValidationState('considerActiveInsulin')"-->
+<!--                    :disabled="!calculationData.correctGlucoseLevel"-->
+<!--      >-->
+<!--        <b-form-checkbox id="consider-active-insulin-checkbox"-->
+<!--                         v-model="calculationData.considerActiveInsulin"-->
+<!--        >-->
+<!--          Учитывать ранее введенный короткий инсулин (по записям ввода инсулина)-->
+<!--        </b-form-checkbox>-->
+<!--        <b-form-invalid-feedback>-->
+<!--                    <span v-for="(message, index) in fieldErrors.considerActiveInsulin"-->
+<!--                          :key="index">-->
+<!--                      {{ message }}-->
+<!--                    </span>-->
+<!--        </b-form-invalid-feedback>-->
+<!--      </b-form-group>-->
     <b-button class="calculate-btn"
               variant="outline-success"
               type="submit"
               :loading="calculating"
               loading-fill
               squared
-              size="lg">
+              size="lg"
+    >
       Рассчитать
     </b-button>
   </b-form>
@@ -163,10 +171,10 @@ watch((calculationData.value), () => {
         <span class="detail-item-name">Корректирование глюкозы: </span>
         <span class="detail-item-value">{{ calculationResult.correctionInsulin }} ед</span>
       </div>
-      <div class="detail-item" key="iob-detail">
-        <span class="detail-item-name">Активный инсулин: </span>
-        <span class="detail-item-value">{{ calculationResult.activeInsulin }} ед</span>
-      </div>
+<!--      <div class="detail-item" key="iob-detail">-->
+<!--        <span class="detail-item-name">Активный инсулин: </span>-->
+<!--        <span class="detail-item-value">{{ calculationResult.activeInsulin }} ед</span>-->
+<!--      </div>-->
     </div>
   </div>
   </form-transition-group>

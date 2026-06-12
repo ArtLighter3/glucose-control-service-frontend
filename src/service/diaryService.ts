@@ -25,9 +25,9 @@ export enum PortionType {
 
 export enum InsulinType {
   LONG = "LONG",
-  SHORT_CARBS = "SHORT_CARBS",
-  SHORT_CORRECTION = "SHORT_CORRECTION",
-  SHORT = "SHORT"
+  SHORT = "SHORT",
+  INTERMEDIATE = "INTERMEDIATE",
+  OTHER = "OTHER"
 }
 
 export enum DiaryEntryType {

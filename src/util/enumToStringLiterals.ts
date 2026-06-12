@@ -21,6 +21,9 @@ const insulinTypeToStringRepresentation: EnumStringRepresentation = {
   "LONG": "Пролонгированный",
   "SHORT_CARBS": "Компенсирующий",
   "SHORT_CORRECTION": "Корректирующий",
+  "RAPID": "Ультракороткого действия",
+  "INTERMEDIATE": "НПХ",
+  "OTHER": "Другое"
 };
 
 const measurementTypeToStringRepresentation: EnumStringRepresentation = {
