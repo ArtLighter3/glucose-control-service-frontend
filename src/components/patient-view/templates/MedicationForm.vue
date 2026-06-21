@@ -68,6 +68,7 @@ const submit = () => {
         id="name"
         label="Наименование"
         label-for="name-input"
+        :disabled="showUpdateForm"
         :state="getValidationState('name')"
       >
         <b-form-input

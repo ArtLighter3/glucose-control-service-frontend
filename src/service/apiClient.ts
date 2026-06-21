@@ -7,6 +7,9 @@ const apiClient = axios.create({
   withXSRFToken: true,
   xsrfCookieName: 'XSRF-TOKEN',
   xsrfHeaderName: 'X-XSRF-TOKEN',
+  headers: {
+    'Accept-Language' : 'ru-RU'
+  }
 });
 
 apiClient.interceptors.response.use(

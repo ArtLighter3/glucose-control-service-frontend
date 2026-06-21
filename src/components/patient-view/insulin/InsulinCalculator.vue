@@ -64,7 +64,7 @@ watch((calculationData.value), () => {
       </b-form-group>
       <b-form-group key="correction" id="correction"
                     class="form-group-inner"
-                    label="Коррекция [%] (например, -50%, +50%)"
+                    label="Коррекция [%] (например, -50, +50)"
                     label-for="correction-input"
                     :state="getValidationState('correction')"
       >
