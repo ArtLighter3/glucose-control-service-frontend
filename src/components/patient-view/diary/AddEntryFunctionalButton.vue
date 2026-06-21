@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { BButton } from 'bootstrap-vue-next'
+import { BButton, BFormCheckbox } from 'bootstrap-vue-next'
 import BaseModal from '@/components/BaseModal.vue'
 import { useModal } from '@/composables/useModal.ts'
 import EntryTypeItem from '@/components/patient-view/diary/EntryTypeItem.vue'
 import AddEntryFormContent from '@/components/patient-view/diary/EntryFormContent.vue'
 import { DiaryEntryType } from '@/service/diaryService.ts'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { CarbsUnit, type GlucoseUnit } from '@/service/patientProfileService.ts'
 
 const props = defineProps<{
@@ -25,6 +25,15 @@ const openEntryForm = (type: DiaryEntryType) => {
   currentEntryType.value = type;
   isEntryFormOpen.value = true;
 };
+
+const closeOnSuccess =
+  ref((localStorage.getItem("close-entry-form-on-success") ?? "true") === "true");
+watch(closeOnSuccess, (newValue) => {
+  localStorage.setItem("close-entry-form-on-success", newValue ? "true" : "false");
+});
+const closeEntryFormIfChecked = () => {
+  if (closeOnSuccess.value) closeEntryForm();
+}
 
 const emit = defineEmits(['entries:added']);
 </script>
@@ -56,10 +65,16 @@ const emit = defineEmits(['entries:added']);
     </div>
   </base-modal>
   <base-modal :is-open="isEntryFormOpen" @close="closeEntryForm" title="">
-    <add-entry-form-content :entry-type="currentEntryType" :patient-id="props.patientId"
-                            :glucose-unit="glucoseUnit" :carbs-unit="carbsUnit"
-                            @entries:updated="$emit('entries:added'); closeEntryForm()"
+    <add-entry-form-content
+      :entry-type="currentEntryType"
+      :patient-id="props.patientId"
+      :glucose-unit="glucoseUnit"
+      :carbs-unit="carbsUnit"
+      @entries:updated="$emit('entries:added'); closeEntryFormIfChecked();"
     />
+    <b-form-checkbox class="close-checkbox" v-model="closeOnSuccess">
+      Закрыть при успешном сохранении
+    </b-form-checkbox>
   </base-modal>
 </template>
 
@@ -68,5 +83,10 @@ const emit = defineEmits(['entries:added']);
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+}
+
+.close-checkbox {
+  opacity: 60%;
+  margin-top: 1rem;
 }
 </style>
