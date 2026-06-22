@@ -6,7 +6,6 @@ import { computed } from 'vue'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale/ru'
 import {
-  getCarbsUnitShortName,
   getGlucoseUnitName
 } from '@/util/enumToStringLiterals.ts'
 
@@ -69,6 +68,10 @@ const formattedDate = computed((): string | null => {
     flex: 1 0 auto;
     aspect-ratio: 1 / 1;
     box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.6);
+
+    @media (max-width: 768px) {
+      aspect-ratio: auto;
+    }
   }
 
   .glucose-item {

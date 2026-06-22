@@ -224,7 +224,6 @@ h4 {
         flex-basis: 250px;
 
         .form-group {
-          margin: 2rem;
 
           .form-group-inner {
             margin-top: 1.1rem;

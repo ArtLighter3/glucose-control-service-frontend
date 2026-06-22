@@ -260,7 +260,7 @@ const addValueByTime = (map: {[key: string]: number}, sortedKeys: ComputedRef<st
 </template>
 
 <style scoped>
-h4 {
+h4, h2 {
   text-align: center;
 }
 
@@ -268,6 +268,7 @@ h4 {
   display: flex;
   align-items: center;
   flex: 1;
+  padding: 1rem;
 
   .insulin-profile-form {
     display: flex;
@@ -294,10 +295,6 @@ h4 {
       @media (max-width: 1080px) {
         width: 100%;
       }
-    }
-
-    @media (max-width: 1080px) {
-      padding-left: 2rem;
     }
   }
 }

@@ -185,7 +185,6 @@ watch((calculationData.value), () => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100%;
     flex: 1;
     padding-left: 2rem;
     padding-right: 2rem;

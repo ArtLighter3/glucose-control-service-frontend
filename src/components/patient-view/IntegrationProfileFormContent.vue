@@ -127,7 +127,7 @@ import { useCopyToClipboard } from '@/composables/useCopyToClipboard.ts'
 </template>
 
 <style scoped>
-h4 {
+h2, h4 {
   text-align: center;
 }
 
@@ -146,7 +146,7 @@ h4 {
       .form-group-wrapper {
         margin: 1rem;
         flex: 1;
-        padding: 2rem;
+        padding: 1rem;
         width: 50%;
         flex-basis: 250px;
 
@@ -171,6 +171,9 @@ h4 {
 
           .app-urls-item {
             cursor: pointer;
+            text-wrap: wrap;
+            overflow-wrap: break-word;
+            word-break: break-word;
           }
         }
       }

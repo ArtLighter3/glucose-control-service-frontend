@@ -43,11 +43,6 @@ const id = ref(useRoute().params.id as string);
   .tabs-wrapper {
     flex-grow: 1;
   }
-
-  @media(max-width: 1080px) {
-    padding-left: 4rem;
-    padding-right: 1rem;
-  }
 }
 
 :deep(.nav-link) {
@@ -55,7 +50,8 @@ const id = ref(useRoute().params.id as string);
   color: var(--color-text);
 
   &.active {
-    background-color: var(--color-background-alt);
+    background-color: var(--color-background-alt-lite);
+    color: var(--color-text);
   }
 }
 

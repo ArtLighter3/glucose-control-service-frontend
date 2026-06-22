@@ -104,6 +104,12 @@ const emit = defineEmits<{
   border-color: var(--color-background-alt);
   cursor: pointer;
   transition: ease-out 0.1s;
+  overflow-wrap: break-word;
+  hyphens: auto;
+
+  @media (max-width: 768px) {
+    padding: 0.5rem;
+  }
 
   &:hover {
     background-color: var(--color-background-alt-lite);
@@ -114,14 +120,23 @@ const emit = defineEmits<{
     flex-direction: column;
     align-items: start;
 
-
     .value-info-wrapper {
       display: flex;
       align-items: center;
       gap: 1rem;
+      flex-wrap: wrap;
+
+      @media (max-width: 768px) {
+        row-gap: 0.5rem;
+        column-gap: 0.5rem;
+      }
 
       .value {
         font-size: 3rem;
+
+        @media (max-width: 768px) {
+          font-size: 2rem;
+        }
       }
     }
 

@@ -34,15 +34,18 @@ onMounted(async () => {
     />
     <b-spinner variant="success" v-else />
     <b-card class="chart-wrapper">
-      <time-chart v-if="!activityLoading" :entries="recentActivity.recentEntries"
-                  :glucose-units="patientProfile.glucoseUnit"
-                  :hyper-glucose="patientProfile.hyperGlucose"
-                  :high-glucose="patientProfile.highGlucose"
-                  :low-glucose="patientProfile.lowGlucose"
-                  :hypo-glucose="patientProfile.hypoGlucose"
-                  time-range="day"
-      />
-      <b-spinner variant="success" v-else/>
+      <div class="chart-inner-content">
+        <time-chart v-if="!activityLoading"
+                    :entries="recentActivity.recentEntries"
+                    :glucose-units="patientProfile.glucoseUnit"
+                    :hyper-glucose="patientProfile.hyperGlucose"
+                    :high-glucose="patientProfile.highGlucose"
+                    :low-glucose="patientProfile.lowGlucose"
+                    :hypo-glucose="patientProfile.hypoGlucose"
+                    time-range="day"
+        />
+        <b-spinner variant="success" v-else />
+      </div>
     </b-card>
 
     <div class="add-button-wrapper">
@@ -64,19 +67,23 @@ onMounted(async () => {
   padding: 1rem;
   gap: 3rem;
 
-  @media (max-width: 1080px) {
-    padding-left: 3.5rem;
-  }
-
   .chart-wrapper {
     width: 70%;
     position: relative;
     overflow-x: auto;
     flex-grow: 1;
 
-    @media (max-width: 1080px) {
-      width: 90vw;
-      height: 100vh;
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+
+    .chart-inner-content {
+      height: 60vh;
+
+      @media (max-width: 768px) {
+        width: 1200px;
+        height: 500px;
+      }
     }
   }
 
@@ -86,7 +93,7 @@ onMounted(async () => {
     right: 100px;
     z-index: 999;
 
-    @media (max-width: 1080px) {
+    @media (max-width: 768px) {
       right: 50px;
       bottom: 100px;
     }

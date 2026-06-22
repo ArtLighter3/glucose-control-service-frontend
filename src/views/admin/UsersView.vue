@@ -15,7 +15,6 @@ import FunctionalUsersList from '@/components/admin-view/FunctionalUsersList.vue
 .users-view {
   display: flex;
   flex-direction: column;
-  padding: 2rem;
 
   h2 {
     text-align: center;

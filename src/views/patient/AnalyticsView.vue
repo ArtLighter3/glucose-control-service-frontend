@@ -15,9 +15,5 @@ const id = ref(useRoute().params.id as string);
 <style scoped>
 .analytics-view-wrapper {
   padding: 2rem;
-
-  @media (max-width: 1080px) {
-    padding-left: 5rem;
-  }
 }
 </style>

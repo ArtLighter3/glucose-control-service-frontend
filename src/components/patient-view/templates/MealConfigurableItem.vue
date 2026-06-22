@@ -62,6 +62,10 @@ const inputUpdated = (input: number | null) => {
   border-color: var(--color-background-alt);
   transition: ease-out 0.1s;
 
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+  }
+
   &:hover {
     background-color: var(--color-background-alt-lite);
   }

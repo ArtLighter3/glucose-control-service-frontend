@@ -96,9 +96,8 @@ const emit = defineEmits<{
   align-items: stretch;
   gap: 1rem;
 
-  @media (max-width: 1080px) {
-    padding-left: 4.32rem;
-    padding-right: 2rem;
+  @media (max-width: 768px) {
+    padding: 0.5rem;
   }
 }
 

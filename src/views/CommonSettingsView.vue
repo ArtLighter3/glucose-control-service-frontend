@@ -2,7 +2,6 @@
 
 import { useRoute } from 'vue-router'
 import { ref } from 'vue'
-import { BTabs, BTab } from 'bootstrap-vue-next'
 import UserInfoFormContent from '@/components/UserInfoFormContent.vue'
 
 const id = ref(useRoute().params.id as string);
@@ -11,11 +10,9 @@ const id = ref(useRoute().params.id as string);
 
 <template>
   <div class="settings-view-wrapper">
-    <b-tabs pills class="tabs-wrapper" justified>
-      <b-tab title="Аккаунт" active>
-        <user-info-form-content :user-id="id"/>
-      </b-tab>
-    </b-tabs>
+    <div class="tabs-wrapper">
+        <user-info-form-content :user-id="id" />
+    </div>
   </div>
 </template>
 
@@ -28,11 +25,6 @@ const id = ref(useRoute().params.id as string);
 
   .tabs-wrapper {
     flex-grow: 1;
-  }
-
-  @media(max-width: 1080px) {
-    padding-left: 4rem;
-    padding-right: 1rem;
   }
 }
 

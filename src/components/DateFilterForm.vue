@@ -126,11 +126,16 @@ const emits = defineEmits<{
         .filter-first-row {
           display: flex;
           flex-direction: row;
+          flex-wrap: wrap;
         }
 
         .filter-presets {
           display: flex;
           gap: 1rem;
+
+          @media (max-width: 768px) {
+            font-size: 0.9rem;
+          }
         }
 
         .buttons {

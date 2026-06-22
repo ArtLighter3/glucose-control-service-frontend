@@ -2,7 +2,7 @@
 
 import { useRoute } from 'vue-router'
 import { ref } from 'vue'
-import { BTabs, BTab, BButton, BSpinner } from 'bootstrap-vue-next'
+import { BButton, BSpinner } from 'bootstrap-vue-next'
 import UserInfoFormContent from '@/components/UserInfoFormContent.vue'
 import { useModal } from '@/composables/useModal.ts'
 import { useDoctorProfileFetching } from '@/composables/fetching/useDoctorProfileFetching.ts'
@@ -20,8 +20,8 @@ const { isCopied, copyToClipboard } = useCopyToClipboard();
 
 <template>
   <div class="settings-view-wrapper">
-    <b-tabs pills class="tabs-wrapper" justified>
-      <b-tab class="tab-wrapper" title="Аккаунт" active>
+    <div class="tabs-wrapper">
+      <div class="tab-wrapper">
         <user-info-form-content :user-id="id"/>
         <b-button class="code-btn" variant="outline-dark" squared @click="fetch(); openModal();">
           Личный код врача
@@ -38,8 +38,8 @@ const { isCopied, copyToClipboard } = useCopyToClipboard();
             Код используется пользователями для самостоятельного прикрепления и обмена данными
           </div>
         </base-modal>
-      </b-tab>
-    </b-tabs>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -58,11 +58,6 @@ const { isCopied, copyToClipboard } = useCopyToClipboard();
       flex-direction: column;
       gap: 2rem;
     }
-  }
-
-  @media(max-width: 1080px) {
-    padding-left: 4rem;
-    padding-right: 1rem;
   }
 }
 
@@ -88,7 +83,8 @@ const { isCopied, copyToClipboard } = useCopyToClipboard();
   color: var(--color-text);
 
   &.active {
-    background-color: var(--color-background-alt);
+    background-color: var(--color-background-alt-lite);
+    color: var(--color-text);
   }
 }
 

@@ -49,6 +49,12 @@ const emit = defineEmits<{
   cursor: pointer;
   transition: ease-out 0.1s;
 
+  @media (max-width: 768px) {
+    padding: 0.5rem;
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
+  }
+
   &:hover {
     background-color: var(--color-background-alt-lite);
   }
@@ -62,12 +68,18 @@ const emit = defineEmits<{
       display: flex;
       align-items: center;
       gap: 0.4rem;
+      overflow-wrap: break-word;
+      word-break: break-word;
     }
 
   }
 
   .attach-detach-btn {
     margin-left: auto;
+
+    @media (max-width: 768px) {
+      margin-left: 0;
+    }
   }
 }
 </style>

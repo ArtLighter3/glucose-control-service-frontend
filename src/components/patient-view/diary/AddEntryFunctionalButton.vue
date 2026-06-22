@@ -83,6 +83,7 @@ const emit = defineEmits(['entries:added']);
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  row-gap: 1rem;
 }
 
 .close-checkbox {

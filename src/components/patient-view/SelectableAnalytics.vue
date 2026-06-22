@@ -121,14 +121,15 @@ watch(analyticsType, (newType) => {
       {{ format(constantTo, 'd MMM, yyyy', { locale: ru }) }}
     </div>
     <div class="graphics-wrapper">
-      <time-chart v-if="analyticsType === AnalyticsType.TIME_CHART"
-                  :entries="entries"
-                  :glucose-units="patientProfile.glucoseUnit"
-                  :hyper-glucose="patientProfile.hyperGlucose"
-                  :high-glucose="patientProfile.highGlucose"
-                  :low-glucose="patientProfile.lowGlucose"
-                  :hypo-glucose="patientProfile.hypoGlucose"
-      />
+      <div v-if="analyticsType === AnalyticsType.TIME_CHART" class="chart-content">
+        <time-chart :entries="entries"
+                    :glucose-units="patientProfile.glucoseUnit"
+                    :hyper-glucose="patientProfile.hyperGlucose"
+                    :high-glucose="patientProfile.highGlucose"
+                    :low-glucose="patientProfile.lowGlucose"
+                    :hypo-glucose="patientProfile.hypoGlucose"
+        />
+      </div>
       <glucose-distribution-chart
         v-else-if="analyticsType === AnalyticsType.GLUCOSE_DISTRIBUTION"
         :distribution="distribution"
@@ -152,12 +153,20 @@ watch(analyticsType, (newType) => {
     position: relative;
     overflow-x: auto;
 
-    @media (max-width: 1080px) {
+    .chart-content {
+      height: 50vh;
+      @media (max-width: 768px) {
+        width: 1200px;
+        height: 500px;
+      }
+    }
+
+    @media (max-width: 768px) {
       width: 100%;
     }
   }
 
-  @media (max-width: 1080px) {
+  @media (max-width: 768px) {
     height: 90vh;
   }
 }

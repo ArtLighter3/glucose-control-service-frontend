@@ -21,7 +21,8 @@ const props = defineProps({
   <div class="panel-item-wrapper">
     <span v-if="name" class="panel-name">{{ name }}</span>
     <span v-if="value !== null && value !== undefined"
-          class="panel-value">{{ parseFloat(value.toFixed(2)) }}</span>
+          class="panel-value">{{ parseFloat(value.toFixed(2)) }}
+    </span>
     <span v-else class="panel-value">--</span>
 
     <span v-if="units" class="panel-unit">{{ units }}</span>

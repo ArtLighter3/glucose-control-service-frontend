@@ -107,25 +107,30 @@ const openEntryUpdateForm = (entryWithType: DiaryEntryWithType) => {
 .diary-wrapper {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  max-width: 100vw;
 
   .filter-wrapper {
-      display: flex;
-      align-self: center;
+    display: flex;
+    align-self: center;
+    padding-left: 2rem;
+    padding-right: 2rem;
 
-      @media (max-width: 1080px) {
-        padding-left: 2rem;
-      }
+    @media (max-width: 768px) {
+      align-self: stretch;
     }
+  }
 
   .entries-list-wrapper {
     padding: 3rem;
     height: 80vh;
     overflow-y: auto;
 
-    @media (max-width: 1080px) {
-      padding-left: 4rem;
-      padding-right: 1rem;
+    @media (max-width: 768px) {
+      padding: 1rem;
+      height: 60vh;
     }
+
   }
 }
 </style>

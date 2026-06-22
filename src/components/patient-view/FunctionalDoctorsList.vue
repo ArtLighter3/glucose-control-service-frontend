@@ -96,7 +96,7 @@ const emit = defineEmits<{
                   v-model="page"
                   :total-rows="totalElements"
                   :per-page="pageSize"
-                  size="lg"
+                  size="md"
                   align="center"
     />
     <b-button
@@ -165,9 +165,11 @@ const emit = defineEmits<{
   align-items: stretch;
   gap: 1rem;
 
-  @media (max-width: 1080px) {
-    padding-left: 4.32rem;
-    padding-right: 2rem;
+  @media (max-width: 768px) {
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 }
 

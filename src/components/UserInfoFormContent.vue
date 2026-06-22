@@ -146,7 +146,6 @@ h4 {
       .form-group-wrapper {
         margin: 1rem;
         flex: 1;
-        padding: 2rem;
         width: 50%;
         flex-basis: 250px;
 

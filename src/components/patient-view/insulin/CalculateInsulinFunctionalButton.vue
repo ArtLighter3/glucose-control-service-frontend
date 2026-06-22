@@ -20,14 +20,22 @@ const { isOpen, openModal, closeModal } = useModal()
     Расчет
   </b-button>
   <base-modal :is-open="isOpen" @close="closeModal" title="Калькулятор инсулина">
-    <insulin-calculator :patient-id="patientId"
-                        :carbs-unit="carbsUnit"
-                        :glucose-unit="glucoseUnit"/>
+    <div class="scrollable-form">
+      <insulin-calculator :patient-id="patientId"
+                          :carbs-unit="carbsUnit"
+                          :glucose-unit="glucoseUnit"
+      />
+    </div>
   </base-modal>
 </template>
 
 <style scoped>
 button {
   font-size: 1rem;
+}
+
+.scrollable-form {
+  height: 60vh;
+  overflow-y: auto;
 }
 </style>

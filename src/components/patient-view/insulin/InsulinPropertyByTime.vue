@@ -146,11 +146,19 @@ const emit = defineEmits<{
   margin-top: 1rem;
   align-items: center;
 
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+    row-gap: 1rem;
+    border-top: var(--color-background-alt);
+    border-top-style: solid;
+    border-top-width: 1px;
+  }
+
   .row-element {
     margin-left: 1rem;
     margin-right: 1rem;
 
-    @media (max-width: 1080px) {
+    @media (max-width: 768px) {
       margin-left: 0.2rem;
       margin-right: 0.2rem;
     }

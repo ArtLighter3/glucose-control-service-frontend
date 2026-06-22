@@ -112,7 +112,7 @@ const emit = defineEmits<{
                   v-model="attachedPage"
                   :total-rows="totalAttached"
                   :per-page="attachedPageSize"
-                  size="lg"
+                  size="md"
                   align="center"
     />
     <b-button
@@ -162,11 +162,6 @@ const emit = defineEmits<{
   flex-direction: column;
   align-items: stretch;
   gap: 1rem;
-
-  @media (max-width: 1080px) {
-    padding-left: 4.32rem;
-    padding-right: 2rem;
-  }
 }
 
 .patient-summary-outer-wrapper {
@@ -174,10 +169,6 @@ const emit = defineEmits<{
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  @media (max-width: 1080px) {
-      padding-left: 4rem;
-  }
 }
 
 .all-patients-search-wrapper {
@@ -205,7 +196,7 @@ const emit = defineEmits<{
 }
 
 .scrollable-list {
-  height: 40vh;
+  height: 50vh;
   overflow-y: auto;
 }
 </style>

@@ -65,10 +65,6 @@ const emit = defineEmits(['user:deleted']);
     text-align: center;
     margin-bottom: 1rem;
   }
-
-  @media(max-width: 1080px) {
-    padding-right: 1rem;
-  }
 }
 
 :deep(.nav-link) {
@@ -76,7 +72,8 @@ const emit = defineEmits(['user:deleted']);
   color: var(--color-text);
 
   &.active {
-    background-color: var(--color-background-alt);
+    background-color: var(--color-background-alt-lite);
+    color: var(--color-text);
   }
 }
 </style>

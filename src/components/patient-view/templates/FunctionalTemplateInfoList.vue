@@ -58,7 +58,7 @@ const openTemplateUpdateForm = (template: Template) => {
       <b-spinner v-if="loading" variant="success" />
       <template-info-list
         v-else
-        :show-add-button="false"
+        :show-choose-button="false"
         :type="type"
         :templates="templates"
         @template:click="openTemplateUpdateForm($event)"
@@ -69,7 +69,7 @@ const openTemplateUpdateForm = (template: Template) => {
       v-model="page"
       :total-rows="totalElements"
       :per-page="pageSize"
-      size="lg"
+      size="md"
       align="center"
     />
     <base-modal :is-open="isOpen" @close="closeModal" title="">
@@ -92,10 +92,6 @@ const openTemplateUpdateForm = (template: Template) => {
   align-items: stretch;
   gap: 1rem;
 
-  @media (max-width: 1080px) {
-    padding-left: 4.32rem;
-    padding-right: 2rem;
-  }
 }
 
 .align-center {

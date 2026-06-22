@@ -57,12 +57,13 @@ const closeUserInfo = () => {
         :users="users"
       />
     </div>
-    <b-pagination v-if="totalElements > pageSize"
+    <b-pagination
+      v-if="totalElements > pageSize"
       class="pages-wrapper"
       v-model="page"
       :total-rows="totalElements"
       :per-page="pageSize"
-      size="lg"
+      size="md"
       align="center"
     />
     <div class="add-button-wrapper">
@@ -86,14 +87,13 @@ const closeUserInfo = () => {
   align-items: stretch;
   gap: 1rem;
 
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
+
   .align-center {
     align-self: center;
     border-color: var(--color-background-alt);
-  }
-
-  @media (max-width: 1080px) {
-    padding-left: 4.32rem;
-    padding-right: 2rem;
   }
 
 }
@@ -104,8 +104,8 @@ const closeUserInfo = () => {
   flex-direction: column;
   align-items: center;
 
-  @media (max-width: 1080px) {
-      padding-left: 4rem;
+  @media (max-width: 768px) {
+    padding: 0;
   }
 }
 
@@ -134,7 +134,7 @@ const closeUserInfo = () => {
 
   @media (max-width: 1080px) {
     right: 50px;
-    bottom: 100px;
+    bottom: 50px;
   }
 }
 </style>

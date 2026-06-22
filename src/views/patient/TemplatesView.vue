@@ -66,7 +66,7 @@ const { componentKey: medListKey, refresh: refreshMedList } = useRefreshComponen
       right: 100px;
       z-index: 999;
 
-      @media (max-width: 1080px) {
+      @media (max-width: 768px) {
         right: 50px;
         bottom: 100px;
       }
@@ -80,7 +80,8 @@ const { componentKey: medListKey, refresh: refreshMedList } = useRefreshComponen
   color: var(--color-text);
 
   &.active {
-    background-color: var(--color-background-alt);
+    background-color: var(--color-background-alt-lite);
+    color: var(--color-text);
   }
 }
 </style>
