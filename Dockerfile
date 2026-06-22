@@ -4,7 +4,7 @@ COPY package.*json ./
 RUN npm install
 
 COPY . .
-ARG API_BASE_URL='http://localhost:8080/api/v1'
+ARG API_BASE_URL='http://localhost:8080'
 ENV VITE_API_BASE_URL=$API_BASE_URL
 ENV VITE_DEFAULT_FETCH_PAGE_SIZE=20
 RUN npm run build
